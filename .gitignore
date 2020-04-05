@@ -1,0 +1,12 @@
+# Vim temp files
+*.swp
+
+# CMake stuff
+CMakeFiles/
+Makefile
+CMakeCache.txt
+*.cmake
+
+# Binary files
+*.a
+Sandbox
