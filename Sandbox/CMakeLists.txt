@@ -4,4 +4,4 @@ add_subdirectory(src)
 
 add_executable(Sandbox ${MTN_SB_SRC})
 target_link_libraries(Sandbox Mouton)
-target_include_directories(Sandbox PRIVATE ../Mouton/includes)
+target_include_directories(Sandbox PRIVATE ../Mouton/src/)

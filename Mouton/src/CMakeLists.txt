@@ -1,3 +1,3 @@
 set(MTN_SRC
-    src/Engine.cpp
+    src/Core/Engine.cpp
     PARENT_SCOPE)

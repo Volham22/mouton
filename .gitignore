@@ -1,5 +1,6 @@
-# Vim temp files
+# Vim temp files and ycm
 *.swp
+.ycm_extra_conf.py
 
 # CMake stuff
 CMakeFiles/
