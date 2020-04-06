@@ -1,0 +1,3 @@
+[submodule "Mouton/vendor/spdlog"]
+	path = Mouton/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

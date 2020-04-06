@@ -11,3 +11,5 @@ CMakeCache.txt
 # Binary files
 *.a
 Sandbox
+
+/Mouton/vendor/spdlog

@@ -17,6 +17,7 @@ namespace Mouton
 
     private:
         Application();
+        void OnInit();
         void Run();
 
     private:

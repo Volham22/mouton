@@ -17,3 +17,4 @@
     #error Build platform unknown !
 #endif
 
+#include "Log.h"
