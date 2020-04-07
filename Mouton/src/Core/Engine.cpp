@@ -25,6 +25,12 @@ namespace Mouton
     {
         Log::Init();
         MTN_INFO("Begin of Mouton");
+
+        ApplicationEvent appEv;
+        EventSystem::ApplyFunction<ApplicationEvent>(&appEv, [](Event& e) -> bool {
+            MTN_TRACE("Event works !");
+            return true;
+        });
     }
 
     void Application::Run()

@@ -12,7 +12,14 @@
 #include <cctype>
 #include <functional>
 #include <algorithm>
+#include <string>
 
 #include <Core/Log.h>
+
+// Events
+#include <Core/Events/Events.h>
+#include <Core/Events/ApplicationEvents.h>
+#include <Core/Events/MouseEvents.h>
+#include <Core/Events/KeyEvents.h>
 
 #endif
