@@ -1,5 +1,5 @@
-#ifndef GLFWWINDOW
-#define GLFWWINDOW
+#ifndef GLFWWINDOW_H
+#define GLFWWINDOW_H
 
 #include "Renderer/Window.h"
 
