@@ -3,7 +3,8 @@
 namespace Mouton
 {
 
-    Application::Application()
+    Application::Application(const WindowProperties& properties)
+        : m_WindowInstance(Window::CreateWindow(properties))
     {
 
     }
@@ -11,8 +12,8 @@ namespace Mouton
 
     void Application::InitApplication()
     {
-        s_Application = new Application();
         s_Application->OnInit();
+        s_Application = new Application(WindowProperties(1280, 720));
         s_Application->Run();
     }
 
@@ -36,6 +37,9 @@ namespace Mouton
     void Application::Run()
     {
         // Main Mouton Application Loop
-        while(true);
+        while(true)
+        {
+            m_WindowInstance->OnUpdate();
+        }
     }
 }

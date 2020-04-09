@@ -1,3 +1,6 @@
 [submodule "Mouton/vendor/spdlog"]
 	path = Mouton/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Mouton/vendor/GLFW"]
+	path = Mouton/vendor/GLFW
+	url = https://github.com/glfw/glfw.git
