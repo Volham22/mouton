@@ -15,6 +15,7 @@ namespace Mouton
         // glClearColor(0.2, 0.2, 0.2, 1.0);
         // glClear(GL_COLOR_BUFFER_BIT);
         // glfwSwapBuffers(m_GLFWWindow);
+        glfwPollEvents();
     }
 
     void GLFWWindowInstance::SetEventFunction(std::function<bool(Event& event)>& func)
@@ -58,6 +59,11 @@ namespace Mouton
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_SAMPLES, 4);
+
+        // Set GLFW Error callback
+        glfwSetErrorCallback([](int error, const char* message) {
+            MTN_ERROR(message);
+        });
 
         m_GLFWWindow = glfwCreateWindow(
             properties.windowWidth, properties.windowHeight,
