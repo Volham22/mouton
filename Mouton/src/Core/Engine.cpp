@@ -12,8 +12,9 @@ namespace Mouton
 
     void Application::InitApplication()
     {
-        s_Application->OnInit();
+        Log::Init();
         s_Application = new Application(WindowProperties(1280, 720));
+        s_Application->OnInit();
         s_Application->Run();
     }
 
@@ -24,8 +25,12 @@ namespace Mouton
 
     void Application::OnInit()
     {
-        Log::Init();
         MTN_INFO("Begin of Mouton");
+
+        m_WindowInstance->SetEventFunction([](Event& event) -> bool {
+            MTN_INFO("Callback window works !!");
+            return true;
+        });
 
         ApplicationEvent appEv;
         EventSystem::ApplyFunction<ApplicationEvent>(&appEv, [](Event& e) -> bool {

@@ -18,9 +18,64 @@ namespace Mouton
         glfwPollEvents();
     }
 
-    void GLFWWindowInstance::SetEventFunction(std::function<bool(Event& event)>& func)
+    void GLFWWindowInstance::SetEventFunction(std::function<bool(Event& event)> func)
     {
         m_CallbackFunc = func;
+
+        // Workaround to retrieve callback from lambdas
+        glfwSetWindowUserPointer(m_GLFWWindow, &m_CallbackFunc);
+
+        // Set GLFW Event Callback
+        glfwSetWindowIconifyCallback(m_GLFWWindow, [](GLFWwindow* win, int iconified) {
+            if(iconified)
+            {
+                auto funcPtr = reinterpret_cast<std::function<bool(Event& event)>*>(glfwGetWindowUserPointer(win));
+                auto& func = *funcPtr;
+
+                WindowMinimizedEvent ev;
+                func(ev);
+            }
+        });
+
+        glfwSetWindowFocusCallback(m_GLFWWindow, [](GLFWwindow* win, int focused) {
+            auto funcPtr = reinterpret_cast<std::function<bool(Event& event)>*>(glfwGetWindowUserPointer(win));
+            auto& func = *funcPtr;
+
+            if(focused)
+            {
+                WindowFocusEvent ev;
+                func(ev);
+            }
+            else
+            {
+                WindowFocusEvent ev;
+                func(ev);
+            }
+        });
+
+        glfwSetWindowPosCallback(m_GLFWWindow, [](GLFWwindow* win, int x, int y) {
+            auto funcPtr = reinterpret_cast<std::function<bool(Event& event)>*>(glfwGetWindowUserPointer(win));
+            auto& func = *funcPtr;
+
+            WindowMovedEvent ev = WindowMovedEvent(x, y);
+            func(ev);
+        });
+
+        glfwSetFramebufferSizeCallback(m_GLFWWindow, [](GLFWwindow* win, int width, int height) {
+            auto funcPtr = reinterpret_cast<std::function<bool(Event& event)>*>(glfwGetWindowUserPointer(win));
+            auto& func = *funcPtr;
+
+            WindowResizeEvent ev = WindowResizeEvent(width, height);
+            func(ev);
+        });
+
+        glfwSetWindowCloseCallback(m_GLFWWindow, [](GLFWwindow* win) {
+            auto funcPtr = reinterpret_cast<std::function<bool(Event& event)>*>(glfwGetWindowUserPointer(win));
+            auto& func = *funcPtr;
+
+            WindowCloseEvent ev;
+            func(ev);
+        });
     }
 
     void GLFWWindowInstance::EnableVSync(bool enable)

@@ -11,7 +11,7 @@ namespace Mouton
         // Mouse
         MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
         // Window
-        WindowFocus, WindowLostFocus, WindowResize, WindowClose, WindowMoved,
+        WindowFocus, WindowLostFocus, WindowResize, WindowClose, WindowMoved, WindowMinimized,
         // Application
         ApplicationEvent
     };

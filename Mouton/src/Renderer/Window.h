@@ -23,7 +23,7 @@ namespace Mouton
     public:
 
         virtual void OnUpdate() = 0;
-        virtual void SetEventFunction(std::function<bool(Event& event)>& func) = 0;
+        virtual void SetEventFunction(std::function<bool(Event& event)> func) = 0;
 
         virtual void EnableVSync(bool enable = true) = 0;
         virtual bool IsVSync() = 0;

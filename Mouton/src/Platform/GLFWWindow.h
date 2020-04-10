@@ -15,14 +15,14 @@ namespace Mouton
         ~GLFWWindowInstance();
 
         virtual void OnUpdate() override;
-        virtual void SetEventFunction(std::function<bool(Event& event)>& func) override;
+        virtual void SetEventFunction(std::function<bool(Event& event)> func) override;
 
         virtual void EnableVSync(bool enable = true) override;
         virtual bool IsVSync() override;
 
         virtual int GetWindowWidth() override;
         virtual int GetWindowHeight() override;
-    
+
     private:
         void OnInit(const WindowProperties& properties);
 

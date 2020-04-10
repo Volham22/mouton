@@ -21,5 +21,6 @@
 #include <Core/Events/ApplicationEvents.h>
 #include <Core/Events/MouseEvents.h>
 #include <Core/Events/KeyEvents.h>
+#include <Core/Events/WindowEvents.h>
 
 #endif
