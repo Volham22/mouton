@@ -27,14 +27,30 @@ namespace Mouton
     {
         MTN_INFO("Begin of Mouton");
 
-        m_WindowInstance->SetEventFunction([](Event& event) -> bool {
-            MTN_INFO("Callback window works !!");
-            return true;
-        });
+        using namespace std::placeholders;
 
-        ApplicationEvent appEv;
-        EventSystem::ApplyFunction<ApplicationEvent>(&appEv, [](Event& e) -> bool {
-            MTN_TRACE("Event works !");
+        m_WindowInstance->SetEventFunction([](Event& event) -> bool {
+            EventSystem::ApplyFunction<WindowCloseEvent>(&event, [](Event& event) -> bool {
+                MTN_INFO("On window close ...");
+                return true;
+            });
+
+            EventSystem::ApplyFunction<WindowFocusEvent>(&event, [](Event& event) -> bool {
+                MTN_INFO("On window focus");
+                return true;
+            });
+
+            EventSystem::ApplyFunction<WindowLostFocusEvent>(&event, [](Event& event) -> bool {
+                MTN_INFO("Window lost focus");
+                return true;
+            });
+
+            EventSystem::ApplyFunction<WindowMovedEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<WindowMovedEvent&>(event);
+                MTN_TRACE("On window move");
+                return true;
+            });
+
             return true;
         });
     }
