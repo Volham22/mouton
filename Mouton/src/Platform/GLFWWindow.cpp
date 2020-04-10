@@ -48,7 +48,7 @@ namespace Mouton
             }
             else
             {
-                WindowFocusEvent ev;
+                WindowLostFocusEvent ev;
                 func(ev);
             }
         });
