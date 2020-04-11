@@ -31,7 +31,7 @@ namespace Mouton
         virtual int GetWindowWidth() = 0;
         virtual int GetWindowHeight() = 0;
 
-        static std::unique_ptr<Window> CreateWindow(const WindowProperties& properties);
+        static std::unique_ptr<Window> CreateWindowInstance(const WindowProperties& properties);
     };
 
 } // namespace Mouton

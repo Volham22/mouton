@@ -4,7 +4,7 @@ namespace Mouton
 {
 
     Application::Application(const WindowProperties& properties)
-        : m_WindowInstance(Window::CreateWindow(properties))
+        : m_WindowInstance(Window::CreateWindowInstance(properties))
     {
 
     }
@@ -48,6 +48,17 @@ namespace Mouton
             EventSystem::ApplyFunction<WindowMovedEvent>(&event, [](Event& event) -> bool {
                 auto& ev = dynamic_cast<WindowMovedEvent&>(event);
                 MTN_TRACE("On window move");
+                return true;
+            });
+
+            EventSystem::ApplyFunction<WindowMinimizedEvent>(&event, [](Event & event) -> bool {
+                MTN_INFO("On window minimize");
+
+                return true;
+            });
+
+            EventSystem::ApplyFunction<WindowResizeEvent>(&event, [](Event& event) -> bool {
+                MTN_INFO("On window resize")
                 return true;
             });
 
