@@ -16,3 +16,7 @@ CMakeCache.txt
 Sandbox
 
 /Mouton/vendor/spdlog
+
+# Visual studio stuff and binaries
+.vs/
+out/
