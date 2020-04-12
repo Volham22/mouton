@@ -91,6 +91,33 @@ namespace Mouton
                 return true;
             });
 
+            EventSystem::ApplyFunction<MouseButtonPressedEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<MouseButtonPressedEvent&>(event);
+
+                if(ev.GetCode() == Keys::MOUSE1)
+                    MTN_INFO("Left button pressed !");
+
+                return true;
+            });
+
+            EventSystem::ApplyFunction<MouseButtonMaintainedEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<MouseButtonMaintainedEvent&>(event);
+
+                if(ev.GetCode() == Keys::MOUSE1)
+                    MTN_INFO("Left button maintained !");
+
+                return true;
+            });
+
+            EventSystem::ApplyFunction<MouseButtonReleasedEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<MouseButtonReleasedEvent&>(event);
+
+                if(ev.GetCode() == Keys::MOUSE1)
+                    MTN_INFO("Left button released !");
+
+                return true;
+            });
+
             return true;
         });
     }

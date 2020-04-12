@@ -100,6 +100,30 @@ namespace Mouton
                 MTN_WARN("Unknown key action from GLFW !");
 
         });
+
+        glfwSetMouseButtonCallback(m_GLFWWindow, [](GLFWwindow* win, int key, int action, int mods) {
+            auto funcPtr = reinterpret_cast<std::function<bool(Event& event)>*>(glfwGetWindowUserPointer(win));
+            auto& func = *funcPtr;
+
+            if(action == GLFW_PRESS)
+            {
+                MouseButtonPressedEvent ev = MouseButtonPressedEvent(key);
+                func(ev);
+            }
+            else if(action == GLFW_REPEAT)
+            {
+                MouseButtonMaintainedEvent ev = MouseButtonMaintainedEvent(key);
+                func(ev);
+            }
+            else if(action == GLFW_RELEASE)
+            {
+                MouseButtonReleasedEvent ev = MouseButtonReleasedEvent(key);
+                func(ev);
+            }
+            else
+                MTN_WARN("Unknown key action from GLFW !");
+
+        });
     }
 
     void GLFWWindowInstance::EnableVSync(bool enable)

@@ -9,7 +9,7 @@ namespace Mouton
         // Keys
         KeyPressed, KeyReleased, KeyMaintained,
         // Mouse
-        MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
+        MouseButtonPressed, MouseButtonReleased, MouseButtonMaintained, MouseMoved, MouseScrolled,
         // Window
         WindowFocus, WindowLostFocus, WindowResize, WindowClose, WindowMoved, WindowMinimized,
         // Application
