@@ -118,6 +118,14 @@ namespace Mouton
                 return true;
             });
 
+            EventSystem::ApplyFunction<MouseMovedEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<MouseMovedEvent&>(event);
+
+                MTN_INFO("Mouse moved");
+
+                return true;
+            });
+
             return true;
         });
     }

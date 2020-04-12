@@ -46,10 +46,15 @@ namespace Mouton
     class MouseMovedEvent : public Event
     {
     public:
+        MouseMovedEvent(double x, double y) : m_XPosition(x), m_YPosition(y) {};
+        double GetXPosition() const { return m_XPosition; };
+        double GetYPosition() const { return m_YPosition; };
         virtual const char* GetName() const override { return "MouseMovedEvent"; };
         virtual EventType GetType() const override { return EventType::MouseMoved; };
         virtual EventCategory GetCategory() const override { return EventCategory::MouseCategory; };
 
+    private:
+        double m_XPosition, m_YPosition;
     };
 
     class MouseScrolledEvent : public Event
