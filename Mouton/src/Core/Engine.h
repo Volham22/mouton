@@ -22,7 +22,7 @@ namespace Mouton
         Application();
         void OnInit();
         void Run();
-        static bool OnEvent(Event& event);
+        bool OnEvent(Event& event);
 
     private:
         static Application* s_Application;
