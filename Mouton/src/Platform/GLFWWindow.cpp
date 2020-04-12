@@ -132,6 +132,14 @@ namespace Mouton
             MouseMovedEvent ev = MouseMovedEvent(x, y);
             func(ev);
         });
+
+        glfwSetScrollCallback(m_GLFWWindow, [](GLFWwindow* win, double xOff, double yOff) {
+            auto funcPtr = reinterpret_cast<std::function<bool(Event& event)>*>(glfwGetWindowUserPointer(win));
+            auto& func = *funcPtr;
+
+            MouseScrolledEvent ev = MouseScrolledEvent(xOff, yOff);
+            func(ev);
+        });
     }
 
     void GLFWWindowInstance::EnableVSync(bool enable)

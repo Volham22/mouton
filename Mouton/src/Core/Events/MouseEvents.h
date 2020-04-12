@@ -60,9 +60,15 @@ namespace Mouton
     class MouseScrolledEvent : public Event
     {
     public:
+        MouseScrolledEvent(double xOffset, double yOffset) : m_XOffset(xOffset), m_YOffset(yOffset) {};
+        double GetXOffset() const { return m_XOffset; };
+        double GetYOffset() const { return m_YOffset; };
         virtual const char* GetName() const override { return "MouseScrolledEvent"; };
         virtual EventType GetType() const override { return EventType::MouseScrolled; };
         virtual EventCategory GetCategory() const override { return EventCategory::MouseCategory; };
+    
+    private:
+        double m_XOffset, m_YOffset;
     };
 
 } // namespace Mouton

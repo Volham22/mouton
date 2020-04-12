@@ -126,6 +126,14 @@ namespace Mouton
                 return true;
             });
 
+            EventSystem::ApplyFunction<MouseScrolledEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<MouseScrolledEvent&>(event);
+
+                MTN_INFO("Mouse scrolled");
+
+                return true;
+            });
+
             return true;
         });
     }
