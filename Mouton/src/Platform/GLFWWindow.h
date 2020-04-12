@@ -23,6 +23,8 @@ namespace Mouton
         virtual int GetWindowWidth() override;
         virtual int GetWindowHeight() override;
 
+        virtual void* GetWindowInternalInstance() const override;
+
     private:
         void OnInit(const WindowProperties& properties);
 

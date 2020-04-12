@@ -4,7 +4,9 @@ set(MTN_SRC
     src/Core/Events/Events.cpp
     src/Core/Events/KeyEvents.cpp
     src/Core/Events/WindowEvents.cpp
+    src/Core/Inputs.cpp
     src/Renderer/Window.cpp
     src/Platform/GLFWWindow.cpp
+    src/Platform/GLFWInputs.cpp
     src/MoutonPch.cpp
     PARENT_SCOPE)

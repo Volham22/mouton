@@ -76,6 +76,30 @@ namespace Mouton
             WindowCloseEvent ev;
             func(ev);
         });
+
+        glfwSetKeyCallback(m_GLFWWindow, [](GLFWwindow* win, int key, int scancode, int action, int mods) {
+            auto funcPtr = reinterpret_cast<std::function<bool(Event& event)>*>(glfwGetWindowUserPointer(win));
+            auto& func = *funcPtr;
+
+            if(action == GLFW_PRESS)
+            {
+                KeyPressedEvent ev = KeyPressedEvent(key);
+                func(ev);
+            }
+            else if(action == GLFW_REPEAT)
+            {
+                KeyMaintainedEvent ev = KeyMaintainedEvent(key);
+                func(ev);
+            }
+            else if(action == GLFW_RELEASE)
+            {
+                KeyReleasedEvent ev = KeyReleasedEvent(key);
+                func(ev);
+            }
+            else
+                MTN_WARN("Unknown key action from GLFW !");
+
+        });
     }
 
     void GLFWWindowInstance::EnableVSync(bool enable)
@@ -101,6 +125,11 @@ namespace Mouton
         int res = -1;
         glfwGetWindowSize(m_GLFWWindow, nullptr, &res);
         return res;
+    }
+
+    void* GLFWWindowInstance::GetWindowInternalInstance() const
+    {
+        return static_cast<void*>(m_GLFWWindow);
     }
 
     void GLFWWindowInstance::OnInit(const WindowProperties& properties)

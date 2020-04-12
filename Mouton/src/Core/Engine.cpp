@@ -1,12 +1,14 @@
 #include "Engine.h"
 
+#include "Core/Inputs.h"
+
 namespace Mouton
 {
 
     Application::Application(const WindowProperties& properties)
         : m_WindowInstance(Window::CreateWindowInstance(properties))
     {
-
+        Inputs::InitInputs(m_WindowInstance->GetWindowInternalInstance());
     }
 
 
@@ -59,6 +61,33 @@ namespace Mouton
 
             EventSystem::ApplyFunction<WindowResizeEvent>(&event, [](Event& event) -> bool {
                 MTN_INFO("On window resize")
+                return true;
+            });
+
+            EventSystem::ApplyFunction<KeyPressedEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<KeyPressedEvent&>(event);
+
+                if(ev.GetCode() == Keys::SPACE)
+                    MTN_INFO("Space key pressed !");
+                
+                return true;
+            });
+
+            EventSystem::ApplyFunction<KeyMaintainedEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<KeyMaintainedEvent&>(event);
+
+                if(ev.GetCode() == Keys::SPACE)
+                    MTN_INFO("Space key maintained !");
+
+                return true;
+            });
+
+            EventSystem::ApplyFunction<KeyReleasedEvent>(&event, [](Event& event) -> bool {
+                auto& ev = dynamic_cast<KeyReleasedEvent&>(event);
+
+                if(ev.GetCode() == Keys::SPACE)
+                    MTN_INFO("Space key released !");
+
                 return true;
             });
 
