@@ -1,5 +1,8 @@
 #include "GLFWWindow.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 namespace Mouton
 {
 
@@ -11,10 +14,7 @@ namespace Mouton
 
     void GLFWWindowInstance::OnUpdate()
     {
-        // TEMP
-        // glClearColor(0.2, 0.2, 0.2, 1.0);
-        // glClear(GL_COLOR_BUFFER_BIT);
-        // glfwSwapBuffers(m_GLFWWindow);
+        glfwSwapBuffers(m_GLFWWindow);
         glfwPollEvents();
     }
 
@@ -200,6 +200,9 @@ namespace Mouton
         }
 
         glfwMakeContextCurrent(m_GLFWWindow);
+
+        if(!gladLoadGL())
+            MTN_ERROR("Failed to load OpenGL with glad");
     }
 
 

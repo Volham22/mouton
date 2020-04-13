@@ -2,6 +2,8 @@
 
 #include "Core/Inputs.h"
 
+#include <glad/glad.h>
+
 namespace Mouton
 {
 
@@ -12,12 +14,12 @@ namespace Mouton
 
     void RenderLayer::OnBind()
     {
-        MTN_TRACE("Render Layer on binding ...");
+        glClearColor(0.4, 0.2, 0.2, 1.0);
     }
 
     void RenderLayer::OnUnbind()
     {
-        MTN_TRACE("Render Layer on unbinding ...");
+
     }
 
     void RenderLayer::OnUpdate()
@@ -26,6 +28,7 @@ namespace Mouton
 
         // MTN_TRACE("Render Layer on update ...");
         // Some rendering stuff will come here ...
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
     bool RenderLayer::OnEvent(Event& event)

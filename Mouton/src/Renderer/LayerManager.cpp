@@ -28,7 +28,11 @@ namespace Mouton
     void LayerManager::UpdateLayers()
     {
         for(Layer* l : m_Layers)
+        {
+            l->OnBind();
             l->OnUpdate();
+            l->OnUnbind();
+        }
     }
 
     bool LayerManager::OnLayersEvent(Event& event)
