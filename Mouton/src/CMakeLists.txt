@@ -1,12 +1,15 @@
 set(MTN_SRC
-    src/Core/Engine.cpp
+    src/Engine.cpp
+    src/MoutonPch.cpp
+    src/ApplicationLayers.cpp
     src/Core/Log.cpp
     src/Core/Events/Events.cpp
     src/Core/Events/KeyEvents.cpp
     src/Core/Events/WindowEvents.cpp
     src/Core/Inputs.cpp
     src/Renderer/Window.cpp
+    src/Renderer/Layer.cpp
+    src/Renderer/LayerManager.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
-    src/MoutonPch.cpp
     PARENT_SCOPE)

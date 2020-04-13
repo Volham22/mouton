@@ -1,39 +1,34 @@
-#include "Engine.h"
+#include "ApplicationLayer.h"
 
 #include "Core/Inputs.h"
 
 namespace Mouton
 {
 
-    Application::Application(const WindowProperties& properties)
-        : m_WindowInstance(Window::CreateWindowInstance(properties))
+    RenderLayer::RenderLayer(const char* name)
+        : Layer(name)
     {
-        Inputs::InitInputs(m_WindowInstance->GetWindowInternalInstance());
     }
 
-
-    void Application::InitApplication()
+    void RenderLayer::OnBind()
     {
-        Log::Init();
-        s_Application = new Application(WindowProperties(1280, 720));
-        s_Application->OnInit();
-        s_Application->Run();
+        MTN_TRACE("Render Layer on binding ...");
     }
 
-    void Application::EndApplication()
+    void RenderLayer::OnUnbind()
     {
-        delete s_Application;
+        MTN_TRACE("Render Layer on unbinding ...");
     }
 
-    void Application::OnInit()
+    void RenderLayer::OnUpdate()
     {
         using namespace std::placeholders;
 
-        MTN_INFO("Begin of Mouton");
-        m_WindowInstance->SetEventFunction(std::bind<bool>(&Application::OnEvent, this, _1));
+        // MTN_TRACE("Render Layer on update ...");
+        // Some rendering stuff will come here ...
     }
 
-    bool Application::OnEvent(Event& event)
+    bool RenderLayer::OnEvent(Event& event)
     {
         EventSystem::ApplyFunction<WindowCloseEvent>(&event, [](Event& event) -> bool {
             MTN_INFO("On window close ...");
@@ -121,15 +116,7 @@ namespace Mouton
             return true;
         });
 
-        return true;
+        return event.Handled();
     }
 
-    void Application::Run()
-    {
-        // Main Mouton Application Loop
-        while(true)
-        {
-            m_WindowInstance->OnUpdate();
-        }
-    }
-}
+} // namespace Mouton

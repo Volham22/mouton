@@ -1,9 +1,10 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "MoutonCore.h"
+#include "Core/MoutonCore.h"
 
 #include "Renderer/Window.h"
+#include "Renderer/LayerManager.h"
 
 #define MOUTON_CORE_INCLUDED Mouton::Application* Mouton::Application::s_Application;
 
@@ -27,6 +28,8 @@ namespace Mouton
     private:
         static Application* s_Application;
         std::unique_ptr<Window> m_WindowInstance;
+        LayerManager m_LayerManager;
+
     };
     
 }
