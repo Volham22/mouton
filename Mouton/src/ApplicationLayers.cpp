@@ -24,9 +24,6 @@ namespace Mouton
 
     void RenderLayer::OnUpdate()
     {
-        using namespace std::placeholders;
-
-        // MTN_TRACE("Render Layer on update ...");
         // Some rendering stuff will come here ...
         glClear(GL_COLOR_BUFFER_BIT);
     }
