@@ -23,3 +23,7 @@ out/
 
 # ImGUI init file
 imgui.ini
+
+# Clion files
+cmake-build-debug/
+.idea/
