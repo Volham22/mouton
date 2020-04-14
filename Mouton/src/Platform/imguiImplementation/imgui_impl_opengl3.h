@@ -5,6 +5,7 @@
 
 // Implemented features:
 //  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID!
+//  [X] Renderer: Multi-viewport support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable'.
 //  [x] Renderer: Desktop GL only: Support for large meshes (64k+ vertices) with 16-bit indices.
 
 // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
@@ -24,8 +25,7 @@
 #pragma once
 #include "imgui.h"      // IMGUI_IMPL_API
 
-// Mouton is using GLAD as OpenGL loader
-// in theory imgui is able to detect it, just to be sure
+// We are using GLAD as loader
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 
 // Backend API

@@ -3,6 +3,8 @@
 
 #include "Renderer/Layer.h" // Also include MoutonPch.h
 
+struct GLFWwindow;
+
 namespace Mouton
 {
 
@@ -25,6 +27,9 @@ namespace Mouton
         virtual void OnUpdate() override;
         virtual void OnUnbind() override;
         virtual bool OnEvent(Event& event) override;
+
+    private:
+        GLFWwindow* m_WindowInstance;
     };
 
 } // namespace Mouton
