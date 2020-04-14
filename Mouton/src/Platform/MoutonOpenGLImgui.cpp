@@ -8,7 +8,6 @@ namespace Mouton
     {
         ImGui::CreateContext();
         ImGui_ImplGlfw_InitForOpenGL(win, false);
-        // MTN_TRACE("Hello");
         ImGui_ImplOpenGL3_Init("#version 130");
 
         if(!IMGUI_CHECKVERSION())
