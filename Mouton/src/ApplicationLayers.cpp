@@ -4,6 +4,9 @@
 
 #include <glad/glad.h>
 
+#include "Platform/MoutonOpenGLImGui.h"
+#include "imgui.h"
+
 namespace Mouton
 {
 
@@ -106,7 +109,7 @@ namespace Mouton
 
         EventSystem::ApplyFunction<MouseMovedEvent>(&event, [](Event& event) -> bool {
             auto& ev = dynamic_cast<MouseMovedEvent&>(event);
-            MTN_INFO("Mouse moved");
+            //MTN_INFO("Mouse moved");
             return true;
         });
 
@@ -117,6 +120,44 @@ namespace Mouton
         });
 
         return event.Handled();
+    }
+
+    ImGUILayer::ImGUILayer(void* win, const char* name)
+        : Layer(name)
+    {
+        InitMoutonImgui(static_cast<GLFWwindow*>(win));
+    }
+
+    void ImGUILayer::OnBind()
+    {
+
+    }
+
+    void ImGUILayer::OnUpdate()
+    {
+        NewImguiMoutonFrame();
+
+        ImGui::Begin("Mouton ImGui window !");
+        ImGui::Text("This is a Imgui text !");
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
+
+    void ImGUILayer::OnUnbind()
+    {
+
+    }
+
+    bool ImGUILayer::OnEvent(Event& event)
+    {
+        return false;
+    }
+
+    ImGUILayer::~ImGUILayer()
+    {
+        DestroyMoutonImgui();
     }
 
 } // namespace Mouton

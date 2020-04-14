@@ -34,6 +34,7 @@ namespace Mouton
         m_WindowInstance->SetEventFunction(std::bind<bool>(&Application::OnEvent, this, _1));
 
         m_LayerManager.AddLayer(new RenderLayer());
+        m_LayerManager.AddLayer(new ImGUILayer(m_WindowInstance->GetWindowInternalInstance()));
     }
 
     bool Application::OnEvent(Event& event)

@@ -203,6 +203,8 @@ namespace Mouton
 
         if(!gladLoadGL())
             MTN_ERROR("Failed to load OpenGL with glad");
+
+        MTN_INFO(glGetString(GL_VERSION));
     }
 
 
