@@ -20,3 +20,6 @@ Sandbox
 # Visual studio stuff and binaries
 .vs/
 out/
+
+# ImGUI init file
+imgui.ini
