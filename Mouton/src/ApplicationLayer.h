@@ -1,6 +1,7 @@
 #ifndef APPLICATION_LAYER_H
 #define APPLICATION_LAYER_H
 
+#include "Renderer/Buffers.h"
 #include "Renderer/Layer.h" // Also include MoutonPch.h
 
 struct GLFWwindow;
@@ -16,6 +17,10 @@ namespace Mouton
         virtual void OnUpdate() override;
         virtual void OnUnbind() override;
         virtual bool OnEvent(Event& event) override;
+    
+    private:
+        std::shared_ptr<VertexBuffer> m_VBO;
+        uint32_t m_VAO;
     };
 
 } // namespace Mouton

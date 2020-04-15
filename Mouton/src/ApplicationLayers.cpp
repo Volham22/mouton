@@ -4,13 +4,30 @@
 
 #include <glad/glad.h>
 
+#include "Renderer/RendererContext.h"
 
 namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name)
+        : Layer(name), m_VBO(nullptr) // Temporary
     {
+        // Some temporary code here
+        RendererContext::InitContext(GraphicAPI::OpenGL);
+
+        static float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+             0.0f,  0.5f, 0.0f,
+             0.5f,  -0.5f, 0.0f
+        };
+
+        glGenVertexArrays(1, &m_VAO);
+        glBindVertexArray(m_VAO);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        m_VBO = VertexBuffer::CreateVertexBuffer();
+        m_VBO->SetData(vertices, sizeof(vertices));
+        glBindVertexArray(0);
     }
 
     void RenderLayer::OnBind()
@@ -20,13 +37,17 @@ namespace Mouton
 
     void RenderLayer::OnUnbind()
     {
-
     }
 
     void RenderLayer::OnUpdate()
     {
         // Some rendering stuff will come here ...
         glClear(GL_COLOR_BUFFER_BIT);
+        glBindVertexArray(m_VAO);
+        m_VBO->Bind();
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
+        m_VBO->Unbind();
     }
 
     bool RenderLayer::OnEvent(Event& event)
