@@ -7,14 +7,27 @@ namespace Mouton
     void InitMoutonImgui(GLFWwindow* win)
     {
         ImGui::CreateContext();
-        ImGui_ImplGlfw_InitForOpenGL(win, false);
-        ImGui_ImplOpenGL3_Init("#version 130");
 
         if(!IMGUI_CHECKVERSION())
             MTN_WARN("Imgui version check failed !");
 
-
+        auto& io = ImGui::GetIO();
         ImGui::StyleColorsDark();
+
+        // Enable some flags
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+        ImGuiStyle& style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
+
+        ImGui_ImplGlfw_InitForOpenGL(win, false);
+        ImGui_ImplOpenGL3_Init("#version 410");
     }
 
     void DestroyMoutonImgui()
