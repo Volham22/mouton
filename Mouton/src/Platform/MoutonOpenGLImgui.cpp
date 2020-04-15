@@ -15,6 +15,7 @@ namespace Mouton
         ImGui::StyleColorsDark();
 
         // Enable some flags
+        // Mouton support ImGui docking and viewports
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;

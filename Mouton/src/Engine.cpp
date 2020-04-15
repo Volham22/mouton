@@ -2,6 +2,7 @@
 
 #include "Core/Inputs.h"
 #include "ApplicationLayer.h"
+#include "ImGuiLayer.h"
 
 namespace Mouton
 {

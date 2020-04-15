@@ -15,7 +15,7 @@ add_subdirectory(vendor/Glad)
 # imgui library
 add_subdirectory(vendor/imgui)
 
-add_library(Mouton ${MTN_SRC})
+add_library(Mouton ${MTN_SRC} src/ImGuiLayer.h src/ImGuiLayer.cpp)
 target_precompile_headers(Mouton PUBLIC src/MoutonPch.h)
 
 target_link_libraries(Mouton glfw Glad imgui)

@@ -1,24 +1,27 @@
-#ifndef APPLICATION_LAYER_H
-#define APPLICATION_LAYER_H
+#ifndef MOUTON_IMGUILAYER_H
+#define MOUTON_IMGUILAYER_H
 
-#include "Renderer/Layer.h" // Also include MoutonPch.h
+#include "Renderer/Layer.h"
 
 struct GLFWwindow;
 
 namespace Mouton
 {
 
-    class RenderLayer : public Layer
+    class ImGUILayer : public Layer
     {
     public:
-        RenderLayer(const char* name = "RenderLayer");
+        ImGUILayer(void* win, const char* name = "ImguiLayer");
+        ~ImGUILayer();
         virtual void OnBind() override;
         virtual void OnUpdate() override;
         virtual void OnUnbind() override;
         virtual bool OnEvent(Event& event) override;
+
+    private:
+        GLFWwindow* m_WindowInstance;
     };
 
 } // namespace Mouton
-
 
 #endif
