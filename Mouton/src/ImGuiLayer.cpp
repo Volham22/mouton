@@ -30,7 +30,12 @@ namespace Mouton
         auto& io = ImGui::GetIO();
 
         NewImguiMoutonFrame();
-        ImGui::ShowDemoWindow();
+        ImGui::Begin("Performance window");
+            ImGui::Text("Mouton Performance.");
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+                    1000.0f / ImGui::GetIO().Framerate,
+                    ImGui::GetIO().Framerate);
+        ImGui::End();
         RenderImguiMouton();
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
