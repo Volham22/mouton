@@ -23,9 +23,11 @@ namespace Mouton
 
         glGenVertexArrays(1, &m_VAO);
         glBindVertexArray(m_VAO);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
         m_VBO = VertexBuffer::CreateVertexBuffer();
+        m_VBO->Bind();
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
+        m_VBO->Unbind();
         m_VBO->SetData(vertices, sizeof(vertices));
         glBindVertexArray(0);
     }
@@ -46,8 +48,8 @@ namespace Mouton
         glBindVertexArray(m_VAO);
         m_VBO->Bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
-        glBindVertexArray(0);
         m_VBO->Unbind();
+        glBindVertexArray(0);
     }
 
     bool RenderLayer::OnEvent(Event& event)

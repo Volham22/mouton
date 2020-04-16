@@ -8,6 +8,7 @@ namespace Mouton
     OpenGLVertexBuffer::OpenGLVertexBuffer()
         : m_OglVboHandle(0)
     {
+        glGenBuffers(1, &m_OglVboHandle);
     }
 
     OpenGLVertexBuffer::OpenGLVertexBuffer(void* data)
