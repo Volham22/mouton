@@ -13,11 +13,13 @@ set(MTN_SRC
     src/Renderer/LayerManager.cpp
     src/Renderer/Buffers.cpp
     src/Renderer/RendererContext.cpp
+    src/Renderer/Shader.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
     src/Platform/MoutonOpenGLImgui.cpp
     src/Platform/OpenGL/OpenGLBuffer.cpp
     src/Platform/OpenGL/OpenGLContext.cpp
+    src/Platform/OpenGL/OpenGLShader.cpp
     src/Platform/imguiImplementation/imgui_impl_glfw.cpp
     src/Platform/imguiImplementation/imgui_impl_opengl3.cpp
     PARENT_SCOPE)

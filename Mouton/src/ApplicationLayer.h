@@ -1,6 +1,7 @@
 #ifndef APPLICATION_LAYER_H
 #define APPLICATION_LAYER_H
 
+#include "Renderer/Shader.h"
 #include "Renderer/Buffers.h"
 #include "Renderer/Layer.h" // Also include MoutonPch.h
 
@@ -19,6 +20,7 @@ namespace Mouton
         virtual bool OnEvent(Event& event) override;
     
     private:
+        std::shared_ptr<Shader> m_Shader;
         std::shared_ptr<VertexBuffer> m_VBO;
         uint32_t m_VAO;
     };

@@ -10,7 +10,7 @@ namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name), m_VBO(nullptr) // Temporary
+        : Layer(name), m_VBO(nullptr)/* TODO: Abstract VAO */, m_Shader()
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
@@ -20,6 +20,9 @@ namespace Mouton
              0.0f,  0.5f, 0.0f,
              0.5f,  -0.5f, 0.0f
         };
+
+        m_Shader = Shader::CreateShader("res/shaders/basicShader.glsl");
+        m_Shader->SetUniform("u_Color", glm::vec4({ 0.5f, 0.0f, 0.5f, 1.0f }));
 
         glGenVertexArrays(1, &m_VAO);
         glBindVertexArray(m_VAO);
@@ -34,7 +37,7 @@ namespace Mouton
 
     void RenderLayer::OnBind()
     {
-        glClearColor(0.4, 0.2, 0.2, 1.0);
+        glClearColor(0.2, 0.2, 0.2, 1.0);
     }
 
     void RenderLayer::OnUnbind()
@@ -45,10 +48,12 @@ namespace Mouton
     {
         // Some rendering stuff will come here ...
         glClear(GL_COLOR_BUFFER_BIT);
+        m_Shader->Bind();
         glBindVertexArray(m_VAO);
         m_VBO->Bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
         m_VBO->Unbind();
+        m_Shader->Unbind();
         glBindVertexArray(0);
     }
 
