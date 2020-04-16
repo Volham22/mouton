@@ -14,7 +14,7 @@ namespace Mouton
     OpenGLVertexBuffer::OpenGLVertexBuffer(void* data)
         : m_OglVboHandle(0)
     {
-        glGenBuffers(GL_ARRAY_BUFFER, &m_OglVboHandle); // TODO: Error handling here
+        glGenBuffers(1, &m_OglVboHandle); // TODO: Error handling here
         glBindBuffer(GL_ARRAY_BUFFER, m_OglVboHandle);
         glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
     }

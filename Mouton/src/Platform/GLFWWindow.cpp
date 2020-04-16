@@ -182,6 +182,7 @@ namespace Mouton
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_SAMPLES, 4);
 
         // Set GLFW Error callback
@@ -201,7 +202,7 @@ namespace Mouton
 
         glfwMakeContextCurrent(m_GLFWWindow);
 
-        if(!gladLoadGL())
+        if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
             MTN_ERROR("Failed to load OpenGL with glad");
 
         MTN_INFO(glGetString(GL_VERSION));

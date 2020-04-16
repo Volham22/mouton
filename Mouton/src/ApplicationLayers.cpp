@@ -26,7 +26,7 @@ namespace Mouton
         m_VBO = VertexBuffer::CreateVertexBuffer();
         m_VBO->Bind();
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, (void*)0);
         m_VBO->Unbind();
         m_VBO->SetData(vertices, sizeof(vertices));
         glBindVertexArray(0);
