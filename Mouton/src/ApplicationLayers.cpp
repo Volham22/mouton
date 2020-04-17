@@ -10,29 +10,30 @@ namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name), m_VBO(nullptr)/* TODO: Abstract VAO */, m_Shader()
+        : Layer(name), m_VBO(nullptr), m_Shader(), m_VAO()
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
 
         static float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
-             0.0f,  0.5f, 0.0f,
-             0.5f,  -0.5f, 0.0f
+            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+             0.0f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+             0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
         };
 
-        m_Shader = Shader::CreateShader("res/shaders/basicShader.glsl");
-        m_Shader->SetUniform("u_Color", glm::vec4({ 0.5f, 0.0f, 0.5f, 1.0f }));
+        m_VAO = VertexArray::CreateVertexArray();
 
-        glGenVertexArrays(1, &m_VAO);
-        glBindVertexArray(m_VAO);
+        m_Shader = Shader::CreateShader("res/shaders/basicShader.glsl");
+
         m_VBO = VertexBuffer::CreateVertexBuffer();
-        m_VBO->Bind();
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, (void*)0);
-        m_VBO->Unbind();
         m_VBO->SetData(vertices, sizeof(vertices));
-        glBindVertexArray(0);
+        m_VBO->Bind();
+        m_VBO->SetLayout({
+            { ShaderType::Float3, false },
+            { ShaderType::Float4, false }
+        });
+        m_VAO->AddVertexBuffer(*m_VBO);
+        m_VBO->Unbind();
     }
 
     void RenderLayer::OnBind()
@@ -48,13 +49,13 @@ namespace Mouton
     {
         // Some rendering stuff will come here ...
         glClear(GL_COLOR_BUFFER_BIT);
+        m_VAO->Bind();
         m_Shader->Bind();
-        glBindVertexArray(m_VAO);
         m_VBO->Bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
         m_VBO->Unbind();
+        m_VAO->Unbind();
         m_Shader->Unbind();
-        glBindVertexArray(0);
     }
 
     bool RenderLayer::OnEvent(Event& event)
