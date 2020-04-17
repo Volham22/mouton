@@ -22,6 +22,7 @@ target_link_libraries(Mouton glfw Glad imgui)
 target_include_directories(Mouton PRIVATE
     src/
     includes/
+    vendor/stb_image/
     vendor/spdlog/include/
     vendor/glfw/include
     vendor/Glad/include

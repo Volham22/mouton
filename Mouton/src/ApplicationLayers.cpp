@@ -10,30 +10,33 @@ namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name), m_VBO(nullptr), m_Shader(), m_VAO()
+        : Layer(name), m_VBO(nullptr), m_Shader(), m_VAO(), m_Texture()
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
 
         static float vertices[] = {
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-             0.0f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-             0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+             0.0f,  0.5f, 0.0f, 0.5f, 1.0f,
+             0.5f,  -0.5f, 0.0f, 1.0f, 0.0f
         };
 
         m_VAO = VertexArray::CreateVertexArray();
 
-        m_Shader = Shader::CreateShader("res/shaders/basicShader.glsl");
+        m_Shader = Shader::CreateShader("res/shaders/textureShader.glsl");
+        m_Shader->SetUniform("u_TexID", 0);
 
         m_VBO = VertexBuffer::CreateVertexBuffer();
         m_VBO->SetData(vertices, sizeof(vertices));
         m_VBO->Bind();
         m_VBO->SetLayout({
             { ShaderType::Float3, false },
-            { ShaderType::Float4, false }
+            { ShaderType::Float2, false }
         });
         m_VAO->AddVertexBuffer(*m_VBO);
         m_VBO->Unbind();
+
+        m_Texture = Texture2D::CreateTexture("res/texture/wood.png");
     }
 
     void RenderLayer::OnBind()
@@ -49,6 +52,7 @@ namespace Mouton
     {
         // Some rendering stuff will come here ...
         glClear(GL_COLOR_BUFFER_BIT);
+        m_Texture->Bind();
         m_VAO->Bind();
         m_Shader->Bind();
         m_VBO->Bind();
@@ -56,6 +60,7 @@ namespace Mouton
         m_VBO->Unbind();
         m_VAO->Unbind();
         m_Shader->Unbind();
+        m_Texture->Unbind();
     }
 
     bool RenderLayer::OnEvent(Event& event)

@@ -15,6 +15,7 @@ set(MTN_SRC
     src/Renderer/RendererContext.cpp
     src/Renderer/Shader.cpp
     src/Renderer/VertexArray.cpp
+    src/Renderer/Texture.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
     src/Platform/MoutonOpenGLImgui.cpp
@@ -22,6 +23,7 @@ set(MTN_SRC
     src/Platform/OpenGL/OpenGLContext.cpp
     src/Platform/OpenGL/OpenGLShader.cpp
     src/Platform/OpenGL/OpenGLVertexArray.cpp
+    src/Platform/OpenGL/OpenGLTexture.cpp
     src/Platform/imguiImplementation/imgui_impl_glfw.cpp
     src/Platform/imguiImplementation/imgui_impl_opengl3.cpp
     PARENT_SCOPE)
