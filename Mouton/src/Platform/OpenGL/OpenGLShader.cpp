@@ -24,8 +24,7 @@ namespace Mouton
 
     void OpenGLShader::SetUniform(const std::string& name, int value)
     {
-        glUseProgram(m_ProgramHandle);
-        int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+        int location = GetUniformLocation(name);
 
         if(location >= 0)
             glUniform1i(location, value);
@@ -37,7 +36,7 @@ namespace Mouton
     void OpenGLShader::SetUniform(const std::string& name, float value)
     {
         glUseProgram(m_ProgramHandle);
-        int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+        int location = GetUniformLocation(name);
 
         if(location >= 0)
             glUniform1f(location, value);
@@ -49,7 +48,7 @@ namespace Mouton
     void OpenGLShader::SetUniform(const std::string& name, const glm::vec2& value)
     {
         glUseProgram(m_ProgramHandle);
-        int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+        int location = GetUniformLocation(name);
 
         if(location >= 0)
             glUniform2f(location, value.x, value.y);
@@ -61,7 +60,7 @@ namespace Mouton
     void OpenGLShader::SetUniform(const std::string& name, const glm::vec3& value)
     {
         glUseProgram(m_ProgramHandle);
-        int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+        int location = GetUniformLocation(name);
 
         if(location >= 0)
             glUniform3f(location, value.x, value.y, value.z);
@@ -73,7 +72,7 @@ namespace Mouton
     void OpenGLShader::SetUniform(const std::string& name, const glm::vec4& value)
     {
         glUseProgram(m_ProgramHandle);
-        int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+        int location = GetUniformLocation(name);
 
         if(location >= 0)
             glUniform4f(location, value.x, value.y, value.z, value.w);
@@ -85,7 +84,7 @@ namespace Mouton
     void OpenGLShader::SetUniform(const std::string& name, const glm::mat2& value)
     {
         glUseProgram(m_ProgramHandle);
-        int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+        int location = GetUniformLocation(name);
 
         if(location >= 0)
             glUniformMatrix2fv(location, 1, false, glm::value_ptr(value));
@@ -97,7 +96,7 @@ namespace Mouton
     void OpenGLShader::SetUniform(const std::string& name, const glm::mat3& value)
     {
         glUseProgram(m_ProgramHandle);
-        int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+        int location = GetUniformLocation(name);
 
         if(location >= 0)
             glUniformMatrix3fv(location, 1, false, glm::value_ptr(value));
@@ -109,7 +108,7 @@ namespace Mouton
     void OpenGLShader::SetUniform(const std::string& name, const glm::mat4& value)
     {
         glUseProgram(m_ProgramHandle);
-        int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+        int location = GetUniformLocation(name);
 
         if(location >= 0)
             glUniformMatrix4fv(location, 1, false, glm::value_ptr(value));
@@ -208,6 +207,28 @@ namespace Mouton
         glDetachShader(m_ProgramHandle, fragmentShaderID);
         glDeleteShader(vertexShaderID);
         glDeleteShader(fragmentShaderID);
+    }
+
+    int OpenGLShader::GetUniformLocation(const std::string& name)
+    {
+        if(m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
+            return m_UniformLocationCache[name];
+        else
+        {
+            glUseProgram(m_ProgramHandle);
+            int location = glGetUniformLocation(m_ProgramHandle, name.c_str());
+
+            if(location >= 0)
+            {
+                m_UniformLocationCache[name] = location;
+                return location;
+            }
+            else
+                MTN_WARN("Uniform '{0}' not found !", name.c_str());
+
+        }
+
+        return -1;
     }
 
 

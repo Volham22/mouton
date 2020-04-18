@@ -28,8 +28,10 @@ namespace Mouton
         std::pair<std::string, std::string> ProcessSourceCode(const std::string& filepath);
         unsigned int CompileShader(const char* sourceCode, int32_t type);
         void InstantiateShader(const std::string& filePath);
+        int GetUniformLocation(const std::string& name);
 
         uint32_t m_ProgramHandle;
+        std::unordered_map<std::string, int> m_UniformLocationCache;
     };
 
 } // namespace Mouton
