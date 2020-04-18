@@ -87,4 +87,18 @@ namespace Mouton
         }
     }
 
+    std::shared_ptr<ElementBuffer> ElementBuffer::CreateElementBuffer()
+    {
+        switch(RendererContext::GetCurrentAPI())
+        {
+        case GraphicAPI::OpenGL:
+            return std::make_shared<OpenGLElementBuffer>();
+            break;
+        
+        default:
+            MTN_ERROR("Unkown ElementBuffer implementation !!\nGraphicAPI is propably not set.");
+            return nullptr;
+        }
+    }
+
 } // namespace Mouton

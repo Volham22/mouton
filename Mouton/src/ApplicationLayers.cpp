@@ -10,15 +10,21 @@ namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name), m_VBO(nullptr), m_Shader(), m_VAO(), m_Texture()
+        : Layer(name), m_VBO(nullptr), m_Shader(), m_VAO(),
+          m_EBO(), m_Texture()
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
 
         static float vertices[] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-             0.0f,  0.5f, 0.0f, 0.5f, 1.0f,
-             0.5f,  -0.5f, 0.0f, 1.0f, 0.0f
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+        };
+
+        static unsigned int indices[] = {
+            0, 1, 2, 0, 3, 2
         };
 
         m_VAO = VertexArray::CreateVertexArray();
@@ -33,8 +39,12 @@ namespace Mouton
             { ShaderType::Float3, false },
             { ShaderType::Float2, false }
         });
+
         m_VAO->AddVertexBuffer(*m_VBO);
         m_VBO->Unbind();
+
+        m_EBO = ElementBuffer::CreateElementBuffer();
+        m_EBO->SetData(indices, sizeof(indices));
 
         m_Texture = Texture2D::CreateTexture("res/texture/wood.png");
     }
@@ -56,7 +66,9 @@ namespace Mouton
         m_VAO->Bind();
         m_Shader->Bind();
         m_VBO->Bind();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        m_EBO->Bind();
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        m_EBO->Unbind();
         m_VBO->Unbind();
         m_VAO->Unbind();
         m_Shader->Unbind();

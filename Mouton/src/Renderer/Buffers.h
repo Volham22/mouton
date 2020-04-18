@@ -37,16 +37,27 @@ namespace Mouton
         std::vector<BufferElement> m_BufferElements;
     };
 
-    class VertexBuffer
+    class Buffer
     {
     public:
         virtual void Bind() = 0;
         virtual void Unbind() = 0;
         virtual void SetData(void* data, size_t size) = 0;
+    };
+
+    class VertexBuffer : public Buffer
+    {
+    public:
         virtual void SetLayout(const BufferLayout& layout) = 0;
         virtual BufferLayout& GetLayout() = 0;
 
         static std::shared_ptr<VertexBuffer> CreateVertexBuffer();
+    };
+
+    class ElementBuffer : public Buffer
+    {
+    public:
+        static std::shared_ptr<ElementBuffer> CreateElementBuffer();
     };
 
 } // namespace Mouton

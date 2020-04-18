@@ -25,6 +25,20 @@ namespace Mouton
         uint32_t m_OglVboHandle;
     };
 
+    class OpenGLElementBuffer : public ElementBuffer
+    {
+    public:
+        OpenGLElementBuffer();
+        ~OpenGLElementBuffer();
+
+        virtual void Bind() override;
+        virtual void Unbind() override;
+        virtual void SetData(void* data, size_t size) override;
+    
+    private:
+        uint32_t m_OglEboHandle;
+    };
+
 } // namespace Mouton
 
 

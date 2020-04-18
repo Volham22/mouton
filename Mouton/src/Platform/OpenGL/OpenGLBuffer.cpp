@@ -41,4 +41,32 @@ namespace Mouton
         glDeleteBuffers(GL_ARRAY_BUFFER, &m_OglVboHandle);
     }
 
+    OpenGLElementBuffer::OpenGLElementBuffer()
+        : m_OglEboHandle(0)
+    {
+        glGenBuffers(1, &m_OglEboHandle);
+    }
+
+    void OpenGLElementBuffer::Bind()
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_OglEboHandle);
+    }
+
+    void OpenGLElementBuffer::Unbind()
+    {
+         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    void OpenGLElementBuffer::SetData(void* data, size_t size)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_OglEboHandle);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    OpenGLElementBuffer::~OpenGLElementBuffer()
+    {
+        glDeleteBuffers(1, &m_OglEboHandle);
+    }
+
 } // namespace Mouton
