@@ -1,10 +1,8 @@
 #include "ApplicationLayer.h"
 
 #include "Core/Inputs.h"
-
-#include <glad/glad.h>
-
 #include "Renderer/RendererContext.h"
+#include "Renderer/Renderer.h"
 
 namespace Mouton
 {
@@ -15,6 +13,7 @@ namespace Mouton
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
+        Renderer::InitRenderer();
 
         static float vertices[] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -51,7 +50,7 @@ namespace Mouton
 
     void RenderLayer::OnBind()
     {
-        glClearColor(0.2, 0.2, 0.2, 1.0);
+        
     }
 
     void RenderLayer::OnUnbind()
@@ -61,13 +60,13 @@ namespace Mouton
     void RenderLayer::OnUpdate()
     {
         // Some rendering stuff will come here ...
-        glClear(GL_COLOR_BUFFER_BIT);
+        Renderer::BeginScene();
         m_Texture->Bind();
         m_VAO->Bind();
         m_Shader->Bind();
         m_VBO->Bind();
         m_EBO->Bind();
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        Renderer::DrawIndexed(6);
         m_EBO->Unbind();
         m_VBO->Unbind();
         m_VAO->Unbind();

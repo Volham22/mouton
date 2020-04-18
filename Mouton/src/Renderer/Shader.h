@@ -2,7 +2,6 @@
 #define SHADER_H
 
 #include "MoutonPch.h"
-#include <glm/glm.hpp>
 
 namespace Mouton
 {

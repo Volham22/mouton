@@ -16,6 +16,9 @@
 
 #include <Core/Log.h>
 
+// Include glm, it is used everywhere
+#include <glm/glm.hpp>
+
 // Events
 #include <Core/Events/Events.h>
 #include <Core/Events/ApplicationEvents.h>
