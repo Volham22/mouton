@@ -1,5 +1,7 @@
 #include "ApplicationLayer.h"
 
+#include "imgui.h"
+
 #include "Core/Inputs.h"
 #include "Renderer/RendererContext.h"
 #include "Renderer/Renderer.h"
@@ -9,7 +11,7 @@ namespace Mouton
 
     RenderLayer::RenderLayer(const char* name)
         : Layer(name), m_VBO(nullptr), m_Shader(), m_VAO(),
-          m_EBO(), m_Texture()
+          m_EBO(), m_Texture(), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f })
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
@@ -60,6 +62,13 @@ namespace Mouton
     void RenderLayer::OnUpdate()
     {
         // Some rendering stuff will come here ...
+        ImGui::Begin("Control texture color !");
+            ImGui::Text("Scroll color");
+            ImGui::DragFloat4("Color", glm::value_ptr(m_Color), 0.01f, 0.0f, 1.0f);
+        ImGui::End();
+
+        m_Shader->SetUniform("u_Color", m_Color);
+
         Renderer::BeginScene();
         m_Texture->Bind();
         m_VAO->Bind();

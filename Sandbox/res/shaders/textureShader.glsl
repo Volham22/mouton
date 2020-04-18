@@ -20,10 +20,11 @@ in vec2 texCoord;
 out vec4 fragmentColor;
 
 uniform sampler2D u_TexID;
+uniform vec4 u_Color;
 
 void main()
 {
-    fragmentColor = texture(u_TexID, texCoord);
+    fragmentColor = texture(u_TexID, texCoord) * u_Color;
 }
 
 #endtype fragment

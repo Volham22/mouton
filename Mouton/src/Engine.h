@@ -5,6 +5,7 @@
 
 #include "Renderer/Window.h"
 #include "Renderer/LayerManager.h"
+#include "ImGuiLayer.h"
 
 #define MOUTON_CORE_INCLUDED Mouton::Application* Mouton::Application::s_Application;
 
@@ -29,6 +30,7 @@ namespace Mouton
         static Application* s_Application;
         std::unique_ptr<Window> m_WindowInstance;
         LayerManager m_LayerManager;
+        ImGUILayer m_ImGuiLayer;
 
     };
     

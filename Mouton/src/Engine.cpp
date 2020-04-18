@@ -2,13 +2,13 @@
 
 #include "Core/Inputs.h"
 #include "ApplicationLayer.h"
-#include "ImGuiLayer.h"
 
 namespace Mouton
 {
 
     Application::Application(const WindowProperties& properties)
-        : m_WindowInstance(Window::CreateWindowInstance(properties)), m_LayerManager()
+        : m_WindowInstance(Window::CreateWindowInstance(properties)), m_LayerManager(),
+          m_ImGuiLayer(m_WindowInstance->GetWindowInternalInstance())
     {
         Inputs::InitInputs(m_WindowInstance->GetWindowInternalInstance());
     }
@@ -35,7 +35,6 @@ namespace Mouton
         m_WindowInstance->SetEventFunction(std::bind<bool>(&Application::OnEvent, this, _1));
 
         m_LayerManager.AddLayer(new RenderLayer());
-        m_LayerManager.AddLayer(new ImGUILayer(m_WindowInstance->GetWindowInternalInstance()));
     }
 
     bool Application::OnEvent(Event& event)
@@ -47,9 +46,13 @@ namespace Mouton
     void Application::Run()
     {
         // Main Mouton Application Loop
+        // ImGUi layer is always on the top
         while(true)
         {
+            m_ImGuiLayer.OnBind();
+            m_ImGuiLayer.OnUpdate();
             m_LayerManager.UpdateLayers();
+            m_ImGuiLayer.OnUnbind();
             m_WindowInstance->OnUpdate();
         }
     }

@@ -27,6 +27,7 @@ namespace Mouton
         std::shared_ptr<VertexArray> m_VAO;
         std::shared_ptr<ElementBuffer> m_EBO;
         std::shared_ptr<Texture2D> m_Texture;
+        glm::vec4 m_Color;
     };
 
 } // namespace Mouton
