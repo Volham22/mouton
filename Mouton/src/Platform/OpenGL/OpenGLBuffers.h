@@ -17,6 +17,7 @@ namespace Mouton
         virtual void Bind() override;
         virtual void Unbind() override;
         virtual void SetData(void* data, size_t size) override;
+        virtual void SetSubData(void* data, size_t begin, size_t end) override;
         virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout;};
         virtual BufferLayout& GetLayout() override { return m_Layout; };
 

@@ -11,6 +11,7 @@ namespace Mouton
     protected:
         virtual void ClearImp() override;
         virtual void SetClearColorImp(const glm::vec4& color);
+        virtual void SetDebugMessageImpl() override;
         virtual void DrawImp(int count) override;
         virtual void DrawIndexedImp(int indicesCount) override;
     };

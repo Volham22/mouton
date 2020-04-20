@@ -21,12 +21,35 @@ namespace Mouton
         static void EndScene();
     
     private:
-        static std::shared_ptr<VertexArray> s_VAO;
-        static std::shared_ptr<VertexBuffer> s_VBO;
-        static std::shared_ptr<ElementBuffer> s_EBO;
-        static std::shared_ptr<Shader> s_ColorShader;
-        static std::shared_ptr<Shader> s_TexturedShader;
-        static glm::mat4 s_VP;
+        static const int MAXQUAD = 10000;
+        static const int MAXTEXTURE = 8;
+
+        static Renderer2D s_Renderer2D;
+
+        Renderer2D();
+        void DrawBatch();
+
+        struct Vertex {
+            glm::vec3 positions;
+            glm::vec2 texCoords;
+            glm::vec4 color;
+            int textureID;
+        };
+
+        struct RendererData {
+            RendererData();
+            int quadCount; // number of quads actually in the buffer
+            int texturesCount;
+            std::array<Vertex, MAXQUAD * 6> data;
+            std::array<std::shared_ptr<Texture>, MAXTEXTURE> textures;
+        };
+
+        std::shared_ptr<VertexArray> m_VAO;
+        std::shared_ptr<VertexBuffer> m_VBO;
+        std::shared_ptr<Shader> m_2DRendererShader;
+        glm::mat4 m_VP;
+
+        RendererData m_BatchData;
     };
 
 } // namespace Mouton

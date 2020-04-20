@@ -48,6 +48,7 @@ namespace Mouton
     class VertexBuffer : public Buffer
     {
     public:
+        virtual void SetSubData(void* data, size_t begin, size_t end) = 0;
         virtual void SetLayout(const BufferLayout& layout) = 0;
         virtual BufferLayout& GetLayout() = 0;
 

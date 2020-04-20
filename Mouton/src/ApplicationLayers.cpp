@@ -38,6 +38,10 @@ namespace Mouton
 
         Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
         Renderer2D::DrawQuad({ 10.0f, 10.0f, 0.0f }, m_Color);
+        Renderer2D::DrawQuad({ 20.0f, 20.0f, 0.0f }, m_Color);
+        Renderer2D::DrawQuad({ 40.0f, 40.0f, 0.0f }, m_Color);
+        Renderer2D::DrawQuad({ 40.0f, 40.0f, 0.0f }, m_Color);
+        Renderer2D::DrawQuad({ 80.0f, 80.0f, 0.0f }, m_Color);
         Renderer2D::EndScene();
     }
 

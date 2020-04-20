@@ -36,6 +36,11 @@ namespace Mouton
         s_RenderCommand->SetClearColorImp(color);
     }
 
+    void RenderCommand::SetDebugMessage()
+    {
+        s_RenderCommand->SetDebugMessageImpl();
+    }
+
     void RenderCommand::Draw(int count)
     {
         s_RenderCommand->DrawImp(count);

@@ -47,6 +47,7 @@ namespace Mouton
         int slot = 0;
         uint64_t offset = 0;
 
+        vb.Bind();
         glBindVertexArray(m_VAOHandle);
 
         for(auto& elem : vb.GetLayout().GetElements())
@@ -67,6 +68,7 @@ namespace Mouton
         }
 
         glBindVertexArray(0);
+        vb.Unbind();
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
