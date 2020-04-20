@@ -29,6 +29,12 @@ namespace Mouton
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
+    bool OpenGLTexture2D::operator==(Texture2D& other) const
+    {
+        // Unsafe operation !
+        return m_TextureHandle == ((OpenGLTexture2D&)other).m_TextureHandle;
+    }
+
     void OpenGLTexture2D::LoadTexture(const char* filepath)
     {
         uint8_t* data = stbi_load(

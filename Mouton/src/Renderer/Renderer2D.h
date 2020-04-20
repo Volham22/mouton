@@ -17,7 +17,7 @@ namespace Mouton
         static void Init();
         static void BeginScene(const glm::mat4& camera);
         static void DrawQuad(const glm::vec3& quads, const glm::vec4& color);
-        static void DrawQuad(const glm::vec3& quads, const Texture& texture);
+        static void DrawQuad(const glm::vec3& quads, std::shared_ptr<Texture2D>& texture);
         static void EndScene();
     
     private:
@@ -33,7 +33,7 @@ namespace Mouton
             glm::vec3 positions;
             glm::vec2 texCoords;
             glm::vec4 color;
-            int textureID;
+            float textureID;
         };
 
         struct RendererData {
@@ -41,7 +41,7 @@ namespace Mouton
             int quadCount; // number of quads actually in the buffer
             int texturesCount;
             std::array<Vertex, MAXQUAD * 6> data;
-            std::array<std::shared_ptr<Texture>, MAXTEXTURE> textures;
+            std::array<std::shared_ptr<Texture2D>, MAXTEXTURE> textures;
         };
 
         std::shared_ptr<VertexArray> m_VAO;

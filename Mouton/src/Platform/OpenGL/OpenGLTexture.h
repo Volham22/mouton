@@ -15,6 +15,8 @@ namespace Mouton
         virtual void Unbind() override;
         virtual int GetWidth() override { return m_TextureWidth; };
         virtual int GetHeight() override { return m_TextureHeight; };
+
+        virtual bool operator==(Texture2D& other) const override;
     
     private:
         void LoadTexture(const char* filepath);

@@ -18,6 +18,8 @@ namespace Mouton
     class Texture2D : public Texture
     {
     public:
+        virtual bool operator==(Texture2D& other) const = 0;
+
         static std::shared_ptr<Texture2D> CreateTexture(const char* filepath);
     };
 

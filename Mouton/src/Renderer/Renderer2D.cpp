@@ -30,7 +30,7 @@ namespace Mouton
             { ShaderType::Float3, false },
             { ShaderType::Float2, false },
             { ShaderType::Float4, false },
-            { ShaderType::Int,    false }
+            { ShaderType::Float,  false }
         });
 
         s_Renderer2D.m_VAO->AddVertexBuffer(*(s_Renderer2D.m_VBO));
@@ -91,14 +91,74 @@ namespace Mouton
             s_Renderer2D.DrawBatch();
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& quads, const Texture& texture)
+    void Renderer2D::DrawQuad(const glm::vec3& quads, std::shared_ptr<Texture2D>& texture)
     {
+        int iQuad = s_Renderer2D.m_BatchData.quadCount;
 
+        const glm::vec3 verticesPositions[] = {
+            {-0.5f, -0.5f, 0.0f },
+            {-0.5f,  0.5f, 0.0f },
+            { 0.5f,  0.5f, 0.0f },
+
+            {-0.5f, -0.5f, 0.0f },
+            { 0.5f, -0.5f, 0.0f },
+            { 0.5f,  0.5f, 0.0f },
+        };
+
+        const glm::vec2 texCoords[] = {
+            { 0.0f, 0.0f, },
+            { 0.0f, 1.0f, },
+            { 1.0f, 1.0f, },
+
+            { 0.0f, 0.0f, },
+            { 1.0f, 0.0f, },
+            { 1.0f, 1.0f, },
+        };
+
+        // Check if the texture has been previously used
+        int textureIndice = 0;
+        for(int i = 1; i < s_Renderer2D.m_BatchData.texturesCount; i++)
+        {
+            if(texture.get() == s_Renderer2D.m_BatchData.textures[i].get())
+            {
+                textureIndice = i;
+                break;
+            }
+        }
+
+        // Add the texture if needed
+        if(textureIndice == 0)
+        {
+            s_Renderer2D.m_BatchData.texturesCount++;
+            s_Renderer2D.m_BatchData.textures[s_Renderer2D.m_BatchData.texturesCount] = texture;
+            textureIndice = s_Renderer2D.m_BatchData.texturesCount;
+        }
+
+        for(int i = 0; i < 6; i++)
+        {
+            s_Renderer2D.m_BatchData.data[iQuad + i] = {
+                verticesPositions[i],
+                texCoords[i],
+                glm::vec4(1.0f),
+                static_cast<float>(textureIndice)
+            };
+        }
+
+        s_Renderer2D.m_BatchData.quadCount += 6;
+
+        if(s_Renderer2D.m_BatchData.quadCount >= MAXQUAD || s_Renderer2D.m_BatchData.texturesCount >= MAXTEXTURE)
+            s_Renderer2D.DrawBatch();
     }
 
     void Renderer2D::DrawBatch()
     {
-        m_2DRendererShader->SetUniform("u_VP", m_VP);
+        for(int i = 1; i < m_BatchData.texturesCount + 1; i++)
+        {
+            m_BatchData.textures[i]->Bind(i);
+            m_2DRendererShader->SetUniform("u_TextureID[" + std::to_string(i) + "]", i);
+        }
+
+        //m_2DRendererShader->SetUniform("u_VP", m_VP);
         m_VBO->SetSubData(&m_BatchData.data[0], 0, sizeof(Vertex) * s_Renderer2D.m_BatchData.quadCount);
 
         m_VBO->Bind();
@@ -108,6 +168,9 @@ namespace Mouton
         m_2DRendererShader->Unbind();
         m_VBO->Unbind();
         m_VAO->Unbind();
+
+        for(int i = 1; i < m_BatchData.texturesCount + 1; i++)
+            s_Renderer2D.m_BatchData.textures[i]->Unbind();
 
         m_BatchData.quadCount = 0;
         m_BatchData.texturesCount = 0;

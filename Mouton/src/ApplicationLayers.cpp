@@ -11,11 +11,14 @@ namespace Mouton
 
     RenderLayer::RenderLayer(const char* name)
         : Layer(name), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f }),
-          m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f), m_Rotation(0.0f)
+          m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f), m_Rotation(0.0f),
+          m_Texture()
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
         Renderer2D::Init();
+
+        m_Texture = Texture2D::CreateTexture("res/texture/wood.png");
     }
 
     void RenderLayer::OnBind()
@@ -37,11 +40,8 @@ namespace Mouton
         ImGui::End();
 
         Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
-        Renderer2D::DrawQuad({ 10.0f, 10.0f, 0.0f }, m_Color);
-        Renderer2D::DrawQuad({ 20.0f, 20.0f, 0.0f }, m_Color);
-        Renderer2D::DrawQuad({ 40.0f, 40.0f, 0.0f }, m_Color);
-        Renderer2D::DrawQuad({ 40.0f, 40.0f, 0.0f }, m_Color);
-        Renderer2D::DrawQuad({ 80.0f, 80.0f, 0.0f }, m_Color);
+        //Renderer2D::DrawQuad({ 10.0f, 10.0f, 0.0f }, m_Color);
+        Renderer2D::DrawQuad({ 10.0f, 10.0f, 0.0f }, m_Texture);
         Renderer2D::EndScene();
     }
 

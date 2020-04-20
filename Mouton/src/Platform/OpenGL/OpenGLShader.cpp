@@ -24,6 +24,7 @@ namespace Mouton
 
     void OpenGLShader::SetUniform(const std::string& name, int value)
     {
+        glUseProgram(m_ProgramHandle);
         int location = GetUniformLocation(name);
 
         if(location >= 0)

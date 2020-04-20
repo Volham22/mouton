@@ -4,6 +4,7 @@
 #include "Renderer/Layer.h"
 #include "Renderer/Renderer2D.h"
 #include "Renderer/Camera.h"
+#include "Renderer/Texture.h"
 
 struct GLFWwindow;
 
@@ -24,6 +25,7 @@ namespace Mouton
         glm::vec3 m_CameraPosition;
         float m_Rotation;
         OrthographicCamera m_Camera;
+        std::shared_ptr<Texture2D> m_Texture;
     };
 
 } // namespace Mouton
