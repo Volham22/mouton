@@ -3,6 +3,7 @@ set(MTN_SRC
     src/MoutonPch.cpp
     src/ApplicationLayers.cpp
     src/ImGuiLayer.cpp
+    src/ImGuiLayer.cpp
     src/Core/Log.cpp
     src/Core/Events/Events.cpp
     src/Core/Events/KeyEvents.cpp
@@ -19,6 +20,7 @@ set(MTN_SRC
     src/Renderer/Renderer.cpp
     src/Renderer/RenderCommand.cpp
     src/Renderer/Renderer2D.cpp
+    src/Renderer/Camera.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
     src/Platform/MoutonOpenGLImgui.cpp

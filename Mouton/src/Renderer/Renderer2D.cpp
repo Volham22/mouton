@@ -8,6 +8,7 @@ namespace Mouton
     std::shared_ptr<ElementBuffer> Renderer2D::s_EBO;
     std::shared_ptr<Shader> Renderer2D::s_ColorShader;
     std::shared_ptr<Shader> Renderer2D::s_TexturedShader;
+    glm::mat4 Renderer2D::s_VP;
 
     void Renderer2D::Init()
     {
@@ -27,9 +28,10 @@ namespace Mouton
         s_EBO->SetData(indices, sizeof(indices));
     }
 
-    void Renderer2D::BeginScene()
+    void Renderer2D::BeginScene(const glm::mat4& camera)
     {
         Renderer::BeginScene();
+        s_VP = camera;
     }
 
     void Renderer2D::EndScene()
@@ -51,6 +53,7 @@ namespace Mouton
         };
 
         s_ColorShader->SetUniform("u_Color", color);
+        s_ColorShader->SetUniform("u_VP", s_VP);
 
         s_VBO->SetData(vertices, sizeof(vertices));
         s_VBO->Bind();

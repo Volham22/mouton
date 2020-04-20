@@ -15,7 +15,7 @@ namespace Mouton
     {
     public:
         static void Init();
-        static void BeginScene();
+        static void BeginScene(const glm::mat4& camera);
         static void DrawQuad(const glm::vec3& quads, const glm::vec4& color);
         static void DrawQuad(const glm::vec3& quads, const Texture& texture);
         static void EndScene();
@@ -26,6 +26,7 @@ namespace Mouton
         static std::shared_ptr<ElementBuffer> s_EBO;
         static std::shared_ptr<Shader> s_ColorShader;
         static std::shared_ptr<Shader> s_TexturedShader;
+        static glm::mat4 s_VP;
     };
 
 } // namespace Mouton

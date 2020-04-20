@@ -10,7 +10,8 @@ namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f })
+        : Layer(name), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f }),
+          m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f)
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
@@ -19,7 +20,7 @@ namespace Mouton
 
     void RenderLayer::OnBind()
     {
-        
+        m_Camera.SetPosition(m_CameraPosition);
     }
 
     void RenderLayer::OnUnbind()
@@ -34,8 +35,9 @@ namespace Mouton
             ImGui::DragFloat4("Color", glm::value_ptr(m_Color), 0.01f, 0.0f, 1.0f);
         ImGui::End();
 
-        Renderer2D::BeginScene();
-        Renderer2D::DrawQuad({ -0.25f, -0.25f, 0.0f }, m_Color);
+        Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
+        Renderer2D::DrawQuad({ 10.0f, 10.0f, 0.0f }, m_Color);
+        Renderer2D::EndScene();
     }
 
     bool RenderLayer::OnEvent(Event& event)
@@ -71,18 +73,32 @@ namespace Mouton
             return true;
         });
 
-        EventSystem::ApplyFunction<KeyPressedEvent>(&event, [](Event& event) -> bool {
+        EventSystem::ApplyFunction<KeyPressedEvent>(&event, [this](Event& event) -> bool {
             auto& ev = dynamic_cast<KeyPressedEvent&>(event);
-             if(ev.GetCode() == Keys::SPACE)
-                MTN_INFO("Space key pressed !");
-            
+
+            if(ev.GetCode() == Keys::RIGHT)
+                m_CameraPosition.x += 0.5f;
+            else if(ev.GetCode() == Keys::LEFT)
+                m_CameraPosition.x += -0.5f;
+            else if(ev.GetCode() == Keys::UP)
+                m_CameraPosition.y += 0.5f;
+            else if(ev.GetCode() == Keys::DOWN)
+                m_CameraPosition.y += -0.5f;
+
             return true;
         });
 
-        EventSystem::ApplyFunction<KeyMaintainedEvent>(&event, [](Event& event) -> bool {
+        EventSystem::ApplyFunction<KeyMaintainedEvent>(&event, [this](Event& event) -> bool {
             auto& ev = dynamic_cast<KeyMaintainedEvent&>(event);
-            if(ev.GetCode() == Keys::SPACE)
-                MTN_INFO("Space key maintained !");
+
+            if(ev.GetCode() == Keys::RIGHT)
+                m_CameraPosition.x += 0.5f;
+            else if(ev.GetCode() == Keys::LEFT)
+                m_CameraPosition.x += -0.5f;
+            else if(ev.GetCode() == Keys::UP)
+                m_CameraPosition.y += 0.5f;
+            else if(ev.GetCode() == Keys::DOWN)
+                m_CameraPosition.y += -0.5f;
             return true;
         });
 

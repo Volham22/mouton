@@ -3,6 +3,7 @@
 
 #include "Renderer/Layer.h"
 #include "Renderer/Renderer2D.h"
+#include "Renderer/Camera.h"
 
 struct GLFWwindow;
 
@@ -20,6 +21,8 @@ namespace Mouton
     
     private:
         glm::vec4 m_Color;
+        glm::vec3 m_CameraPosition;
+        OrthographicCamera m_Camera;
     };
 
 } // namespace Mouton
