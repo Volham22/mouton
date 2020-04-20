@@ -10,44 +10,11 @@ namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name), m_VBO(nullptr), m_Shader(), m_VAO(),
-          m_EBO(), m_Texture(), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f })
+        : Layer(name), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f })
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
-        Renderer::InitRenderer();
-
-        static float vertices[] = {
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-        };
-
-        static unsigned int indices[] = {
-            0, 1, 2, 0, 3, 2
-        };
-
-        m_VAO = VertexArray::CreateVertexArray();
-
-        m_Shader = Shader::CreateShader("res/shaders/textureShader.glsl");
-        m_Shader->SetUniform("u_TexID", 0);
-
-        m_VBO = VertexBuffer::CreateVertexBuffer();
-        m_VBO->SetData(vertices, sizeof(vertices));
-        m_VBO->Bind();
-        m_VBO->SetLayout({
-            { ShaderType::Float3, false },
-            { ShaderType::Float2, false }
-        });
-
-        m_VAO->AddVertexBuffer(*m_VBO);
-        m_VBO->Unbind();
-
-        m_EBO = ElementBuffer::CreateElementBuffer();
-        m_EBO->SetData(indices, sizeof(indices));
-
-        m_Texture = Texture2D::CreateTexture("res/texture/wood.png");
+        Renderer2D::Init();
     }
 
     void RenderLayer::OnBind()
@@ -67,20 +34,8 @@ namespace Mouton
             ImGui::DragFloat4("Color", glm::value_ptr(m_Color), 0.01f, 0.0f, 1.0f);
         ImGui::End();
 
-        m_Shader->SetUniform("u_Color", m_Color);
-
-        Renderer::BeginScene();
-        m_Texture->Bind();
-        m_VAO->Bind();
-        m_Shader->Bind();
-        m_VBO->Bind();
-        m_EBO->Bind();
-        Renderer::DrawIndexed(6);
-        m_EBO->Unbind();
-        m_VBO->Unbind();
-        m_VAO->Unbind();
-        m_Shader->Unbind();
-        m_Texture->Unbind();
+        Renderer2D::BeginScene();
+        Renderer2D::DrawQuad({ -0.25f, -0.25f, 0.0f }, m_Color);
     }
 
     bool RenderLayer::OnEvent(Event& event)

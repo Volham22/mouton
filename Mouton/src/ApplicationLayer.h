@@ -1,11 +1,8 @@
 #ifndef APPLICATION_LAYER_H
 #define APPLICATION_LAYER_H
 
-#include "Renderer/VertexArray.h"
-#include "Renderer/Texture.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Buffers.h"
-#include "Renderer/Layer.h" // Also include MoutonPch.h
+#include "Renderer/Layer.h"
+#include "Renderer/Renderer2D.h"
 
 struct GLFWwindow;
 
@@ -22,11 +19,6 @@ namespace Mouton
         virtual bool OnEvent(Event& event) override;
     
     private:
-        std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<VertexBuffer> m_VBO;
-        std::shared_ptr<VertexArray> m_VAO;
-        std::shared_ptr<ElementBuffer> m_EBO;
-        std::shared_ptr<Texture2D> m_Texture;
         glm::vec4 m_Color;
     };
 

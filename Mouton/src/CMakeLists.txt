@@ -18,6 +18,7 @@ set(MTN_SRC
     src/Renderer/Texture.cpp
     src/Renderer/Renderer.cpp
     src/Renderer/RenderCommand.cpp
+    src/Renderer/Renderer2D.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
     src/Platform/MoutonOpenGLImgui.cpp
