@@ -11,7 +11,7 @@ namespace Mouton
 
     RenderLayer::RenderLayer(const char* name)
         : Layer(name), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f }),
-          m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f)
+          m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f), m_Rotation(0.0f)
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
@@ -21,6 +21,7 @@ namespace Mouton
     void RenderLayer::OnBind()
     {
         m_Camera.SetPosition(m_CameraPosition);
+        m_Camera.SetRotation(m_Rotation);
     }
 
     void RenderLayer::OnUnbind()
@@ -84,6 +85,10 @@ namespace Mouton
                 m_CameraPosition.y += 0.5f;
             else if(ev.GetCode() == Keys::DOWN)
                 m_CameraPosition.y += -0.5f;
+            else if(ev.GetCode() == Keys::Q)
+                m_Rotation += 0.5f;
+            else if(ev.GetCode() == Keys::R)
+                m_Rotation += -0.5f;
 
             return true;
         });
@@ -99,6 +104,10 @@ namespace Mouton
                 m_CameraPosition.y += 0.5f;
             else if(ev.GetCode() == Keys::DOWN)
                 m_CameraPosition.y += -0.5f;
+            else if(ev.GetCode() == Keys::Q)
+                m_Rotation += 0.5f;
+            else if(ev.GetCode() == Keys::R)
+                m_Rotation += -0.5f;
             return true;
         });
 

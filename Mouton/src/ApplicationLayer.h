@@ -22,6 +22,7 @@ namespace Mouton
     private:
         glm::vec4 m_Color;
         glm::vec3 m_CameraPosition;
+        float m_Rotation;
         OrthographicCamera m_Camera;
     };
 
