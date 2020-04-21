@@ -41,6 +41,8 @@ namespace Mouton
     {
         Renderer::BeginScene();
         s_Renderer2D.m_VP = camera;
+        s_Renderer2D.m_BatchData.drawCallPerFrame = 0;
+        s_Renderer2D.m_BatchData.verticesAmount = 0;
     }
 
     void Renderer2D::EndScene()
@@ -87,6 +89,7 @@ namespace Mouton
         }
 
         s_Renderer2D.m_BatchData.quadCount += 6;
+        s_Renderer2D.m_BatchData.verticesAmount += 6;
 
         if(s_Renderer2D.m_BatchData.quadCount >= MAXQUAD || s_Renderer2D.m_BatchData.texturesCount >= MAXTEXTURE)
             s_Renderer2D.DrawBatch();
@@ -147,9 +150,20 @@ namespace Mouton
         }
 
         s_Renderer2D.m_BatchData.quadCount += 6;
+        s_Renderer2D.m_BatchData.verticesAmount += 6;
 
         if(s_Renderer2D.m_BatchData.quadCount >= MAXQUAD || s_Renderer2D.m_BatchData.texturesCount >= MAXTEXTURE)
             s_Renderer2D.DrawBatch();
+    }
+
+    int Renderer2D::GetDrawCallPerFrame()
+    {
+        return s_Renderer2D.m_BatchData.drawCallPerFrame;
+    }
+
+    int Renderer2D::GetVerticesAmount()
+    {
+        return s_Renderer2D.m_BatchData.verticesAmount;
     }
 
     void Renderer2D::DrawBatch()
@@ -176,6 +190,7 @@ namespace Mouton
 
         m_BatchData.quadCount = 0;
         m_BatchData.texturesCount = 0;
+        m_BatchData.drawCallPerFrame++;
     }
 
 } // namespace Mouton

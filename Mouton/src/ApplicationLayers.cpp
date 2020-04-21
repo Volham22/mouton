@@ -10,7 +10,7 @@ namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name), m_QuadSize(1.0f), m_QuadPosition(1.0f), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f }),
+        : Layer(name), m_Count(10), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f }),
           m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f), m_Rotation(0.0f), m_QuadRotation(0.0f),
           m_Texture()
     {
@@ -37,14 +37,23 @@ namespace Mouton
         ImGui::Begin("Control texture color !");
             ImGui::Text("Scroll color");
             ImGui::DragFloat4("Color", glm::value_ptr(m_Color), 0.01f, 0.0f, 1.0f);
-            ImGui::DragFloat2("Size", glm::value_ptr(m_QuadSize));
-            ImGui::DragFloat3("Position", glm::value_ptr(m_QuadPosition));
             ImGui::DragFloat("Rotate", &m_QuadRotation);
+            ImGui::DragInt("Quad count", &m_Count);
+        ImGui::End();
+
+        ImGui::Begin("Renderer 2D stats");
+            ImGui::Text(("Number of drawcalls per frame : " + std::to_string(Renderer2D::GetDrawCallPerFrame())).c_str());
+            ImGui::Text(("Number of vertices per frame : " + std::to_string(Renderer2D::GetVerticesAmount())).c_str());
         ImGui::End();
 
         Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
-        Renderer2D::DrawQuad({ 20.0f, 20.0f, 0.0f }, { 10.0f, 10.0f }, m_Color, m_QuadRotation);
-        Renderer2D::DrawQuad(m_QuadPosition, m_QuadSize, m_Texture, m_QuadRotation);
+
+        for(int i = 0; i < m_Count; i++)
+        {
+            for(int j = 0; j < m_Count; j++)
+                Renderer2D::DrawQuad({ i * 10.0f, j * 10.0f, 0.0f}, { 5.0f, 5.0f }, m_Color, m_QuadRotation);
+        }
+
         Renderer2D::EndScene();
     }
 
