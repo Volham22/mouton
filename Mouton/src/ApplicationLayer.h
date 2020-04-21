@@ -21,6 +21,8 @@ namespace Mouton
         virtual bool OnEvent(Event& event) override;
     
     private:
+        glm::vec2 m_QuadSize;
+        glm::vec3 m_QuadPosition;
         glm::vec4 m_Color;
         glm::vec3 m_CameraPosition;
         float m_Rotation;

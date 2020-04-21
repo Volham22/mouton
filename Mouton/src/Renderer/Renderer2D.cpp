@@ -27,7 +27,7 @@ namespace Mouton
         s_Renderer2D.m_VP = glm::mat4(1.0f);
 
         s_Renderer2D.m_VBO->SetLayout({
-            { ShaderType::Float3, false },
+            { ShaderType::Float4, false },
             { ShaderType::Float2, false },
             { ShaderType::Float4, false },
             { ShaderType::Float,  false }
@@ -51,18 +51,18 @@ namespace Mouton
             s_Renderer2D.DrawBatch();
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& quad, const glm::vec4& color)
+    void Renderer2D::DrawQuad(const glm::vec3& quad, const glm::vec2 size, const glm::vec4& color)
     {
         int iQuad = s_Renderer2D.m_BatchData.quadCount;
 
-        const glm::vec3 verticesPositions[] = {
-            {-0.5f, -0.5f, 0.0f },
-            {-0.5f,  0.5f, 0.0f },
-            { 0.5f,  0.5f, 0.0f },
+        const glm::vec4 verticesPositions[] = {
+            {-0.5f, -0.5f, 0.0f, 1.0f },
+            {-0.5f,  -0.5f + size.y, 0.0f, 1.0f },
+            { -0.5f + size.x,  -0.5f + size.y, 0.0f, 1.0f },
 
-            {-0.5f, -0.5f, 0.0f },
-            { 0.5f, -0.5f, 0.0f },
-            { 0.5f,  0.5f, 0.0f },
+            {-0.5f, -0.5f, 0.0f, 1.0f },
+            { -0.5f + size.x, -0.5f, 0.0f, 1.0f },
+            { -0.5f + size.x,  -0.5f + size.y, 0.0f, 1.0f },
         };
 
         const glm::vec2 texCoords[] = {
@@ -78,7 +78,7 @@ namespace Mouton
         for(int i = 0; i < 6; i++)
         {
             s_Renderer2D.m_BatchData.data[iQuad + i] = {
-                verticesPositions[i],
+                s_Renderer2D.m_VP * glm::translate(glm::mat4(1.0f), quad) * verticesPositions[i],
                 texCoords[i],
                 color,
                 0
@@ -91,18 +91,18 @@ namespace Mouton
             s_Renderer2D.DrawBatch();
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& quads, std::shared_ptr<Texture2D>& texture)
+    void Renderer2D::DrawQuad(const glm::vec3& quad, const glm::vec2& size, std::shared_ptr<Texture2D>& texture)
     {
         int iQuad = s_Renderer2D.m_BatchData.quadCount;
 
-        const glm::vec3 verticesPositions[] = {
-            {-0.5f, -0.5f, 0.0f },
-            {-0.5f,  0.5f, 0.0f },
-            { 0.5f,  0.5f, 0.0f },
+        glm::vec4 verticesPositions[] = {
+            {-0.5f, -0.5f, 0.0f, 1.0f },
+            {-0.5f,  -0.5f + size.y, 0.0f, 1.0f },
+            { -0.5f + size.x,  -0.5f + size.y, 0.0f, 1.0f },
 
-            {-0.5f, -0.5f, 0.0f },
-            { 0.5f, -0.5f, 0.0f },
-            { 0.5f,  0.5f, 0.0f },
+            {-0.5f, -0.5f, 0.0f, 1.0f },
+            { -0.5f + size.x, -0.5f, 0.0f, 1.0f },
+            { -0.5f + size.x,  -0.5f + size.y, 0.0f, 1.0f },
         };
 
         const glm::vec2 texCoords[] = {
@@ -137,7 +137,7 @@ namespace Mouton
         for(int i = 0; i < 6; i++)
         {
             s_Renderer2D.m_BatchData.data[iQuad + i] = {
-                verticesPositions[i],
+                s_Renderer2D.m_VP * glm::translate(glm::mat4(1.0f), quad) * verticesPositions[i],
                 texCoords[i],
                 glm::vec4(1.0f),
                 static_cast<float>(textureIndice)
