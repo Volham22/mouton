@@ -51,7 +51,7 @@ namespace Mouton
             s_Renderer2D.DrawBatch();
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& quad, const glm::vec2 size, const glm::vec4& color)
+    void Renderer2D::DrawQuad(const glm::vec3& quad, const glm::vec2 size, const glm::vec4& color, float rotation)
     {
         int iQuad = s_Renderer2D.m_BatchData.quadCount;
 
@@ -78,7 +78,8 @@ namespace Mouton
         for(int i = 0; i < 6; i++)
         {
             s_Renderer2D.m_BatchData.data[iQuad + i] = {
-                s_Renderer2D.m_VP * glm::translate(glm::mat4(1.0f), quad) * verticesPositions[i],
+                s_Renderer2D.m_VP * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0, 0, 1)) *
+                    glm::translate(glm::mat4(1.0f), quad) * verticesPositions[i],
                 texCoords[i],
                 color,
                 0
@@ -91,7 +92,7 @@ namespace Mouton
             s_Renderer2D.DrawBatch();
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3& quad, const glm::vec2& size, std::shared_ptr<Texture2D>& texture)
+    void Renderer2D::DrawQuad(const glm::vec3& quad, const glm::vec2& size, std::shared_ptr<Texture2D>& texture, float rotation)
     {
         int iQuad = s_Renderer2D.m_BatchData.quadCount;
 
@@ -137,7 +138,8 @@ namespace Mouton
         for(int i = 0; i < 6; i++)
         {
             s_Renderer2D.m_BatchData.data[iQuad + i] = {
-                s_Renderer2D.m_VP * glm::translate(glm::mat4(1.0f), quad) * verticesPositions[i],
+                s_Renderer2D.m_VP * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0, 0, 1)) *
+                    glm::translate(glm::mat4(1.0f), quad) * verticesPositions[i],
                 texCoords[i],
                 glm::vec4(1.0f),
                 static_cast<float>(textureIndice)

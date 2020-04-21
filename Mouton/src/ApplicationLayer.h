@@ -25,7 +25,7 @@ namespace Mouton
         glm::vec3 m_QuadPosition;
         glm::vec4 m_Color;
         glm::vec3 m_CameraPosition;
-        float m_Rotation;
+        float m_Rotation, m_QuadRotation;
         OrthographicCamera m_Camera;
         std::shared_ptr<Texture2D> m_Texture;
     };

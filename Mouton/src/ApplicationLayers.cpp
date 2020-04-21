@@ -11,7 +11,7 @@ namespace Mouton
 
     RenderLayer::RenderLayer(const char* name)
         : Layer(name), m_QuadSize(1.0f), m_QuadPosition(1.0f), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f }),
-          m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f), m_Rotation(0.0f),
+          m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f), m_Rotation(0.0f), m_QuadRotation(0.0f),
           m_Texture()
     {
         // Some temporary code here
@@ -39,11 +39,12 @@ namespace Mouton
             ImGui::DragFloat4("Color", glm::value_ptr(m_Color), 0.01f, 0.0f, 1.0f);
             ImGui::DragFloat2("Size", glm::value_ptr(m_QuadSize));
             ImGui::DragFloat3("Position", glm::value_ptr(m_QuadPosition));
+            ImGui::DragFloat("Rotate", &m_QuadRotation);
         ImGui::End();
 
         Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
-        Renderer2D::DrawQuad({ 20.0f, 20.0f, 0.0f }, { 10.0f, 10.0f }, m_Color);
-        Renderer2D::DrawQuad(m_QuadPosition, m_QuadSize, m_Texture);
+        Renderer2D::DrawQuad({ 20.0f, 20.0f, 0.0f }, { 10.0f, 10.0f }, m_Color, m_QuadRotation);
+        Renderer2D::DrawQuad(m_QuadPosition, m_QuadSize, m_Texture, m_QuadRotation);
         Renderer2D::EndScene();
     }
 

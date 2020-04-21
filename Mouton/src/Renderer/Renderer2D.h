@@ -16,8 +16,8 @@ namespace Mouton
     public:
         static void Init();
         static void BeginScene(const glm::mat4& camera);
-        static void DrawQuad(const glm::vec3& quad, const glm::vec2 size, const glm::vec4& color);
-        static void DrawQuad(const glm::vec3& quads, const glm::vec2& size, std::shared_ptr<Texture2D>& texture);
+        static void DrawQuad(const glm::vec3& quad, const glm::vec2 size, const glm::vec4& color, float rotation = 0.0f);
+        static void DrawQuad(const glm::vec3& quads, const glm::vec2& size, std::shared_ptr<Texture2D>& texture, float rotation = 0.0f);
         static void EndScene();
     
     private:
