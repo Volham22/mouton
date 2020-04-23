@@ -15,6 +15,17 @@ namespace Mouton
         glClearColor(color.r, color.g, color.b, color.a);
     }
 
+    void OpenGLRenderCommand::SetBlendingImpl(bool enable)
+    {
+        if(enable)
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
+        }
+        else
+            glDisable(GL_BLEND);
+    }
+
     void OpenGLRenderCommand::SetDebugMessageImpl()
     {
     

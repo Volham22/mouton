@@ -18,6 +18,11 @@ namespace Mouton
         RenderCommand::Clear();
     }
 
+    void Renderer::SetBlending(bool enable)
+    {
+        RenderCommand::SetBlending(true);
+    }
+
     void Renderer::Draw(int count)
     {
         RenderCommand::Draw(count);

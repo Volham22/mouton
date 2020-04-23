@@ -20,6 +20,7 @@ namespace Mouton
     void Renderer2D::Init()
     {
         Renderer::InitRenderer();
+        Renderer::SetBlending(true);
 
         s_Renderer2D.m_VAO = VertexArray::CreateVertexArray();
         s_Renderer2D.m_VBO = VertexBuffer::CreateVertexBuffer();

@@ -36,6 +36,11 @@ namespace Mouton
         s_RenderCommand->SetClearColorImp(color);
     }
 
+    void RenderCommand::SetBlending(bool enable)
+    {
+        s_RenderCommand->SetBlendingImpl(enable);
+    }
+
     void RenderCommand::SetDebugMessage()
     {
         s_RenderCommand->SetDebugMessageImpl();

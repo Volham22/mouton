@@ -18,7 +18,7 @@ namespace Mouton
         RendererContext::InitContext(GraphicAPI::OpenGL);
         Renderer2D::Init();
 
-        m_Texture = Texture2D::CreateTexture("res/texture/wood.png");
+        m_Texture = Texture2D::CreateTexture("res/texture/error.png");
     }
 
     void RenderLayer::OnBind()
@@ -51,7 +51,7 @@ namespace Mouton
         for(int i = 0; i < m_Count; i++)
         {
             for(int j = 0; j < m_Count; j++)
-                Renderer2D::DrawQuad({ i * 10.0f, j * 10.0f, 0.0f}, { 5.0f, 5.0f }, m_Color, m_QuadRotation);
+                Renderer2D::DrawQuad({ i * 10.0f, j * 10.0f, 0.0f}, { 5.0f, 5.0f }, m_Texture, m_QuadRotation);
         }
 
         Renderer2D::EndScene();

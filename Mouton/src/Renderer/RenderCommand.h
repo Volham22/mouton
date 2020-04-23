@@ -12,6 +12,7 @@ namespace Mouton
         static void Init();
         static void Clear();
         static void SetClearColor(const glm::vec4& color);
+        static void SetBlending(bool enable = true);
         static void Draw(int count);
         static void DrawIndexed(int indicesCount);
         static void SetDebugMessage();
@@ -20,6 +21,7 @@ namespace Mouton
         virtual void ClearImp() = 0;
         virtual void SetClearColorImp(const glm::vec4& color) = 0;
         virtual void SetDebugMessageImpl() = 0;
+        virtual void SetBlendingImpl(bool enable = true) = 0;
         virtual void DrawImp(int count) = 0;
         virtual void DrawIndexedImp(int indicesCount) = 0;
 
