@@ -11,6 +11,7 @@ namespace Mouton
     protected:
         virtual void ClearImp() override;
         virtual void SetClearColorImp(const glm::vec4& color);
+        virtual void SetDepthTestImp(bool enable) override;
         virtual void SetBlendingImpl(bool enable = true) override;
         virtual void SetDebugMessageImpl() override;
         virtual void DrawImp(int count) override;

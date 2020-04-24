@@ -21,12 +21,12 @@ namespace Mouton
         virtual bool OnEvent(Event& event) override;
     
     private:
-        int m_Count;
-        glm::vec4 m_Color;
-        glm::vec3 m_CameraPosition;
-        float m_Rotation, m_QuadRotation;
-        OrthographicCamera m_Camera;
+        std::shared_ptr<Shader> m_Shader;
+        std::shared_ptr<VertexArray> m_VAO;
+        std::shared_ptr<VertexBuffer> m_VBO;
         std::shared_ptr<Texture2D> m_Texture;
+        glm::vec3 m_CameraPosition, m_CameraDirection;
+        PerspectiveCamera m_Camera;
     };
 
 } // namespace Mouton

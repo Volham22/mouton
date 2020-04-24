@@ -11,6 +11,7 @@ namespace Mouton
     public:
         static void Init();
         static void Clear();
+        static void SetDepthTest(bool enable = true);
         static void SetClearColor(const glm::vec4& color);
         static void SetBlending(bool enable = true);
         static void Draw(int count);
@@ -19,6 +20,7 @@ namespace Mouton
     
     protected:
         virtual void ClearImp() = 0;
+        virtual void SetDepthTestImp(bool enable = true) = 0;
         virtual void SetClearColorImp(const glm::vec4& color) = 0;
         virtual void SetDebugMessageImpl() = 0;
         virtual void SetBlendingImpl(bool enable = true) = 0;

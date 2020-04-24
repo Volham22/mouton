@@ -10,21 +10,78 @@ namespace Mouton
 {
 
     RenderLayer::RenderLayer(const char* name)
-        : Layer(name), m_Count(10), m_Color({ 1.0f, 1.0f, 1.0f, 1.0f }),
-          m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_CameraPosition(0.0f), m_Rotation(0.0f), m_QuadRotation(0.0f),
-          m_Texture()
+        : Layer(name), m_Shader(), m_VAO(), m_VBO(),
+          m_CameraPosition(0.0f), m_CameraDirection({ 1.0f, 0.0f, 0.0f }),
+          m_Camera(1280.0f / 720.0f, 45.0f, m_CameraPosition, m_CameraDirection)
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
-        Renderer2D::Init();
+        Renderer::InitRenderer();
+        Renderer::SetDepthTest(true);
 
-        m_Texture = Texture2D::CreateTexture("res/texture/error.png");
+        m_Shader = Shader::CreateShader("res/shaders/textureShader.glsl");
+        m_VAO = VertexArray::CreateVertexArray();
+        m_VBO = VertexBuffer::CreateVertexBuffer();
+        m_Texture = Texture2D::CreateTexture("res/texture/wood.png");
+        m_Shader->SetUniform("u_TextureID", 0);
+
+        float vertices[] = {
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        };
+
+        m_VBO->SetData(vertices, sizeof(vertices));
+        m_VBO->SetLayout({
+            { ShaderType::Float3, false },
+            { ShaderType::Float2, false }
+        });
+        m_VAO->AddVertexBuffer(*m_VBO);
     }
 
     void RenderLayer::OnBind()
     {
         m_Camera.SetPosition(m_CameraPosition);
-        m_Camera.SetRotation(m_Rotation);
+        m_Camera.SetDirection(m_CameraDirection);
+        m_Shader->SetUniform("u_VP", m_Camera.GetViewProjectionMatrix());
     }
 
     void RenderLayer::OnUnbind()
@@ -33,28 +90,22 @@ namespace Mouton
 
     void RenderLayer::OnUpdate()
     {
-        // Some rendering stuff will come here ...
-        ImGui::Begin("Control texture color !");
-            ImGui::Text("Scroll color");
-            ImGui::DragFloat4("Color", glm::value_ptr(m_Color), 0.01f, 0.0f, 1.0f);
-            ImGui::DragFloat("Rotate", &m_QuadRotation);
-            ImGui::DragInt("Quad count", &m_Count);
+        ImGui::Begin("Camera control panel");
+            ImGui::DragFloat3("Camera Position", glm::value_ptr(m_CameraPosition), 0.1f);
+            ImGui::DragFloat3("Camera Direction", glm::value_ptr(m_CameraDirection), 0.1f);
         ImGui::End();
 
-        ImGui::Begin("Renderer 2D stats");
-            ImGui::Text(("Number of drawcalls per frame : " + std::to_string(Renderer2D::GetDrawCallPerFrame())).c_str());
-            ImGui::Text(("Number of vertices per frame : " + std::to_string(Renderer2D::GetVerticesAmount())).c_str());
-        ImGui::End();
-
-        Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
-
-        for(int i = 0; i < m_Count; i++)
-        {
-            for(int j = 0; j < m_Count; j++)
-                Renderer2D::DrawQuad({ i * 10.0f, j * 10.0f, 0.0f}, { 5.0f, 5.0f }, m_Texture, m_QuadRotation);
-        }
-
-        Renderer2D::EndScene();
+        Renderer::BeginScene();
+        m_VBO->Bind();
+        m_VAO->Bind();
+        m_Shader->Bind();
+        m_Texture->Bind();
+        Renderer::Draw(36);
+        m_VBO->Unbind();
+        m_VAO->Unbind();
+        m_Shader->Unbind();
+        m_Texture->Unbind();
+        Renderer::EndScene();
     }
 
     bool RenderLayer::OnEvent(Event& event)
@@ -93,37 +144,12 @@ namespace Mouton
         EventSystem::ApplyFunction<KeyPressedEvent>(&event, [this](Event& event) -> bool {
             auto& ev = dynamic_cast<KeyPressedEvent&>(event);
 
-            if(ev.GetCode() == Keys::RIGHT)
-                m_CameraPosition.x += 0.5f;
-            else if(ev.GetCode() == Keys::LEFT)
-                m_CameraPosition.x += -0.5f;
-            else if(ev.GetCode() == Keys::UP)
-                m_CameraPosition.y += 0.5f;
-            else if(ev.GetCode() == Keys::DOWN)
-                m_CameraPosition.y += -0.5f;
-            else if(ev.GetCode() == Keys::Q)
-                m_Rotation += 0.5f;
-            else if(ev.GetCode() == Keys::R)
-                m_Rotation += -0.5f;
-
             return true;
         });
 
         EventSystem::ApplyFunction<KeyMaintainedEvent>(&event, [this](Event& event) -> bool {
             auto& ev = dynamic_cast<KeyMaintainedEvent&>(event);
 
-            if(ev.GetCode() == Keys::RIGHT)
-                m_CameraPosition.x += 0.5f;
-            else if(ev.GetCode() == Keys::LEFT)
-                m_CameraPosition.x += -0.5f;
-            else if(ev.GetCode() == Keys::UP)
-                m_CameraPosition.y += 0.5f;
-            else if(ev.GetCode() == Keys::DOWN)
-                m_CameraPosition.y += -0.5f;
-            else if(ev.GetCode() == Keys::Q)
-                m_Rotation += 0.5f;
-            else if(ev.GetCode() == Keys::R)
-                m_Rotation += -0.5f;
             return true;
         });
 

@@ -31,6 +31,11 @@ namespace Mouton
         s_RenderCommand->ClearImp();
     }
 
+    void RenderCommand::SetDepthTest(bool enable)
+    {
+        s_RenderCommand->SetDepthTestImp(enable);
+    }
+
     void RenderCommand::SetClearColor(const glm::vec4& color)
     {
         s_RenderCommand->SetClearColorImp(color);

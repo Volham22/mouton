@@ -18,6 +18,11 @@ namespace Mouton
         RenderCommand::Clear();
     }
 
+    void Renderer::SetDepthTest(bool enable)
+    {
+        RenderCommand::SetDepthTest(enable);
+    }
+
     void Renderer::SetBlending(bool enable)
     {
         RenderCommand::SetBlending(true);

@@ -26,4 +26,23 @@ namespace Mouton
         m_VP = m_Proj * m_View;
     }
 
+    PerspectiveCamera::PerspectiveCamera(float aspectRatio, float fov, const glm::vec3& position, const glm::vec3& direction)
+        : m_Position(position), m_Direction(direction), m_Projection(1.0f), m_VP(1.0f)
+    {
+        m_Projection = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100.0f);
+        m_VP = m_Projection * glm::lookAt(position, glm::normalize(m_Position - m_Direction), glm::vec3(0, 0, 1));
+    }
+
+    void PerspectiveCamera::SetPosition(const glm::vec3& position)
+    {
+        m_Position = position;
+        m_VP = m_Projection * glm::lookAt(m_Position, m_Direction, glm::vec3(0, 0, 1));
+    }
+
+    void PerspectiveCamera::SetDirection(const glm::vec3& direction)
+    {
+        m_Direction = glm::normalize(m_Position - direction);
+        m_VP = m_Projection * glm::lookAt(m_Position, m_Direction, glm::vec3(0, 0, 1));
+    }
+
 }
