@@ -16,14 +16,14 @@ add_subdirectory(vendor/Glad)
 add_subdirectory(vendor/imgui)
 
 # Assimp
-set(ENABLE_BOOST_WORKAROUND ON)
-set(ZLIB_LIBRARIES zlibstatic)
-set(BUILD_STATIC_LIB ON)
-set(BUILD_ASSIMP_TOOLS  ON)
-set(ASSIMP_BUILD_STATIC_LIB ON)
-set(ASSIMP_NO_EXPORT ON)
-set(ASSIMP_BUILD_TESTS OFF)
-set(ASSIMP_WERROR OFF)
+option(ENABLE_BOOST_WORKAROUND ON)
+option(ZLIB_LIBRARIES zlibstatic)
+option(BUILD_STATIC_LIB ON)
+option(BUILD_ASSIMP_TOOLS  ON)
+option(ASSIMP_BUILD_STATIC_LIB ON)
+option(ASSIMP_NO_EXPORT ON)
+option(ASSIMP_BUILD_TESTS OFF)
+option(ASSIMP_WERROR OFF)
 
 add_subdirectory(vendor/assimp)
 
