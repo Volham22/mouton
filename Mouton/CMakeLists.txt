@@ -23,6 +23,8 @@ set(BUILD_ASSIMP_TOOLS  ON)
 set(ASSIMP_BUILD_STATIC_LIB ON)
 set(ASSIMP_NO_EXPORT ON)
 set(ASSIMP_BUILD_TESTS OFF)
+set(ASSIMP_WERROR OFF)
+
 add_subdirectory(vendor/assimp)
 
 add_library(Mouton ${MTN_SRC})

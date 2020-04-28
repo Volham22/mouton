@@ -12,6 +12,8 @@ CMakeCache.txt
 *.cmake
 
 # Binary files
+bin/
+lib/
 *.a
 Sandbox/Sandbox
 
