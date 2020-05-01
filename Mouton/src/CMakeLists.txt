@@ -21,6 +21,8 @@ set(MTN_SRC
     src/Renderer/RenderCommand.cpp
     src/Renderer/Renderer2D.cpp
     src/Renderer/Camera.cpp
+    src/Renderer/Mesh.cpp
+    src/Renderer/Scene.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
     src/Platform/MoutonOpenGLImgui.cpp
@@ -32,4 +34,5 @@ set(MTN_SRC
     src/Platform/OpenGL/OpenGLRenderCommand.cpp
     src/Platform/imguiImplementation/imgui_impl_glfw.cpp
     src/Platform/imguiImplementation/imgui_impl_opengl3.cpp
+    src/Platform/Assimp/AssimpSceneLoader.cpp
     PARENT_SCOPE)

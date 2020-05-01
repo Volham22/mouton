@@ -58,6 +58,8 @@ namespace Mouton
     class ElementBuffer : public Buffer
     {
     public:
+        virtual int GetCount() const = 0;
+
         static std::shared_ptr<ElementBuffer> CreateElementBuffer();
     };
 

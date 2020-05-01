@@ -49,7 +49,7 @@ namespace Mouton
     }
 
     OpenGLElementBuffer::OpenGLElementBuffer()
-        : m_OglEboHandle(0)
+        : m_OglEboHandle(0), m_Size(0)
     {
         glGenBuffers(1, &m_OglEboHandle);
     }
@@ -66,9 +66,16 @@ namespace Mouton
 
     void OpenGLElementBuffer::SetData(void* data, size_t size)
     {
+        m_Size = size;
+
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_OglEboHandle);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    int OpenGLElementBuffer::GetCount() const
+    {
+        return m_Size / sizeof(uint32_t);
     }
 
     OpenGLElementBuffer::~OpenGLElementBuffer()

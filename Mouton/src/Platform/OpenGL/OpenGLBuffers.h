@@ -35,9 +35,11 @@ namespace Mouton
         virtual void Bind() override;
         virtual void Unbind() override;
         virtual void SetData(void* data, size_t size) override;
+        virtual int GetCount() const override;
     
     private:
         uint32_t m_OglEboHandle;
+        size_t m_Size;
     };
 
 } // namespace Mouton
