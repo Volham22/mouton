@@ -24,7 +24,7 @@ namespace Mouton
             return false;
         }
 
-        m_Path = m_Path.substr(0, m_Path.find_last_of('/'));
+        m_Path = m_Path.substr(0, m_Path.find_last_of('/')) + '/';
         LoadNodes(scene->mRootNode, scene);
 
         m_LoadedScene = std::make_shared<Scene>(m_Meshes);
@@ -76,6 +76,8 @@ namespace Mouton
             }
             else
                 vertex.textureCoords = { 0.0, 0.0 };
+
+            vertices.push_back(vertex);
         }
 
         for(unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -117,9 +119,9 @@ namespace Mouton
 
             auto texKey = m_Textures.find(path.C_Str());
 
-            if(texKey != m_Textures.end())
+            if(texKey == m_Textures.end())
             {
-                auto tex = Texture2D::CreateTexture(path.C_Str());
+                auto tex = Texture2D::CreateTexture((m_Path + path.C_Str()).c_str());
 
                 m_Textures[path.C_Str()] = 
                     std::make_pair(type, tex);

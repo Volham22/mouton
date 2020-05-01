@@ -5,7 +5,7 @@ namespace Mouton
 
     Mesh::Mesh(std::vector<MeshVertex>& vertices,
             std::vector<unsigned int>& indices,
-            const std::vector<MeshTexture>& textures)
+            std::vector<MeshTexture> textures)
     : m_Indices(indices), m_Vertices(vertices), m_Textures(textures),
       m_VBO(VertexBuffer::CreateVertexBuffer()), m_EBO(ElementBuffer::CreateElementBuffer())
     {
