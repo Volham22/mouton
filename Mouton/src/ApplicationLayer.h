@@ -23,8 +23,9 @@ namespace Mouton
     private:
         std::shared_ptr<Shader> m_Shader;
         std::shared_ptr<Scene> m_Scene;
-        glm::vec3 m_CameraPosition, m_CameraDirection;
-        PerspectiveCamera m_Camera;
+        glm::vec3 m_CameraDirection;
+        OrbitalCamera m_Camera;
+        float m_Horizontal, m_Vertical, m_Distance;
     };
 
 } // namespace Mouton
