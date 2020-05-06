@@ -13,7 +13,7 @@ namespace Mouton
         : Layer(name), m_Shader(),
           m_CameraDirection(0.0f),
           m_Camera(1280.0f / 720.0f, 45.0f, 20.0f, glm::vec3(0.0f, 0.0f, 0.0f), 0.1f, 200.0f),
-          m_CameraController(std::make_shared<OrbitalCamera>(m_Camera))
+          m_CameraController(std::shared_ptr<OrbitalCamera>(&m_Camera))
     {
         // Some temporary code here
         RendererContext::InitContext(GraphicAPI::OpenGL);
