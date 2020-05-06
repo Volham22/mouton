@@ -63,7 +63,7 @@ namespace Mouton
                 TAB               = 258,
                 BACKSPACE         = 259,
                 INSERT            = 260,
-                KEYDELETE            = 261,
+                KEYDELETE         = 261,
                 RIGHT             = 262,
                 LEFT              = 263,
                 DOWN              = 264,

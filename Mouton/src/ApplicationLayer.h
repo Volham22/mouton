@@ -3,7 +3,7 @@
 
 #include "Renderer/Layer.h"
 #include "Renderer/Shader.h"
-#include "Renderer/Camera.h"
+#include "Renderer/OrbitalCameraController.h"
 #include "Renderer/Scene.h"
 
 struct GLFWwindow;
@@ -25,7 +25,7 @@ namespace Mouton
         std::shared_ptr<Scene> m_Scene;
         glm::vec3 m_CameraDirection;
         OrbitalCamera m_Camera;
-        float m_Horizontal, m_Vertical, m_Distance;
+        OrbitalCameraController m_CameraController;
     };
 
 } // namespace Mouton

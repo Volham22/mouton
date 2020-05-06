@@ -12,7 +12,12 @@ namespace Mouton
 
     bool GLFWInputs::IsKeyPressedInt(int keycode)
     {
-        int status = glfwGetKey(m_Window, keycode);
+        int status = 0;
+        if(keycode >= 0 && keycode <= 7)
+            status = glfwGetMouseButton(m_Window, keycode);
+        else
+            status = glfwGetKey(m_Window, keycode);
+
         return (status == GLFW_PRESS) || (status == GLFW_REPEAT);
     }
 

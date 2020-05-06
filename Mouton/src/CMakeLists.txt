@@ -23,6 +23,7 @@ set(MTN_SRC
     src/Renderer/Camera.cpp
     src/Renderer/Mesh.cpp
     src/Renderer/Scene.cpp
+    src/Renderer/OrbitalCameraController.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
     src/Platform/MoutonOpenGLImgui.cpp
