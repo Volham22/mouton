@@ -9,8 +9,8 @@ namespace Mouton
     class OrbitalCameraController
     {
     public:
-        OrbitalCameraController(const std::shared_ptr<OrbitalCamera>& cam, float cameraSpeed = 0.05f);
-        OrbitalCameraController(float cameraSpeed = 0.05f);
+        OrbitalCameraController(const std::shared_ptr<OrbitalCamera>& cam, float cameraSpeed = 0.5f);
+        OrbitalCameraController(float cameraSpeed = 0.5f);
 
         void Control(const std::shared_ptr<OrbitalCamera>& cam) { m_Camera = cam; };
         bool OnEvent(Event& event);

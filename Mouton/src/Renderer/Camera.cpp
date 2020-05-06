@@ -60,11 +60,11 @@ namespace Mouton
 
     void OrbitalCamera::Orbit(float angleHorizontal, float angleVertical, float distance)
     {
-        glm::vec3 horizontal = { glm::cos(angleHorizontal), glm::sin(angleHorizontal), 0.0f };
-        glm::vec3 vertical = { 0.0f, glm::cos(angleVertical), glm::sin(angleVertical) };
+        glm::vec3 horizontal = { glm::cos(glm::radians(angleHorizontal)), glm::sin(glm::radians(angleHorizontal)), 0.0f };
+        glm::vec3 vertical = { 0.0f, glm::cos(glm::radians(angleVertical)), glm::sin(glm::radians(angleVertical)) };
 
         glm::mat4 view = glm::lookAt(
-            (horizontal + vertical) * distance,
+            glm::normalize(horizontal + vertical) * distance,
             m_TargetPosition,
             glm::vec3(0.0f, 0.0f, 1.0f)
         );

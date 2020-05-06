@@ -46,7 +46,7 @@ namespace Mouton
             return true;
         });
 
-        m_Camera->Orbit(10.0f, m_VerticalAngle, m_Distance);
+        m_Camera->Orbit(m_HorizontalAngle, m_VerticalAngle, m_Distance);
         return event.Handled();
     }
 
