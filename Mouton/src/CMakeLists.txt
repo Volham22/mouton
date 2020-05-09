@@ -22,7 +22,7 @@ set(MTN_SRC
     src/Renderer/Renderer2D.cpp
     src/Renderer/Camera.cpp
     src/Renderer/Mesh.cpp
-    src/Renderer/Scene.cpp
+    src/Renderer/Model.cpp
     src/Renderer/OrbitalCameraController.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
@@ -35,5 +35,5 @@ set(MTN_SRC
     src/Platform/OpenGL/OpenGLRenderCommand.cpp
     src/Platform/imguiImplementation/imgui_impl_glfw.cpp
     src/Platform/imguiImplementation/imgui_impl_opengl3.cpp
-    src/Platform/Assimp/AssimpSceneLoader.cpp
+    src/Platform/Assimp/AssimpModelLoader.cpp
     PARENT_SCOPE)

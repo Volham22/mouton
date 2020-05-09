@@ -4,7 +4,7 @@
 #include "Renderer/Layer.h"
 #include "Renderer/Shader.h"
 #include "Renderer/OrbitalCameraController.h"
-#include "Renderer/Scene.h"
+#include "Renderer/Model.h"
 
 struct GLFWwindow;
 
@@ -22,7 +22,7 @@ namespace Mouton
     
     private:
         std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<Scene> m_Scene;
+        std::shared_ptr<Model> m_Model;
         glm::vec3 m_CameraDirection;
         OrbitalCamera m_Camera;
         OrbitalCameraController m_CameraController;

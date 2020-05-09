@@ -26,9 +26,9 @@ namespace Mouton
         m_Shader->SetUniform("u_Normal", 2);
         m_Shader->SetUniform("u_Height", 3);
 
-        auto loader = SceneLoader::CreateSceneLoader("res/models/Cat/cat.obj");
+        auto loader = ModelLoader::CreateModelLoader("res/models/Cat/cat.obj");
         loader->Load();
-        m_Scene = loader->GetLoadedScene();
+        m_Model = loader->GetLoadedModel();
     }
 
     void RenderLayer::OnBind()
@@ -50,7 +50,7 @@ namespace Mouton
 
         Renderer::BeginScene();
         m_Shader->Bind();
-        m_Scene->DrawScene();
+        m_Model->DrawModel();
         m_Shader->Unbind();
         Renderer::EndScene();
     }

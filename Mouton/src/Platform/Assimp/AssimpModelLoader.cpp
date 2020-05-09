@@ -1,16 +1,16 @@
-#include "AssimpSceneLoader.h"
+#include "AssimpModelLoader.h"
 
 #include <assimp/Importer.hpp>
 
 namespace Mouton
 {
 
-    AssimpSceneLoader::AssimpSceneLoader(const std::string& path)
-        : m_LoadedScene(), m_Path(path), m_Meshes(), m_Textures()
+    AssimpModelLoader::AssimpModelLoader(const std::string& path)
+        : m_LoadedModel(), m_Path(path), m_Meshes(), m_Textures()
     {
     }
 
-    bool AssimpSceneLoader::Load()
+    bool AssimpModelLoader::Load()
     {
         Assimp::Importer importer;
         const aiScene* scene = importer.ReadFile(m_Path,
@@ -27,17 +27,17 @@ namespace Mouton
         m_Path = m_Path.substr(0, m_Path.find_last_of('/')) + '/';
         LoadNodes(scene->mRootNode, scene);
 
-        m_LoadedScene = std::make_shared<Scene>(m_Meshes);
+        m_LoadedModel = std::make_shared<Model>(m_Meshes);
 
         return true;
     }
 
-    std::shared_ptr<Scene>& AssimpSceneLoader::GetLoadedScene()
+    std::shared_ptr<Model>& AssimpModelLoader::GetLoadedModel()
     {
-        return m_LoadedScene;
+        return m_LoadedModel;
     }
 
-    void AssimpSceneLoader::LoadNodes(aiNode* node, const aiScene* scene)
+    void AssimpModelLoader::LoadNodes(aiNode* node, const aiScene* scene)
     {
         // Foreach meshes load it
         for(unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -51,7 +51,7 @@ namespace Mouton
             LoadNodes(node->mChildren[i], scene);
     }
 
-    Mesh AssimpSceneLoader::LoadMesh(aiMesh* mesh, const aiScene* scene)
+    Mesh AssimpModelLoader::LoadMesh(aiMesh* mesh, const aiScene* scene)
     {
         std::vector<MeshVertex> vertices;
         std::vector<unsigned int> indices;
@@ -108,7 +108,7 @@ namespace Mouton
         return Mesh(vertices, indices, textures);
     }
 
-    std::vector<MeshTexture> AssimpSceneLoader::LoadTextures(aiMaterial* mat, aiTextureType aiType, TextureType type)
+    std::vector<MeshTexture> AssimpModelLoader::LoadTextures(aiMaterial* mat, aiTextureType aiType, TextureType type)
     {
         std::vector<MeshTexture> textures;
 

@@ -23,7 +23,7 @@ namespace Mouton
 
     class Mesh
     {
-        friend class Scene;
+        friend class Model;
 
     public:
         Mesh(std::vector<MeshVertex>& vertices,

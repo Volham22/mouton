@@ -1,5 +1,5 @@
-#ifndef SCENE_H
-#define SCENE_H
+#ifndef MODEL_H
+#define MODEL_H
 
 #include "MoutonPch.h"
 
@@ -9,24 +9,24 @@
 namespace Mouton
 {
 
-    class Scene
+    class Model
     {
     public:
-        Scene(const std::vector<Mesh>& meshes);
-        void DrawScene();
+        Model(const std::vector<Mesh>& meshes);
+        void DrawModel();
     
     private:
         std::vector<Mesh> m_Meshes;
         std::shared_ptr<VertexArray> m_VAO;
     };
 
-    class SceneLoader
+    class ModelLoader
     {
     public:
         virtual bool Load() = 0;
-        virtual std::shared_ptr<Scene>& GetLoadedScene() = 0;
+        virtual std::shared_ptr<Model>& GetLoadedModel() = 0;
 
-        static std::unique_ptr<SceneLoader> CreateSceneLoader(const std::string& path);
+        static std::unique_ptr<ModelLoader> CreateModelLoader(const std::string& path);
     };
 
 } // namespace Mouton
