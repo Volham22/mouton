@@ -26,6 +26,7 @@ set(MTN_SRC
     src/Renderer/OrbitalCameraController.cpp
     src/Renderer/Animations/Bone.cpp
     src/Renderer/Animations/KeyFrame.cpp
+    src/Renderer/Animations/Animation.cpp
     src/Platform/GLFWWindow.cpp
     src/Platform/GLFWInputs.cpp
     src/Platform/MoutonOpenGLImgui.cpp

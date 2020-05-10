@@ -6,7 +6,8 @@ namespace Mouton
 {
 
     AssimpModelLoader::AssimpModelLoader(const std::string& path)
-        : m_LoadedModel(), m_Path(path), m_Meshes(), m_BonesIndex(0), m_Bones(), m_Textures()
+        : m_LoadedModel(), m_Animations(new std::vector<Animation>()), m_Path(path), m_Meshes(),
+          m_BonesIndex(0), m_Bones(), m_Textures()
     {
     }
 
@@ -37,6 +38,11 @@ namespace Mouton
     std::shared_ptr<Model>& AssimpModelLoader::GetLoadedModel()
     {
         return m_LoadedModel;
+    }
+
+    std::shared_ptr<std::vector<Animation>>& AssimpModelLoader::GetModelAnimations()
+    {
+        return m_Animations;
     }
 
     void AssimpModelLoader::LoadNodes(aiNode* node, const aiScene* scene)
@@ -188,6 +194,8 @@ namespace Mouton
             {
                 aiAnimation* animation = scene->mAnimations[i];
                 std::string animName = animation->mName.C_Str();
+
+                m_Animations->push_back(Animation(animName, animation->mDuration, animation->mTicksPerSecond));
 
                 for(int j  = 0; j < animation->mNumChannels; j++)
                 {

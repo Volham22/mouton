@@ -6,6 +6,7 @@
 #include "VertexArray.h"
 #include "Mesh.h"
 #include "Animations/Bone.h"
+#include "Animations/Animation.h"
 
 namespace Mouton
 {
@@ -28,6 +29,7 @@ namespace Mouton
     public:
         virtual bool Load() = 0;
         virtual std::shared_ptr<Model>& GetLoadedModel() = 0;
+        virtual std::shared_ptr<std::vector<Animation>>& GetModelAnimations() = 0;
 
         static std::unique_ptr<ModelLoader> CreateModelLoader(const std::string& path);
     };

@@ -17,7 +17,8 @@ namespace Mouton
         AssimpModelLoader(const std::string& path);
         virtual bool Load() override;
         virtual std::shared_ptr<Model>& GetLoadedModel() override;
-    
+        virtual std::shared_ptr<std::vector<Animation>>& GetModelAnimations() override;
+
     private:
         void LoadNodes(aiNode* node, const aiScene* scene);
         Mesh LoadMesh(aiMesh* mesh, const aiScene* scene);
@@ -25,9 +26,10 @@ namespace Mouton
         void LoadMeshBones(aiMesh* mesh, std::vector<MeshVertex>& vertices);
         void LoadBoneKeyFrame(const aiScene* scene);
         void MakeBoneHierarchy(aiNode* node, const aiString& name);
-        std::vector<MeshTexture> LoadTextures(aiMaterial*  mat, aiTextureType aiType, TextureType type);
+        std::vector<MeshTexture> LoadTextures(aiMaterial* mat, aiTextureType aiType, TextureType type);
 
         std::shared_ptr<Model> m_LoadedModel;
+        std::shared_ptr<std::vector<Animation>> m_Animations;
         std::string m_Path;
         std::vector<Mesh> m_Meshes;
         int m_BonesIndex;
