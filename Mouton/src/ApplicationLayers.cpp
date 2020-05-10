@@ -26,7 +26,7 @@ namespace Mouton
         m_Shader->SetUniform("u_Normal", 2);
         m_Shader->SetUniform("u_Height", 3);
 
-        auto loader = ModelLoader::CreateModelLoader("res/models/biped-robot/source/Animation.fbx");
+        auto loader = ModelLoader::CreateModelLoader("res/models/shark/White_Shark.dae");
         loader->Load();
         m_Model = loader->GetLoadedModel();
     }

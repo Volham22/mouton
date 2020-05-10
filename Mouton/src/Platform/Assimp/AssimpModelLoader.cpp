@@ -65,6 +65,7 @@ namespace Mouton
 
             // Make the ID to -1 by default, it is required for weight assignment by LoadMeshBones
             vertex.bonesID = glm::ivec4(-1);
+            vertex.weight = glm::ivec4(-1);
 
             vertex.positions.x = mesh->mVertices[i].x;
             vertex.positions.y = mesh->mVertices[i].y;
@@ -148,11 +149,17 @@ namespace Mouton
                     int bonePos = 0;
                     // We support only 4 bones to affect a vertex, if it's more than 4 then it will be undefined
                     // behaviour. A warning may be emmitted
-                    while(vertices[vertexID].bonesID[bonePos] != -1 && bonePos < 4)
+                    while(bonePos < 4 && vertices[vertexID].bonesID[bonePos] != -1)
                         bonePos++;
 
-                    vertices[vertexID].bonesID[bonePos] = m_Bones[boneName].GetIndex();
-                    vertices[vertexID].weight[bonePos]  = bone->mWeights[j].mWeight;
+                    if(bonePos < 4)
+                    {
+                        vertices[vertexID].bonesID[bonePos] = m_Bones[boneName].GetIndex();
+                        vertices[vertexID].weight[bonePos]  = bone->mWeights[j].mWeight;
+                    }
+                    else
+                        MTN_WARN("Bone {0} affect more than 4 vertices !", boneName.c_str()); // TODO: Take the most relevant one
+                    
                 }
             }
         }
