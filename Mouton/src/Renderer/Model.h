@@ -15,13 +15,22 @@ namespace Mouton
     {
     public:
         Model(const std::vector<Mesh>& meshes);
-        Model(const std::vector<Mesh>& meshes, const std::unordered_map<std::string, Bone>& bone);
+        Model(const std::vector<Mesh>& meshes, const std::unordered_map<std::string, Bone>& bone,
+            const std::shared_ptr<std::vector<Animation>>& animations, const std::string& rootNodeName);
+        void PlayAnimation(const std::string& name);
+        void StopAnimation();
         void DrawModel();
     
     private:
         std::vector<Mesh> m_Meshes;
+        std::string m_RootNodeName;
         std::unordered_map<std::string, Bone> m_Bones;
         std::shared_ptr<VertexArray> m_VAO;
+        std::shared_ptr<std::vector<Animation>> m_Animations;
+
+        Animation* m_CurrentAnim;
+
+        void UpdateAnimation();
     };
 
     class ModelLoader

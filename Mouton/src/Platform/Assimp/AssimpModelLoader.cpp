@@ -30,7 +30,9 @@ namespace Mouton
         MakeBoneHierarchy(scene->mRootNode, scene->mRootNode->mName);
         LoadBoneKeyFrame(scene);
 
-        m_LoadedModel = m_Bones.size() > 0 ? std::make_shared<Model>(m_Meshes, m_Bones) : std::make_shared<Model>(m_Meshes);
+        m_LoadedModel = m_Bones.size() > 0 ?
+            std::make_shared<Model>(m_Meshes, m_Bones, m_Animations, scene->mRootNode->mName.C_Str()) :
+            std::make_shared<Model>(m_Meshes);
 
         return true;
     }
@@ -175,7 +177,10 @@ namespace Mouton
     {
         for(int i = 0; i < node->mNumChildren; i++)
         {
-            // If the node has a name add it as child of parent node
+            // Set bone global transform matrix every nodes will be set since 
+            // this function is called first the root node
+            m_Bones[name.C_Str()].SetGlobalTransformMatrix(ToGlmMat4(node->mTransformation));
+            // If the node has a name, add it as child of parents nodes
             if(node->mChildren[i]->mName.length > 0)
             {
                 m_Bones[std::string(name.C_Str())].AddChild(m_Bones[std::string(node->mChildren[i]->mName.C_Str())]);

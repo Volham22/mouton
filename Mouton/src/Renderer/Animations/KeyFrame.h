@@ -16,6 +16,7 @@ namespace Mouton
         const glm::vec3& GetPosition() const { return m_Position; };
         const glm::vec3& GetScale() const { return m_Scale; };
         const glm::quat& GetRotation() const { return m_Rotation; };
+        double GetTime() const { return m_Time; };
 
         bool operator<(const KeyFrame& other) const;
 

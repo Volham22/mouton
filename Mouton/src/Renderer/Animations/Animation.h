@@ -14,7 +14,7 @@ namespace Mouton
         Animation();
         Animation(const std::string& name, double duration, double tickPerSecond);
         void Play();
-        void Update();
+        double Update();
         void Stop();
 
         const std::string& GetName() const { return m_Name; };
@@ -24,6 +24,7 @@ namespace Mouton
         std::string m_Name;
         double m_Duration, m_TickPerSecond;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_BeginTime;
+        bool m_Playing;
     };
 
 } // namespace Mouton
