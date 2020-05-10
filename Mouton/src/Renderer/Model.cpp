@@ -18,6 +18,12 @@ namespace Mouton
         m_VAO->AddVertexBuffer(*(m_Meshes[0].m_VBO));
     }
 
+        Model::Model(const std::vector<Mesh>& meshes, const std::unordered_map<std::string, Bone>& bones)
+        : m_Meshes(meshes), m_Bones(bones), m_VAO(VertexArray::CreateVertexArray())
+    {
+        m_VAO->AddVertexBuffer(*(m_Meshes[0].m_VBO));
+    }
+
     void Model::DrawModel()
     {
         m_VAO->Bind();

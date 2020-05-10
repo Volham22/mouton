@@ -13,6 +13,8 @@ namespace Mouton
         glm::vec3 positions;
         glm::vec2 textureCoords;
         glm::vec3 normal;
+        glm::ivec4 bonesID;
+        glm::ivec4 weight;
     };
 
     enum TextureType {

@@ -6,7 +6,7 @@ namespace Mouton
 {
 
     AssimpModelLoader::AssimpModelLoader(const std::string& path)
-        : m_LoadedModel(), m_Path(path), m_Meshes(), m_Textures()
+        : m_LoadedModel(), m_Path(path), m_Meshes(), m_BonesIndex(0), m_Bones(), m_Textures()
     {
     }
 
@@ -26,8 +26,9 @@ namespace Mouton
 
         m_Path = m_Path.substr(0, m_Path.find_last_of('/')) + '/';
         LoadNodes(scene->mRootNode, scene);
+        MakeBoneHierarchy(scene->mRootNode, scene->mRootNode->mName);
 
-        m_LoadedModel = std::make_shared<Model>(m_Meshes);
+        m_LoadedModel = m_Bones.size() > 0 ? std::make_shared<Model>(m_Meshes, m_Bones) : std::make_shared<Model>(m_Meshes);
 
         return true;
     }
@@ -60,6 +61,9 @@ namespace Mouton
         for(unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
             MeshVertex vertex;
+
+            // Make the ID to -1 by default, it is required for weight assignment by LoadMeshBones
+            vertex.bonesID = glm::ivec4(-1);
 
             vertex.positions.x = mesh->mVertices[i].x;
             vertex.positions.y = mesh->mVertices[i].y;
@@ -105,7 +109,109 @@ namespace Mouton
         else
             MTN_WARN("Non textured models are not implemented yet");
 
+        LoadMeshBones(mesh, vertices); // Load mesh bones if any
+
         return Mesh(vertices, indices, textures);
+    }
+
+    glm::mat4 AssimpModelLoader::ToGlmMat4(const aiMatrix4x4& m)
+    {
+        glm::mat4 res;
+
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+                res[i][j] = m[i][j];
+        }
+
+        return res;
+    }
+
+    void AssimpModelLoader::LoadMeshBones(aiMesh* mesh, std::vector<MeshVertex>& vertices)
+    {
+        for(int i = 0; i < mesh->mNumBones; i++)
+        {
+            std::string boneName = mesh->mBones[i]->mName.C_Str();
+            auto it = m_Bones.find(boneName);
+
+            if(it == m_Bones.end())
+            {
+                aiBone* bone = mesh->mBones[i];
+                Bone meshBone = Bone(++m_BonesIndex, boneName, ToGlmMat4(bone->mOffsetMatrix));
+                m_Bones[boneName] = meshBone;
+
+                // Add vertex weight
+                for(int j = 0; j < bone->mNumWeights; j++)
+                {
+                    int vertexID = bone->mWeights[j].mVertexId;
+                    int bonePos = 0;
+                    // We support only 4 bones to affect a vertex, if it's more than 4 then it will be undefined
+                    // behaviour. A warning may be emmitted
+                    while(vertices[vertexID].bonesID[bonePos] != -1 && bonePos < 4)
+                        bonePos++;
+
+                    vertices[vertexID].bonesID[bonePos] = m_Bones[boneName].GetIndex();
+                    vertices[vertexID].weight[bonePos]  = bone->mWeights[j].mWeight;
+                }
+            }
+        }
+    }
+
+    void AssimpModelLoader::MakeBoneHierarchy(aiNode* node, const aiString& name)
+    {
+        for(int i = 0; i < node->mNumChildren; i++)
+        {
+            // If the node has a name add it as child of parent node
+            if(node->mChildren[i]->mName.length > 0)
+            {
+                m_Bones[std::string(name.C_Str())].AddChild(m_Bones[std::string(node->mChildren[i]->mName.C_Str())]);
+                MakeBoneHierarchy(node->mChildren[i], node->mChildren[i]->mName);
+            }
+            else
+                MakeBoneHierarchy(node->mChildren[i], name);
+        }
+    }
+
+    void AssimpModelLoader::LoadBoneKeyFrame(aiScene* scene)
+    {
+        if(scene->mNumAnimations > 0)
+        {
+            for(int i = 0; i < scene->mNumAnimations; i++)
+            {
+                aiAnimation* animation = scene->mAnimations[i];
+                std::string animName = animation->mName.C_Str();
+
+                for(int j  = 0; j < animation->mNumChannels; j++)
+                {
+                    KeyFrame key;
+                    for(int k = 0; k < animation->mChannels[j]->mNumPositionKeys; k++)
+                    {
+                        std::string nodeName = animation->mChannels[j]->mNodeName.C_Str();
+
+                        glm::vec3 position;
+                        position.x = animation->mChannels[j]->mPositionKeys[k].mValue.x;
+                        position.y = animation->mChannels[j]->mPositionKeys[k].mValue.y;
+                        position.z = animation->mChannels[j]->mPositionKeys[k].mValue.z;
+
+                        glm::vec3 scale;
+                        scale.x = animation->mChannels[j]->mScalingKeys[k].mValue.x;
+                        scale.y = animation->mChannels[j]->mScalingKeys[k].mValue.y;
+                        scale.z = animation->mChannels[j]->mScalingKeys[k].mValue.z;
+
+                        glm::quat rotation;
+                        rotation.x = animation->mChannels[j]->mRotationKeys[k].mValue.x;
+                        rotation.y = animation->mChannels[j]->mRotationKeys[k].mValue.y;
+                        rotation.z = animation->mChannels[j]->mRotationKeys[k].mValue.z;
+                        rotation.w = animation->mChannels[j]->mRotationKeys[k].mValue.w;
+
+                        double time = animation->mChannels[j]->mPositionKeys[k].mTime;
+
+                        key = KeyFrame(nodeName, position, scale, rotation, time);
+                        m_Bones[nodeName].AddKeyFrame(animName, key);
+                    }
+                }
+            }
+        }
     }
 
     std::vector<MeshTexture> AssimpModelLoader::LoadTextures(aiMaterial* mat, aiTextureType aiType, TextureType type)

@@ -5,6 +5,7 @@
 
 #include "VertexArray.h"
 #include "Mesh.h"
+#include "Animations/Bone.h"
 
 namespace Mouton
 {
@@ -13,10 +14,12 @@ namespace Mouton
     {
     public:
         Model(const std::vector<Mesh>& meshes);
+        Model(const std::vector<Mesh>& meshes, const std::unordered_map<std::string, Bone>& bone);
         void DrawModel();
     
     private:
         std::vector<Mesh> m_Meshes;
+        std::unordered_map<std::string, Bone> m_Bones;
         std::shared_ptr<VertexArray> m_VAO;
     };
 
