@@ -23,7 +23,7 @@ namespace Mouton
         Mesh LoadMesh(aiMesh* mesh, const aiScene* scene);
         glm::mat4 ToGlmMat4(const aiMatrix4x4& matrix);
         void LoadMeshBones(aiMesh* mesh, std::vector<MeshVertex>& vertices);
-        void LoadBoneKeyFrame(aiScene* scene);
+        void LoadBoneKeyFrame(const aiScene* scene);
         void MakeBoneHierarchy(aiNode* node, const aiString& name);
         std::vector<MeshTexture> LoadTextures(aiMaterial*  mat, aiTextureType aiType, TextureType type);
 

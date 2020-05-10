@@ -27,6 +27,7 @@ namespace Mouton
         m_Path = m_Path.substr(0, m_Path.find_last_of('/')) + '/';
         LoadNodes(scene->mRootNode, scene);
         MakeBoneHierarchy(scene->mRootNode, scene->mRootNode->mName);
+        LoadBoneKeyFrame(scene);
 
         m_LoadedModel = m_Bones.size() > 0 ? std::make_shared<Model>(m_Meshes, m_Bones) : std::make_shared<Model>(m_Meshes);
 
@@ -172,7 +173,7 @@ namespace Mouton
         }
     }
 
-    void AssimpModelLoader::LoadBoneKeyFrame(aiScene* scene)
+    void AssimpModelLoader::LoadBoneKeyFrame(const aiScene* scene)
     {
         if(scene->mNumAnimations > 0)
         {

@@ -26,7 +26,7 @@ namespace Mouton
         m_Shader->SetUniform("u_Normal", 2);
         m_Shader->SetUniform("u_Height", 3);
 
-        auto loader = ModelLoader::CreateModelLoader("res/models/Cat/cat.obj");
+        auto loader = ModelLoader::CreateModelLoader("res/models/biped-robot/source/Animation.fbx");
         loader->Load();
         m_Model = loader->GetLoadedModel();
     }
@@ -49,9 +49,9 @@ namespace Mouton
 
 
         Renderer::BeginScene();
-        m_Shader->Bind();
-        m_Model->DrawModel();
-        m_Shader->Unbind();
+        // m_Shader->Bind();
+        // m_Model->DrawModel();
+        // m_Shader->Unbind();
         Renderer::EndScene();
     }
 
