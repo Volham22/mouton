@@ -28,7 +28,7 @@ namespace Mouton
 
     double Animation::Update()
     {
-        std::chrono::duration<double> elasped = m_BeginTime - std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elasped = std::chrono::high_resolution_clock::now() - m_BeginTime;
 
         if(elasped.count() < m_Duration)
             return elasped.count() / m_Duration;

@@ -13,7 +13,8 @@ namespace Mouton
     }
 
     Model::Model(const std::vector<Mesh>& meshes)
-        : m_Meshes(meshes), m_VAO(VertexArray::CreateVertexArray())
+        : m_Meshes(meshes), m_RootNodeName(), m_Bones(), m_VAO(VertexArray::CreateVertexArray()),
+          m_Animations(), m_CurrentAnim(nullptr)
     {
         m_VAO->AddVertexBuffer(*(m_Meshes[0].m_VBO));
     }
@@ -21,7 +22,7 @@ namespace Mouton
         Model::Model(const std::vector<Mesh>& meshes, const std::unordered_map<std::string, Bone>& bone,
             const std::shared_ptr<std::vector<Animation>>& animations, const std::string& rootNodeName)
         : m_Meshes(meshes), m_RootNodeName(rootNodeName), m_Bones(bone), m_VAO(VertexArray::CreateVertexArray()),
-          m_Animations(animations)
+          m_Animations(animations), m_CurrentAnim(nullptr)
     {
         m_VAO->AddVertexBuffer(*(m_Meshes[0].m_VBO));
     }
@@ -33,7 +34,7 @@ namespace Mouton
             for(Animation& anim : *m_Animations)
             {
                 if(anim.GetName() == name)
-                {
+                {é
                     anim.Play();
                     m_CurrentAnim = &anim;
                 }
@@ -54,9 +55,22 @@ namespace Mouton
             MTN_WARN("Attempted to stop an animation but nothing is playing !");
     }
 
-    void Model::DrawModel()
+    void Model::DrawModel(Shader& shader)
     {
         m_VAO->Bind();
+
+        if(m_CurrentAnim)
+        {
+            m_Bones[m_RootNodeName].Update(m_CurrentAnim->Update(), m_CurrentAnim->GetName());
+
+            int cnt = 0;
+            for(auto& [name, bone] : m_Bones)
+            {
+                shader.SetUniform(std::string("u_Bones[") + std::to_string(cnt) + std::string("]"),
+                    bone.GetAnimatedTransform());
+                cnt++;
+            }
+        }
 
         for(Mesh& mesh : m_Meshes)
         {

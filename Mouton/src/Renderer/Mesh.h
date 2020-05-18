@@ -30,7 +30,7 @@ namespace Mouton
     public:
         Mesh(std::vector<MeshVertex>& vertices,
             std::vector<unsigned int>& indices,
-            std::vector<MeshTexture> textures);
+            std::vector<MeshTexture> textures, bool animated=false);
         void Bind() const;
         void Unbind() const;
 

@@ -3,6 +3,7 @@
 
 #include "MoutonPch.h"
 
+#include "Shader.h"
 #include "VertexArray.h"
 #include "Mesh.h"
 #include "Animations/Bone.h"
@@ -19,7 +20,7 @@ namespace Mouton
             const std::shared_ptr<std::vector<Animation>>& animations, const std::string& rootNodeName);
         void PlayAnimation(const std::string& name);
         void StopAnimation();
-        void DrawModel();
+        void DrawModel(Shader& shader);
     
     private:
         std::vector<Mesh> m_Meshes;

@@ -15,11 +15,17 @@ namespace Mouton
         virtual void Unbind() override;
 
         // Uniforms
-        virtual void SetUniform(const std::string& name, int value) override;
         virtual void SetUniform(const std::string& name, float value) override;
+
+        virtual void SetUniform(const std::string& name, int value) override;
+        virtual void SetUniform(const std::string& name, const glm::ivec2& value) override;
+        virtual void SetUniform(const std::string& name, const glm::ivec3& value) override;
+        virtual void SetUniform(const std::string& name, const glm::ivec4& value) override;
+
         virtual void SetUniform(const std::string& name, const glm::vec2& value) override;
         virtual void SetUniform(const std::string& name, const glm::vec3& value) override;
         virtual void SetUniform(const std::string& name, const glm::vec4& value) override;
+
         virtual void SetUniform(const std::string& name, const glm::mat2& value) override;
         virtual void SetUniform(const std::string& name, const glm::mat3& value) override;
         virtual void SetUniform(const std::string& name, const glm::mat4& value) override;

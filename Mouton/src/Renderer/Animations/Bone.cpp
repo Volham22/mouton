@@ -33,23 +33,29 @@ namespace Mouton
 
     void Bone::Update(double animationProgress, const std::string& animationName)
     {
-        auto& keyFrameLow = m_KeyFrames[animationName][FindKeyFrame(animationProgress, animationName)];
-        auto& keyFrameUp = m_KeyFrames[animationName][FindKeyFrame(animationProgress, animationName) + 1];
+        int index = FindKeyFrame(animationProgress, animationName);
 
-        glm::vec3 position = glm::mix(keyFrameLow.GetPosition(), keyFrameUp.GetPosition(), 
-            static_cast<float>(animationProgress));
-        glm::vec3 scale = glm::mix(keyFrameLow.GetScale(), keyFrameUp.GetScale(),
-            static_cast<float>(animationProgress));
-        glm::quat rotations = glm::slerp(keyFrameLow.GetRotation(), keyFrameUp.GetRotation(),
-            static_cast<float>(animationProgress));
+        if(index > 0)
+        {
+            auto& keyFrameLow = m_KeyFrames[animationName][FindKeyFrame(animationProgress, animationName)];
+            auto& keyFrameUp = m_KeyFrames[animationName][FindKeyFrame(animationProgress, animationName) + 1];
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-            glm::mat4_cast(rotations) * glm::scale(glm::mat4(1.0f), scale);
+            glm::vec3 position = glm::mix(keyFrameLow.GetPosition(), keyFrameUp.GetPosition(), 
+                static_cast<float>(animationProgress));
+            glm::vec3 scale = glm::mix(keyFrameLow.GetScale(), keyFrameUp.GetScale(),
+                static_cast<float>(animationProgress));
+            glm::quat rotations = glm::slerp(keyFrameLow.GetRotation(), keyFrameUp.GetRotation(),
+                static_cast<float>(animationProgress));
+
+            glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+                glm::mat4_cast(rotations) * glm::scale(glm::mat4(1.0f), scale);
+            
+            m_AnimatedTransform = GetGlobalTransformInverse() * transform * m_LocalOffset;
         
-        m_AnimatedTransform = GetGlobalTransformInverse() * transform * m_LocalOffset;
 
         for(Bone& child : m_Childs)
             UpdateRec(animationProgress, animationName, transform);
+        }
     }
 
     void Bone::UpdateRec(double animationProgress, const std::string& animationName, const glm::mat4& parentTransform)
@@ -76,6 +82,13 @@ namespace Mouton
     int Bone::FindKeyFrame(double animProgress, const std::string& animationName)
     {
         auto& keyframes = m_KeyFrames[animationName];
+
+        if(keyframes.size() <= 1)
+        {
+            MTN_TRACE("At least 2 to keys are needed to interpolate !");
+            return -1;
+        }
+
 
         for(int i = 0; i < keyframes.size() - 1; i++)
         {

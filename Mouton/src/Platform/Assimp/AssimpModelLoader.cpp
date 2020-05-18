@@ -121,7 +121,7 @@ namespace Mouton
 
         LoadMeshBones(mesh, vertices); // Load mesh bones if any
 
-        return Mesh(vertices, indices, textures);
+        return Mesh(vertices, indices, textures, mesh->mNumBones > 0 ? true : false);
     }
 
     glm::mat4 AssimpModelLoader::ToGlmMat4(const aiMatrix4x4& m)

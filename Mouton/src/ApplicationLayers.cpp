@@ -20,15 +20,17 @@ namespace Mouton
         Renderer::InitRenderer();
         Renderer::SetDepthTest(true);
 
-        m_Shader = Shader::CreateShader("res/shaders/3DShader.glsl");
+        m_Shader = Shader::CreateShader("res/shaders/3DAnimatedShader.glsl");
         m_Shader->SetUniform("u_Diffuse", 0);
         m_Shader->SetUniform("u_Specular", 1);
         m_Shader->SetUniform("u_Normal", 2);
         m_Shader->SetUniform("u_Height", 3);
 
-        auto loader = ModelLoader::CreateModelLoader("res/models/shark/White_Shark.dae");
+        auto loader = ModelLoader::CreateModelLoader("res/models/robot/source/Drone.FBX");
         loader->Load();
         m_Model = loader->GetLoadedModel();
+
+        m_Model->PlayAnimation("Take 001");
     }
 
     void RenderLayer::OnBind()
@@ -49,9 +51,9 @@ namespace Mouton
 
 
         Renderer::BeginScene();
-        // m_Shader->Bind();
-        // m_Model->DrawModel();
-        // m_Shader->Unbind();
+        m_Shader->Bind();
+        m_Model->DrawModel(*m_Shader);
+        m_Shader->Unbind();
         Renderer::EndScene();
     }
 

@@ -14,10 +14,15 @@ namespace Mouton
 
         // Uniforms
         virtual void SetUniform(const std::string& name, int value) = 0;
+        virtual void SetUniform(const std::string& name, const glm::ivec2& value) = 0;
+        virtual void SetUniform(const std::string& name, const glm::ivec3& value) = 0;
+        virtual void SetUniform(const std::string& name, const glm::ivec4& value) = 0;
+
         virtual void SetUniform(const std::string& name, float value) = 0;
         virtual void SetUniform(const std::string& name, const glm::vec2& value) = 0;
         virtual void SetUniform(const std::string& name, const glm::vec3& value) = 0;
         virtual void SetUniform(const std::string& name, const glm::vec4& value) = 0;
+
         virtual void SetUniform(const std::string& name, const glm::mat2& value) = 0;
         virtual void SetUniform(const std::string& name, const glm::mat3& value) = 0;
         virtual void SetUniform(const std::string& name, const glm::mat4& value) = 0;

@@ -5,16 +5,30 @@ namespace Mouton
 
     Mesh::Mesh(std::vector<MeshVertex>& vertices,
             std::vector<unsigned int>& indices,
-            std::vector<MeshTexture> textures)
+            std::vector<MeshTexture> textures, bool animated)
     : m_Indices(indices), m_Vertices(vertices), m_Textures(textures),
       m_VBO(VertexBuffer::CreateVertexBuffer()), m_EBO(ElementBuffer::CreateElementBuffer())
     {
         m_VBO->SetData(&vertices[0], sizeof(MeshVertex) * vertices.size());
-        m_VBO->SetLayout({
-            { ShaderType::Float3, false },
-            { ShaderType::Float2, false },
-            { ShaderType::Float3, false }
-        });
+
+        if(animated)
+        {
+            m_VBO->SetLayout({
+                { ShaderType::Float3, false },
+                { ShaderType::Float2, false },
+                { ShaderType::Float3, false },
+                { ShaderType::Int4,   false },
+                { ShaderType::Int4,   false },
+            });
+        }
+        else
+        {
+            m_VBO->SetLayout({
+                { ShaderType::Float3, false },
+                { ShaderType::Float2, false },
+                { ShaderType::Float3, false }
+            });
+        }
 
         m_EBO->SetData(&indices[0], sizeof(unsigned int) * indices.size());
     }

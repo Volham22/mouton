@@ -34,6 +34,42 @@ namespace Mouton
         glUseProgram(0);
     }
 
+    void OpenGLShader::SetUniform(const std::string& name, const glm::ivec2& value)
+    {
+        glUseProgram(m_ProgramHandle);
+        int location = GetUniformLocation(name);
+
+        if(location >= 0)
+            glUniform2i(location, value.x, value.y);
+        else
+            MTN_WARN("Uniform '{0}' not found !", name.c_str());
+        glUseProgram(0);
+    }
+
+    void OpenGLShader::SetUniform(const std::string& name, const glm::ivec3& value)
+    {
+        glUseProgram(m_ProgramHandle);
+        int location = GetUniformLocation(name);
+
+        if(location >= 0)
+            glUniform3i(location, value.x, value.y, value.z);
+        else
+            MTN_WARN("Uniform '{0}' not found !", name.c_str());
+        glUseProgram(0);
+    }
+
+    void OpenGLShader::SetUniform(const std::string& name, const glm::ivec4& value)
+    {
+        glUseProgram(m_ProgramHandle);
+        int location = GetUniformLocation(name);
+
+        if(location >= 0)
+            glUniform4i(location, value.x, value.y, value.z, value.w);
+        else
+            MTN_WARN("Uniform '{0}' not found !", name.c_str());
+        glUseProgram(0);
+    }
+
     void OpenGLShader::SetUniform(const std::string& name, float value)
     {
         glUseProgram(m_ProgramHandle);
