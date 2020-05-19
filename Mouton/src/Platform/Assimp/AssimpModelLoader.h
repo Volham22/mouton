@@ -21,11 +21,11 @@ namespace Mouton
 
     private:
         void LoadNodes(aiNode* node, const aiScene* scene);
-        Mesh LoadMesh(aiMesh* mesh, const aiScene* scene);
+        Mesh LoadMesh(aiMesh* mesh, const aiScene* scene, aiNode* meshNode);
         glm::mat4 ToGlmMat4(const aiMatrix4x4& matrix);
-        void LoadMeshBones(aiMesh* mesh, std::vector<MeshVertex>& vertices);
+        void LoadMeshBones(aiMesh* mesh, std::vector<MeshVertex>& vertices, aiNode* meshNode, const aiScene* scene);
+        void MakeChild(const aiScene* scene);
         void LoadBoneKeyFrame(const aiScene* scene);
-        void MakeBoneHierarchy(aiNode* node, const aiString& name);
         std::vector<MeshTexture> LoadTextures(aiMaterial* mat, aiTextureType aiType, TextureType type);
 
         std::shared_ptr<Model> m_LoadedModel;
@@ -34,6 +34,7 @@ namespace Mouton
         std::vector<Mesh> m_Meshes;
         int m_BonesIndex;
         std::unordered_map<std::string, Bone> m_Bones;
+        std::unordered_map<std::string, aiNode*> m_BoneNode;
         std::unordered_map<std::string, MeshTexture> m_Textures;
     };
 

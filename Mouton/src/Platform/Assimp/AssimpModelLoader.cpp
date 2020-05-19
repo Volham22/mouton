@@ -7,7 +7,7 @@ namespace Mouton
 
     AssimpModelLoader::AssimpModelLoader(const std::string& path)
         : m_LoadedModel(), m_Animations(new std::vector<Animation>()), m_Path(path), m_Meshes(),
-          m_BonesIndex(0), m_Bones(), m_Textures()
+          m_BonesIndex(0), m_Bones(), m_BoneNode(), m_Textures()
     {
     }
 
@@ -27,8 +27,8 @@ namespace Mouton
 
         m_Path = m_Path.substr(0, m_Path.find_last_of('/')) + '/';
         LoadNodes(scene->mRootNode, scene);
-        MakeBoneHierarchy(scene->mRootNode, scene->mRootNode->mName);
-        LoadBoneKeyFrame(scene);
+        MakeChild(scene);
+        //LoadBoneKeyFrame(scene);
 
         m_LoadedModel = m_Bones.size() > 0 ?
             std::make_shared<Model>(m_Meshes, m_Bones, m_Animations, scene->mRootNode->mName.C_Str()) :
@@ -53,7 +53,7 @@ namespace Mouton
         for(unsigned int i = 0; i < node->mNumMeshes; i++)
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            m_Meshes.push_back(LoadMesh(mesh, scene));
+            m_Meshes.push_back(LoadMesh(mesh, scene, node));
         }
 
         // Recursevely called for all of node's children
@@ -61,7 +61,7 @@ namespace Mouton
             LoadNodes(node->mChildren[i], scene);
     }
 
-    Mesh AssimpModelLoader::LoadMesh(aiMesh* mesh, const aiScene* scene)
+    Mesh AssimpModelLoader::LoadMesh(aiMesh* mesh, const aiScene* scene, aiNode* meshNode)
     {
         std::vector<MeshVertex> vertices;
         std::vector<unsigned int> indices;
@@ -119,7 +119,7 @@ namespace Mouton
         else
             MTN_WARN("Non textured models are not implemented yet");
 
-        LoadMeshBones(mesh, vertices); // Load mesh bones if any
+        LoadMeshBones(mesh, vertices, meshNode, scene); // Load mesh bones if any
 
         return Mesh(vertices, indices, textures, mesh->mNumBones > 0 ? true : false);
     }
@@ -137,7 +137,7 @@ namespace Mouton
         return res;
     }
 
-    void AssimpModelLoader::LoadMeshBones(aiMesh* mesh, std::vector<MeshVertex>& vertices)
+    void AssimpModelLoader::LoadMeshBones(aiMesh* mesh, std::vector<MeshVertex>& vertices, aiNode* meshNode, const aiScene* scene)
     {
         for(int i = 0; i < mesh->mNumBones; i++)
         {
@@ -148,7 +148,9 @@ namespace Mouton
             {
                 aiBone* bone = mesh->mBones[i];
                 Bone meshBone = Bone(++m_BonesIndex, boneName, ToGlmMat4(bone->mOffsetMatrix));
+                meshBone.SetGlobalTransformMatrix(ToGlmMat4(meshNode->mTransformation));
                 m_Bones[boneName] = meshBone;
+                m_BoneNode[boneName] = meshNode;
 
                 // Add vertex weight
                 for(int j = 0; j < bone->mNumWeights; j++)
@@ -167,73 +169,76 @@ namespace Mouton
                     }
                     else
                         MTN_WARN("Bone {0} affect more than 4 vertices !", boneName.c_str()); // TODO: Take the most relevant one
-                    
                 }
             }
         }
     }
 
-    void AssimpModelLoader::MakeBoneHierarchy(aiNode* node, const aiString& name)
+    // TODO: Improve time complexity it's O(n^2)
+    void AssimpModelLoader::MakeChild(const aiScene* scene)
     {
-        for(int i = 0; i < node->mNumChildren; i++)
+        for(auto& [boneName, bone] : m_Bones)
         {
-            // Set bone global transform matrix every nodes will be set since 
-            // this function is called first the root node
-            m_Bones[name.C_Str()].SetGlobalTransformMatrix(ToGlmMat4(node->mTransformation));
-            // If the node has a name, add it as child of parents nodes
-            if(node->mChildren[i]->mName.length > 0)
+            aiNode* boneParent = m_BoneNode[boneName]->mParent;
+
+            while(boneParent != nullptr)
             {
-                m_Bones[std::string(name.C_Str())].AddChild(m_Bones[std::string(node->mChildren[i]->mName.C_Str())]);
-                MakeBoneHierarchy(node->mChildren[i], node->mChildren[i]->mName);
-            }
-            else
-                MakeBoneHierarchy(node->mChildren[i], name);
-        }
-    }
-
-    void AssimpModelLoader::LoadBoneKeyFrame(const aiScene* scene)
-    {
-        if(scene->mNumAnimations > 0)
-        {
-            for(int i = 0; i < scene->mNumAnimations; i++)
-            {
-                aiAnimation* animation = scene->mAnimations[i];
-                std::string animName = animation->mName.C_Str();
-
-                m_Animations->push_back(Animation(animName, animation->mDuration, animation->mTicksPerSecond));
-
-                for(int j  = 0; j < animation->mNumChannels; j++)
+                for(int i = 0; i < boneParent->mNumMeshes; i++)
                 {
-                    KeyFrame key;
-                    for(int k = 0; k < animation->mChannels[j]->mNumPositionKeys; k++)
-                    {
-                        std::string nodeName = animation->mChannels[j]->mNodeName.C_Str();
+                    aiMesh* parentMesh = scene->mMeshes[boneParent->mMeshes[i]];
 
-                        glm::vec3 position;
-                        position.x = animation->mChannels[j]->mPositionKeys[k].mValue.x;
-                        position.y = animation->mChannels[j]->mPositionKeys[k].mValue.y;
-                        position.z = animation->mChannels[j]->mPositionKeys[k].mValue.z;
-
-                        glm::vec3 scale;
-                        scale.x = animation->mChannels[j]->mScalingKeys[k].mValue.x;
-                        scale.y = animation->mChannels[j]->mScalingKeys[k].mValue.y;
-                        scale.z = animation->mChannels[j]->mScalingKeys[k].mValue.z;
-
-                        glm::quat rotation;
-                        rotation.x = animation->mChannels[j]->mRotationKeys[k].mValue.x;
-                        rotation.y = animation->mChannels[j]->mRotationKeys[k].mValue.y;
-                        rotation.z = animation->mChannels[j]->mRotationKeys[k].mValue.z;
-                        rotation.w = animation->mChannels[j]->mRotationKeys[k].mValue.w;
-
-                        double time = animation->mChannels[j]->mPositionKeys[k].mTime;
-
-                        key = KeyFrame(nodeName, position, scale, rotation, time);
-                        m_Bones[nodeName].AddKeyFrame(animName, key);
-                    }
+                    for(int j = 0; j < parentMesh->mNumBones; j++)
+                        m_Bones[parentMesh->mBones[j]->mName.C_Str()].AddChild(bone);
                 }
+
+                boneParent = boneParent->mParent;
             }
         }
     }
+
+    // void AssimpModelLoader::LoadBoneKeyFrame(const aiScene* scene)
+    // {
+    //     if(scene->mNumAnimations > 0)
+    //     {
+    //         for(int i = 0; i < scene->mNumAnimations; i++)
+    //         {
+    //             aiAnimation* animation = scene->mAnimations[i];
+    //             std::string animName = animation->mName.C_Str();
+
+    //             m_Animations->push_back(Animation(animName, animation->mDuration, animation->mTicksPerSecond));
+
+    //             for(int j  = 0; j < animation->mNumChannels; j++)
+    //             {
+    //                 KeyFrame key;
+    //                 for(int k = 0; k < animation->mChannels[j]->mNumPositionKeys; k++)
+    //                 {
+    //                     std::string nodeName = animation->mChannels[j]->mNodeName.C_Str();
+
+    //                     glm::vec3 position;
+    //                     position.x = animation->mChannels[j]->mPositionKeys[k].mValue.x;
+    //                     position.y = animation->mChannels[j]->mPositionKeys[k].mValue.y;
+    //                     position.z = animation->mChannels[j]->mPositionKeys[k].mValue.z;
+
+    //                     glm::vec3 scale;
+    //                     scale.x = animation->mChannels[j]->mScalingKeys[k].mValue.x;
+    //                     scale.y = animation->mChannels[j]->mScalingKeys[k].mValue.y;
+    //                     scale.z = animation->mChannels[j]->mScalingKeys[k].mValue.z;
+
+    //                     glm::quat rotation;
+    //                     rotation.x = animation->mChannels[j]->mRotationKeys[k].mValue.x;
+    //                     rotation.y = animation->mChannels[j]->mRotationKeys[k].mValue.y;
+    //                     rotation.z = animation->mChannels[j]->mRotationKeys[k].mValue.z;
+    //                     rotation.w = animation->mChannels[j]->mRotationKeys[k].mValue.w;
+
+    //                     double time = animation->mChannels[j]->mPositionKeys[k].mTime;
+
+    //                     key = KeyFrame(nodeName, position, scale, rotation, time);
+    //                     m_Bones[nodeName].AddKeyFrame(animName, key);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     std::vector<MeshTexture> AssimpModelLoader::LoadTextures(aiMaterial* mat, aiTextureType aiType, TextureType type)
     {

@@ -34,7 +34,7 @@ namespace Mouton
             for(Animation& anim : *m_Animations)
             {
                 if(anim.GetName() == name)
-                {é
+                {
                     anim.Play();
                     m_CurrentAnim = &anim;
                 }
@@ -84,7 +84,7 @@ namespace Mouton
 
     void Model::UpdateAnimation()
     {
-        double animationProgress = m_CurrentAnim->Update();
+        //double animationProgress = m_CurrentAnim->Update();
 
     }
 
