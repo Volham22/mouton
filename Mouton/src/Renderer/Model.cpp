@@ -1,7 +1,6 @@
 #include "Model.h"
 
 #include "Platform/Assimp/AssimpModelLoader.h"
-#include "Renderer.h"
 
 namespace Mouton
 {
@@ -12,19 +11,14 @@ namespace Mouton
         return std::make_unique<AssimpModelLoader>(path);
     }
 
-    Model::Model(const std::vector<Mesh>& meshes)
-        : m_Meshes(meshes), m_RootNodeName(), m_Bones(), m_VAO(VertexArray::CreateVertexArray()),
-          m_Animations(), m_CurrentAnim(nullptr)
+    Model::Model(const std::shared_ptr<Node>& rootNode)
+        : m_RootNode(rootNode), m_Animations(), m_CurrentAnim(nullptr)
     {
-        m_VAO->AddVertexBuffer(*(m_Meshes[0].m_VBO));
     }
 
-        Model::Model(const std::vector<Mesh>& meshes, const std::unordered_map<std::string, Bone>& bone,
-            const std::shared_ptr<std::vector<Animation>>& animations, const std::string& rootNodeName)
-        : m_Meshes(meshes), m_RootNodeName(rootNodeName), m_Bones(bone), m_VAO(VertexArray::CreateVertexArray()),
-          m_Animations(animations), m_CurrentAnim(nullptr)
+        Model::Model(const std::shared_ptr<std::vector<Animation>>& animations, const std::shared_ptr<Node>& rootNode)
+        : m_RootNode(rootNode), m_Animations(animations), m_CurrentAnim(nullptr)
     {
-        m_VAO->AddVertexBuffer(*(m_Meshes[0].m_VBO));
     }
 
     void Model::PlayAnimation(const std::string& name)
@@ -50,42 +44,37 @@ namespace Mouton
         {
             m_CurrentAnim->Stop();
             m_CurrentAnim = nullptr;
+            MTN_TRACE("Animation finished");
         }
         else
             MTN_WARN("Attempted to stop an animation but nothing is playing !");
     }
 
-    void Model::DrawModel(Shader& shader)
+    void Model::DrawModel()
     {
-        m_VAO->Bind();
-
         if(m_CurrentAnim)
         {
-            m_Bones[m_RootNodeName].Update(m_CurrentAnim->Update(), m_CurrentAnim->GetName());
+            double animProgress = m_CurrentAnim->Update();
 
-            int cnt = 0;
-            for(auto& [name, bone] : m_Bones)
+            if(animProgress > 0)
             {
-                shader.SetUniform(std::string("u_Bones[") + std::to_string(cnt) + std::string("]"),
-                    bone.GetAnimatedTransform());
-                cnt++;
+                glm::mat4 rootTransform = glm::mat4(1.0f);
+                m_RootNode->ProcessNodeHierarchy(m_CurrentAnim->GetName(), animProgress, rootTransform);
             }
+            else
+                StopAnimation();
         }
 
-        for(Mesh& mesh : m_Meshes)
-        {
-            mesh.Bind();
-            Renderer::DrawIndexed(mesh.m_EBO->GetCount());
-            mesh.Unbind();
-        }
-
-        m_VAO->Unbind();
+        m_RootNode->Draw();
     }
 
-    void Model::UpdateAnimation()
+    std::shared_ptr<std::array<glm::mat4, MTN_MAX_BONES_COUNT>> Model::GetBonesTransforms() const
     {
-        //double animationProgress = m_CurrentAnim->Update();
+        auto transforms = std::make_shared<std::array<glm::mat4, MTN_MAX_BONES_COUNT>>();
+        m_RootNode->RetrieveBonesTransform(transforms);
 
+        return transforms;
     }
+
 
 } // namespace Mouton

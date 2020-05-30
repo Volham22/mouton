@@ -5,6 +5,9 @@
 
 #include "KeyFrame.h"
 
+// Maximum bones count allowed by shaders
+#define MTN_MAX_BONES_COUNT 20
+
 namespace Mouton
 {
 
@@ -13,25 +16,23 @@ namespace Mouton
     public:
         Bone();
         Bone(int index, const std::string& name, const glm::mat4& localTansform);
-        void AddChild(const Bone& child);
         void AddKeyFrame(const std::string& animationName, const KeyFrame& keyFrame);
         void SortKeyFrames();
         void SetGlobalTransformMatrix(const glm::mat4& matrix) { m_GlobalTransform = matrix; };
         int GetIndex() const { return m_Index; };
         glm::mat4 GetAnimatedTransform() const { return m_AnimatedTransform; };
-        void SetAnimatedTransform(const glm::mat4& animatedTransform) { m_AnimatedTransform = animatedTransform; };
+        void SetLocalOffset(const glm::mat4& offsetMatrix) { m_LocalOffset = offsetMatrix; };
         glm::mat4 GetGlobalTransformInverse() const { return glm::inverse(m_GlobalTransform); };
-        void Update(double animationProgress, const std::string& animationName);
+        glm::mat4 Update(double animationProgress, const std::string& animationName, const glm::mat4& parentTransform);
     private:
         int m_Index;
         std::string m_Name;
-        std::vector<Bone> m_Childs;
         std::unordered_map<std::string, std::vector<KeyFrame>> m_KeyFrames;
         glm::mat4 m_AnimatedTransform;
         glm::mat4 m_LocalOffset;
         glm::mat4 m_GlobalTransform;
+        glm::mat4 m_LocalTransform;
 
-        void UpdateRec(double animationProgress, const std::string& animationName, const glm::mat4& parentTransform);
         int FindKeyFrame(double animationProgress, const std::string& animationName);
     };
 

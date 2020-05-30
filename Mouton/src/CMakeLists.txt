@@ -24,6 +24,7 @@ set(MTN_SRC
     src/Renderer/Mesh.cpp
     src/Renderer/Model.cpp
     src/Renderer/OrbitalCameraController.cpp
+    src/Renderer/Node.cpp
     src/Renderer/Animations/Bone.cpp
     src/Renderer/Animations/KeyFrame.cpp
     src/Renderer/Animations/Animation.cpp

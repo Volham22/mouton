@@ -118,37 +118,37 @@ namespace Mouton
         glUseProgram(0);
     }
 
-    void OpenGLShader::SetUniform(const std::string& name, const glm::mat2& value)
+    void OpenGLShader::SetUniform(const std::string& name, const glm::mat2& value, bool tranpose)
     {
         glUseProgram(m_ProgramHandle);
         int location = GetUniformLocation(name);
 
         if(location >= 0)
-            glUniformMatrix2fv(location, 1, false, glm::value_ptr(value));
+            glUniformMatrix2fv(location, 1, tranpose, glm::value_ptr(value));
         else
             MTN_WARN("Uniform '{0}' not found !", name.c_str());
         glUseProgram(0);
     }
 
-    void OpenGLShader::SetUniform(const std::string& name, const glm::mat3& value)
+    void OpenGLShader::SetUniform(const std::string& name, const glm::mat3& value, bool transpose)
     {
         glUseProgram(m_ProgramHandle);
         int location = GetUniformLocation(name);
 
         if(location >= 0)
-            glUniformMatrix3fv(location, 1, false, glm::value_ptr(value));
+            glUniformMatrix3fv(location, 1, transpose, glm::value_ptr(value));
         else
             MTN_WARN("Uniform '{0}' not found !", name.c_str());
         glUseProgram(0);
     }
 
-    void OpenGLShader::SetUniform(const std::string& name, const glm::mat4& value)
+    void OpenGLShader::SetUniform(const std::string& name, const glm::mat4& value, bool transpose)
     {
         glUseProgram(m_ProgramHandle);
         int location = GetUniformLocation(name);
 
         if(location >= 0)
-            glUniformMatrix4fv(location, 1, false, glm::value_ptr(value));
+            glUniformMatrix4fv(location, 1, transpose, glm::value_ptr(value));
         else
             MTN_WARN("Uniform '{0}' not found !", name.c_str());
         glUseProgram(0);

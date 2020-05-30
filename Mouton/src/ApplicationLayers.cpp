@@ -12,7 +12,7 @@ namespace Mouton
     RenderLayer::RenderLayer(const char* name)
         : Layer(name), m_Shader(),
           m_CameraDirection(0.0f),
-          m_Camera(1280.0f / 720.0f, 45.0f, 20.0f, glm::vec3(0.0f, 0.0f, 0.0f), 0.1f, 200.0f),
+          m_Camera(1280.0f / 720.0f, 45.0f, 20.0f, glm::vec3(0.0f, 0.0f, 0.0f), 0.1f, 1000.0f),
           m_CameraController(std::shared_ptr<OrbitalCamera>(&m_Camera))
     {
         // Some temporary code here
@@ -49,10 +49,14 @@ namespace Mouton
             ImGui::DragFloat3("Camera target position", glm::value_ptr(m_CameraDirection), 0.1f);
         ImGui::End();
 
+        auto bonesTransforms = m_Model->GetBonesTransforms();
+
+        for(unsigned int i = 0; i < bonesTransforms->size(); i++)
+            m_Shader->SetUniform("u_Bones[" + std::to_string(i) + "]", (*bonesTransforms)[i]);
 
         Renderer::BeginScene();
         m_Shader->Bind();
-        m_Model->DrawModel(*m_Shader);
+        m_Model->DrawModel();
         m_Shader->Unbind();
         Renderer::EndScene();
     }

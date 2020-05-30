@@ -23,9 +23,9 @@ namespace Mouton
         virtual void SetUniform(const std::string& name, const glm::vec3& value) = 0;
         virtual void SetUniform(const std::string& name, const glm::vec4& value) = 0;
 
-        virtual void SetUniform(const std::string& name, const glm::mat2& value) = 0;
-        virtual void SetUniform(const std::string& name, const glm::mat3& value) = 0;
-        virtual void SetUniform(const std::string& name, const glm::mat4& value) = 0;
+        virtual void SetUniform(const std::string& name, const glm::mat2& value, bool transpose=false) = 0;
+        virtual void SetUniform(const std::string& name, const glm::mat3& value, bool transpose=false) = 0;
+        virtual void SetUniform(const std::string& name, const glm::mat4& value, bool transpose=false) = 0;
 
         static std::shared_ptr<Shader> CreateShader(const std::string &filepath);
     };

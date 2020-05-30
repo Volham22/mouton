@@ -31,7 +31,7 @@ namespace Mouton
         std::chrono::duration<double> elasped = std::chrono::high_resolution_clock::now() - m_BeginTime;
 
         if(elasped.count() < m_Duration)
-            return elasped.count() / m_Duration;
+            return elasped.count();
         else
             return -1.0;
     }

@@ -15,6 +15,8 @@ add_subdirectory(vendor/Glad)
 # imgui library
 add_subdirectory(vendor/imgui)
 
+add_subdirectory(vendor/assimp)
+
 # Assimp
 option(ENABLE_BOOST_WORKAROUND ON)
 option(ZLIB_LIBRARIES zlibstatic)
@@ -25,10 +27,15 @@ option(ASSIMP_NO_EXPORT ON)
 option(ASSIMP_BUILD_TESTS OFF)
 option(ASSIMP_WERROR OFF)
 
-add_subdirectory(vendor/assimp)
-
 add_library(Mouton ${MTN_SRC})
 target_precompile_headers(Mouton PUBLIC src/MoutonPch.h)
+
+if(MSVC)
+    target_compile_options(Mouton PRIVATE /W4)
+else()
+    target_compile_options(Mouton PRIVATE -Wall -Wextra)
+endif()
+
 
 target_link_libraries(Mouton glfw Glad imgui assimp)
 target_include_directories(Mouton PRIVATE
