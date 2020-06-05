@@ -45,7 +45,7 @@ namespace Mouton
             m_LocalTransform = (glm::translate(glm::mat4(1.0f), position) *
                 glm::mat4_cast(rotations) * glm::scale(glm::mat4(1.0f), scale));
             
-            m_AnimatedTransform = m_LocalTransform * parentTransform * GetGlobalTransformInverse();
+            m_AnimatedTransform = GetGlobalTransformInverse() * parentTransform * m_LocalTransform;
 
             return parentTransform;
         }
