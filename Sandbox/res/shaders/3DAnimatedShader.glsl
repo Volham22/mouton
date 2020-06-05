@@ -1,7 +1,7 @@
 #type vertex
 #version 410 core
 
-#define MAX_BONES_COUNT 20
+#define MAX_BONES_COUNT 30
 
 layout (location = 0) in vec3 a_Pos;
 layout (location = 1) in vec2 a_TexCoord;

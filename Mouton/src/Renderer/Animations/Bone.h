@@ -6,7 +6,7 @@
 #include "KeyFrame.h"
 
 // Maximum bones count allowed by shaders
-#define MTN_MAX_BONES_COUNT 20
+#define MTN_MAX_BONES_COUNT 30
 
 namespace Mouton
 {

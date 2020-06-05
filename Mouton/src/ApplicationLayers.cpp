@@ -26,11 +26,10 @@ namespace Mouton
         m_Shader->SetUniform("u_Normal", 2);
         m_Shader->SetUniform("u_Height", 3);
 
-        auto loader = ModelLoader::CreateModelLoader("res/models/robot/source/Drone.FBX");
+        auto loader = ModelLoader::CreateModelLoader("res/models/Man/man.fbx");
         loader->Load();
         m_Model = loader->GetLoadedModel();
 
-        m_Model->PlayAnimation("Take 001");
     }
 
     void RenderLayer::OnBind()
@@ -53,6 +52,17 @@ namespace Mouton
 
         for(unsigned int i = 0; i < bonesTransforms->size(); i++)
             m_Shader->SetUniform("u_Bones[" + std::to_string(i) + "]", (*bonesTransforms)[i]);
+
+        ImGui::Begin("Animation");
+            ImGui::Text("Manage the animation");
+
+            if(ImGui::Button("Play"))
+                m_Model->PlayAnimation("Armature|idle");
+
+            if(ImGui::Button("Stop"))
+                m_Model->StopAnimation();
+
+        ImGui::End();
 
         Renderer::BeginScene();
         m_Shader->Bind();

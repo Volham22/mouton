@@ -192,7 +192,7 @@ namespace Mouton
                 aiAnimation* animation = scene->mAnimations[i];
                 std::string animName = animation->mName.C_Str();
 
-                m_Animations->push_back(Animation(animName, animation->mDuration, animation->mTicksPerSecond));
+                m_Animations->push_back(Animation(animName.length() > 0 ? animName : "animation" + i, animation->mDuration, animation->mTicksPerSecond));
 
                 for(int j  = 0; j < animation->mNumChannels; j++)
                 {

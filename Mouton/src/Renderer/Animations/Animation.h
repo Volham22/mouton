@@ -23,7 +23,8 @@ namespace Mouton
     private:
         std::string m_Name;
         double m_Duration, m_TickPerSecond;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_BeginTime;
+        double m_Tick;
+        std::chrono::high_resolution_clock::time_point m_Begin;
         bool m_Playing;
     };
 

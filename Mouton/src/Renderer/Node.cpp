@@ -20,8 +20,6 @@ namespace Mouton
 
     void Node::ProcessNodeHierarchy(const std::string& animationName, double animationProgress, glm::mat4 parentTransform)
     {
-        parentTransform *= m_Transform;
-
         if(m_Bones.size() > 0)
         {
             for(auto& bone : m_Bones)
@@ -31,7 +29,7 @@ namespace Mouton
         }
 
         for(auto& child : m_Children)
-            child->ProcessNodeHierarchy(animationName, animationProgress, parentTransform);
+            child->ProcessNodeHierarchy(animationName, animationProgress, parentTransform * m_Transform);
     }
 
     void Node::AddChildren(const std::shared_ptr<Node>& node)

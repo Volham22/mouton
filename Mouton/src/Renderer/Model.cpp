@@ -56,10 +56,10 @@ namespace Mouton
         {
             double animProgress = m_CurrentAnim->Update();
 
-            if(animProgress > 0)
+            if(animProgress >= 0)
             {
-                glm::mat4 rootTransform = glm::mat4(1.0f);
-                m_RootNode->ProcessNodeHierarchy(m_CurrentAnim->GetName(), animProgress, rootTransform);
+                // glm::mat4 rootTransform = glm::mat4(1.0f);
+                m_RootNode->ProcessNodeHierarchy(m_CurrentAnim->GetName(), animProgress, m_RootNode->GetTransformation());
             }
             else
                 StopAnimation();
