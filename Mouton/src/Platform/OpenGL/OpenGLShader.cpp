@@ -169,16 +169,16 @@ namespace Mouton
             file.seekg(std::ios::beg);
             file.read(&fileCode[0], size);
 
-            int beginVertex = fileCode.find("#type vertex") + strlen("#type vertex");
-            int endVertex   = fileCode.find("#endtype vertex");
+            unsigned int beginVertex = fileCode.find("#type vertex") + strlen("#type vertex");
+            unsigned int endVertex   = fileCode.find("#endtype vertex");
 
             if(beginVertex != std::string::npos && endVertex != std::string::npos)
                 vertexCode = fileCode.substr(beginVertex, endVertex - beginVertex);
             else
                 MTN_ERROR("Missing or unclosed '#type vertex' directive in '{0}'", filepath.c_str());
 
-            int beginFragment = fileCode.find("#type fragment") + strlen("#type fragment");
-            int endFragment = fileCode.find("#endtype fragment");
+            unsigned int beginFragment = fileCode.find("#type fragment") + strlen("#type fragment");
+            unsigned int endFragment = fileCode.find("#endtype fragment");
 
             if(beginFragment != std::string::npos && endFragment != std::string::npos)
                 fragmentCode = fileCode.substr(beginFragment, endFragment - beginFragment);

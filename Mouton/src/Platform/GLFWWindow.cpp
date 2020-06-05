@@ -187,7 +187,7 @@ namespace Mouton
 
         // Set GLFW Error callback
         glfwSetErrorCallback([](int error, const char* message) {
-            MTN_ERROR(message);
+            MTN_ERROR("GLFW ERROR ({0}) : {1}", error, message);
         });
 
         m_GLFWWindow = glfwCreateWindow(

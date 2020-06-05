@@ -11,6 +11,7 @@ namespace Mouton
     {
     public:
         Layer(const char* name = "Layer");
+        virtual ~Layer() = default;
         std::string& GetName() { return m_Name; };
 
         virtual void OnBind()   = 0;

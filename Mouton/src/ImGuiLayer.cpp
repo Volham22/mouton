@@ -9,7 +9,7 @@ namespace Mouton
 {
 
     ImGUILayer::ImGUILayer(void* win, const char* name)
-            : m_WindowInstance(static_cast<GLFWwindow*>(win)), Layer(name)
+            : Layer(name), m_WindowInstance(static_cast<GLFWwindow*>(win))
     {
         InitMoutonImgui(m_WindowInstance);
 

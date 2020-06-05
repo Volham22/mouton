@@ -11,7 +11,7 @@ namespace Mouton
         int windowWidth, windowHeight;
 
         WindowProperties()
-            : name("Mouton"), windowHeight(720), windowWidth(1280) {}
+            : name("Mouton"), windowWidth(1280), windowHeight(720) {}
         WindowProperties(const char* name, int width, int height)
             : name(name), windowWidth(width), windowHeight(height) {}
         WindowProperties(int width, int height)

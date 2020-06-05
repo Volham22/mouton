@@ -106,7 +106,7 @@ namespace Mouton
                 indices.push_back(face.mIndices[j]);
         }
 
-        if(mesh->mMaterialIndex >= 0)
+        if(mesh->mMaterialIndex > 0)
         {
             aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
 
@@ -144,7 +144,7 @@ namespace Mouton
     void AssimpModelLoader::LoadMeshBones(aiMesh* mesh, aiNode* meshNode,
         const aiScene* scene, std::vector<MeshVertex>& vertices, std::shared_ptr<Node>& node)
     {
-        for(int i = 0; i < mesh->mNumBones; i++)
+        for(unsigned int i = 0; i < mesh->mNumBones; i++)
         {
             std::string boneName = mesh->mBones[i]->mName.C_Str();
             auto it = m_Bones.find(boneName);
@@ -162,7 +162,7 @@ namespace Mouton
                 node->AddBone(m_Bones[boneName]);
 
             // Add vertex weight
-            for(int j = 0; j < bone->mNumWeights; j++)
+            for(unsigned int j = 0; j < bone->mNumWeights; j++)
             {
                 int vertexID = bone->mWeights[j].mVertexId;
                 int bonePos = 0;
@@ -187,17 +187,17 @@ namespace Mouton
     {
         if(scene->mNumAnimations > 0)
         {
-            for(int i = 0; i < scene->mNumAnimations; i++)
+            for(unsigned int i = 0; i < scene->mNumAnimations; i++)
             {
                 aiAnimation* animation = scene->mAnimations[i];
                 std::string animName = animation->mName.C_Str();
 
                 m_Animations->push_back(Animation(animName.length() > 0 ? animName : "animation" + i, animation->mDuration, animation->mTicksPerSecond));
 
-                for(int j  = 0; j < animation->mNumChannels; j++)
+                for(unsigned int j  = 0; j < animation->mNumChannels; j++)
                 {
                     KeyFrame key;
-                    for(int k = 0; k < animation->mChannels[j]->mNumPositionKeys; k++)
+                    for(unsigned int k = 0; k < animation->mChannels[j]->mNumPositionKeys; k++)
                     {
                         aiNode* animNode = scene->mRootNode->FindNode(animation->mChannels[j]->mNodeName);
 

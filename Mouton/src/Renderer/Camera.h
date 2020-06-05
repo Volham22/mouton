@@ -45,8 +45,8 @@ namespace Mouton
     class OrbitalCamera : public Camera
     {
     public:
-        OrbitalCamera(float aspectRatio, float fov, float distance,
-            const glm::vec3& targetPos, float near = 0.1f, float far = 100.0f);
+        OrbitalCamera(float aspectRatio, float fov, const glm::vec3& targetPos,
+            float near = 0.1f, float far = 100.0f);
         virtual void SetPosition(const glm::vec3& position) override;
         virtual const glm::mat4& GetViewProjectionMatrix() const override { return m_VP; };
         void Orbit(float angleHorizontal, float angleVertical, float distance);

@@ -45,8 +45,8 @@ namespace Mouton
         m_VP = m_Projection * glm::lookAt(m_Position, m_Direction, glm::vec3(0, 0, 1));
     }
 
-    OrbitalCamera::OrbitalCamera(float aspectRatio, float fov, float distance,
-        const glm::vec3& targetPos, float near, float far)
+    OrbitalCamera::OrbitalCamera(float aspectRatio, float fov, const glm::vec3& targetPos,
+            float near, float far)
         : m_Projection(glm::perspective(glm::radians(fov), aspectRatio, near, far)),
           m_VP(m_Projection * glm::lookAt(targetPos + 1.0f, targetPos, glm::vec3(0.0f, 0.0f, 1.0f))),
           m_TargetPosition(0.0f)
