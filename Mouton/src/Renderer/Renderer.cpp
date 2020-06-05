@@ -25,7 +25,7 @@ namespace Mouton
 
     void Renderer::SetBlending(bool enable)
     {
-        RenderCommand::SetBlending(true);
+        RenderCommand::SetBlending(enable);
     }
 
     void Renderer::Draw(int count)
