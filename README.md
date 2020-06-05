@@ -6,6 +6,8 @@ Mouton is a 3D engine.
 
 ## How to install ?
 
+You will need a C++17 compiler.
+
 Clone this repository
 
 ```
