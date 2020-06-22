@@ -1,7 +1,6 @@
 #include "Engine.h"
 
 #include "Core/Inputs.h"
-#include "ApplicationLayer.h"
 
 namespace Mouton
 {
