@@ -18,12 +18,15 @@ namespace Mouton
         Application(const WindowProperties& properties);
         Application(Application &app) = delete;
         static void InitApplication();
+        static void PushLayer(Layer* layer);
+        static void Run();
         static void EndApplication();
 
     private:
         Application();
         void OnInit();
-        void Run();
+        void RunImpl();
+        void PushLayerImpl(Layer* layer);
         bool OnEvent(Event& event);
 
     private:
@@ -33,7 +36,7 @@ namespace Mouton
         ImGUILayer m_ImGuiLayer;
 
     };
-    
+
 }
 
 #endif
