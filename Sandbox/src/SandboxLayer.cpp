@@ -1,71 +1,43 @@
 #include "SandboxLayer.h"
 #include "imgui.h"
 
-#include "Core/Inputs.h"
 #include "Renderer/RendererContext.h"
 #include "Renderer/Renderer.h"
+
+#include "Renderer/Renderer2D.h"
 
 using namespace Mouton;
 
 SandboxLayer::SandboxLayer()
-    : Layer("Sandbox Layer"), m_Shader(),
-      m_CameraDirection(0.0f),
-      m_Camera(1280.0f / 720.0f, 45.0f, glm::vec3(0.0f, 0.0f, 0.0f), 0.1f, 1000.0f),
-      m_CameraController(std::shared_ptr<OrbitalCamera>(&m_Camera))
+    : Layer("Sandbox Layer"),
+      m_Camera(0.0f, 100.0f, 0.0f, 100.0f)
 {
-    // Some temporary code here
     RendererContext::InitContext(GraphicAPI::OpenGL);
     Renderer::InitRenderer();
-    Renderer::SetDepthTest(true);
-
-    m_Shader = Shader::CreateShader("res/shaders/3DAnimatedShader.glsl");
-    m_Shader->SetUniform("u_Diffuse", 0);
-    m_Shader->SetUniform("u_Specular", 1);
-    m_Shader->SetUniform("u_Normal", 2);
-    m_Shader->SetUniform("u_Height", 3);
-
-    auto loader = ModelLoader::CreateModelLoader("res/models/Man/man.fbx");
-    loader->Load();
-    m_Model = loader->GetLoadedModel();
+    Renderer2D::Init();
 }
 
 void SandboxLayer::OnBind()
 {
-    m_Camera.SetPosition(m_CameraDirection);
-    m_Shader->SetUniform("u_VP", m_CameraController.GetViewProjectionMatrix());
+
 }
 
 void SandboxLayer::OnUnbind()
 {
+    Renderer2D::EndScene();
 }
 
 void SandboxLayer::OnUpdate()
 {
-    ImGui::Begin("Camera control panel");
-    ImGui::DragFloat3("Camera target position", glm::value_ptr(m_CameraDirection), 0.1f);
-    ImGui::End();
+    Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
 
-    auto bonesTransforms = m_Model->GetBonesTransforms();
+    for(int i = 0; i < 100; i += 20)
+    {
+        for(int j = 0; j < 100; j += 20)
+            Renderer2D::DrawQuad({10.0f + i, 10.0f + j, 0.0f }, { 10.0f, 10.0f }, { 1.0f, 0.0f, 0.75f, 1.0f });
+    }
 
-    for (unsigned int i = 0; i < bonesTransforms->size(); i++)
-        m_Shader->SetUniform("u_Bones[" + std::to_string(i) + "]", (*bonesTransforms)[i]);
-
-    ImGui::Begin("Animation");
-    ImGui::Text("Manage the animation");
-
-    if (ImGui::Button("Play"))
-        m_Model->PlayAnimation("Armature|idle");
-
-    if (ImGui::Button("Stop"))
-        m_Model->StopAnimation();
-
-    ImGui::End();
-
-    Renderer::BeginScene();
-    m_Shader->Bind();
-    m_Model->DrawModel();
-    m_Shader->Unbind();
-    Renderer::EndScene();
+    Renderer2D::EndScene();
 }
 
 bool SandboxLayer::OnEvent(Event &event)
@@ -74,9 +46,6 @@ bool SandboxLayer::OnEvent(Event &event)
         MTN_INFO("On window close ...");
         return true;
     });
-
-    // Handle Camera controller event
-    m_CameraController.OnEvent(event);
 
     return event.Handled();
 }

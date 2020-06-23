@@ -2,9 +2,8 @@
 
 #include "Core/Events/Events.h"
 
-#include "Renderer/Shader.h"
 #include "Renderer/Model.h"
-#include "Renderer/OrbitalCameraController.h"
+#include "Renderer/Camera.h"
 
 class SandboxLayer : public Mouton::Layer
 {
@@ -17,9 +16,6 @@ public:
     virtual bool OnEvent(Mouton::Event& event) override;
 
 private:
-        std::shared_ptr<Mouton::Shader> m_Shader;
         std::shared_ptr<Mouton::Model> m_Model;
-        glm::vec3 m_CameraDirection;
-        Mouton::OrbitalCamera m_Camera;
-        Mouton::OrbitalCameraController m_CameraController;
+        Mouton::OrthographicCamera m_Camera;
 };
