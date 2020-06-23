@@ -64,6 +64,13 @@ void SandboxLayer::OnUpdate()
     ImGui::Begin("Hello world");
     ImGui::LabelText("Some random text to demonstrate stuff", "Explanation");
     ImGui::End();
+
+    ImGui::Begin("Performance window");
+    ImGui::Text("Mouton Performance.");
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+        1000.0f / ImGui::GetIO().Framerate,
+        ImGui::GetIO().Framerate);
+    ImGui::End();
 }
 
 bool SandboxLayer::OnEvent(Event &event)
