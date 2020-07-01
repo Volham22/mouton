@@ -16,6 +16,7 @@ bin/
 lib/
 *.a
 Sandbox/Sandbox
+Editor/MoutonEditor
 
 /Mouton/vendor/spdlog
 

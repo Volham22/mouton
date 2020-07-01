@@ -14,3 +14,4 @@ endif()
 
 add_subdirectory(Mouton)
 add_subdirectory(Sandbox)
+add_subdirectory(Editor)

@@ -29,13 +29,6 @@ namespace Mouton
 
     void ImGUILayer::OnUpdate()
     {
-
-        ImGui::Begin("Performance window");
-            ImGui::Text("Mouton Performance.");
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-                    1000.0f / ImGui::GetIO().Framerate,
-                    ImGui::GetIO().Framerate);
-        ImGui::End();
     }
 
     void ImGUILayer::OnUnbind()
