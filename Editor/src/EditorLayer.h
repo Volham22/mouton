@@ -2,8 +2,8 @@
 
 #include "Core/Events/Events.h"
 
-#include "Renderer/Model.h"
 #include "Renderer/Camera.h"
+#include "Renderer/Framebuffer.h"
 
 class EditorLayer : public Mouton::Layer
 {
@@ -16,6 +16,6 @@ public:
     virtual bool OnEvent(Mouton::Event& event) override;
 
 private:
-        std::shared_ptr<Mouton::Model> m_Model;
+        std::shared_ptr<Mouton::Framebuffer> m_ViewportFramebuffer;
         Mouton::OrthographicCamera m_Camera;
 };

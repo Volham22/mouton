@@ -24,6 +24,7 @@ set(MTN_SRC
     src/Renderer/Model.cpp
     src/Renderer/OrbitalCameraController.cpp
     src/Renderer/Node.cpp
+    src/Renderer/Framebuffer.cpp
     src/Renderer/Animations/Bone.cpp
     src/Renderer/Animations/KeyFrame.cpp
     src/Renderer/Animations/Animation.cpp
@@ -36,6 +37,7 @@ set(MTN_SRC
     src/Platform/OpenGL/OpenGLVertexArray.cpp
     src/Platform/OpenGL/OpenGLTexture.cpp
     src/Platform/OpenGL/OpenGLRenderCommand.cpp
+    src/Platform/OpenGL/OpenGLFramebuffer.cpp
     src/Platform/imguiImplementation/imgui_impl_glfw.cpp
     src/Platform/imguiImplementation/imgui_impl_opengl3.cpp
     src/Platform/Assimp/AssimpModelLoader.cpp

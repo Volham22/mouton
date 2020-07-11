@@ -15,6 +15,8 @@ EditorLayer::EditorLayer()
     RendererContext::InitContext(GraphicAPI::OpenGL);
     Renderer::InitRenderer();
     Renderer2D::Init();
+
+    m_ViewportFramebuffer = Framebuffer::CreateFramebuffer();
 }
 
 void EditorLayer::OnBind()
@@ -28,16 +30,6 @@ void EditorLayer::OnUnbind()
 
 void EditorLayer::OnUpdate()
 {
-    Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
-
-    for (int i = 0; i < 100; i += 20)
-    {
-        for (int j = 0; j < 100; j += 20)
-            Renderer2D::DrawQuad({10.0f + i, 10.0f + j, 0.0f}, {10.0f, 10.0f}, {1.0f, 0.0f, 0.75f, 1.0f});
-    }
-
-    Renderer2D::EndScene();
-
     static ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_PassthruCentralNode;
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     static bool dockSpaceOpened = true;
@@ -61,8 +53,15 @@ void EditorLayer::OnUpdate()
 
     ImGui::End();
 
-    ImGui::Begin("Mouton Editor");
-    ImGui::LabelText("Some random text to demonstrate stuff", "Explanation");
+    // m_ViewportFramebuffer->CreateBlankTexture(500, 500);
+
+    ImGui::Begin("Game Viewport");
+    static uint32_t textureID = m_ViewportFramebuffer->GetTextureAttachmentID();
+
+    auto[width, height] = ImGui::GetContentRegionAvail();
+    m_ViewportFramebuffer->CreateBlankTexture(width, height);
+
+    ImGui::Image((void*)textureID, { width, height });
     ImGui::End();
 
     ImGui::Begin("Performance window");
@@ -71,6 +70,19 @@ void EditorLayer::OnUpdate()
         1000.0f / ImGui::GetIO().Framerate,
         ImGui::GetIO().Framerate);
     ImGui::End();
+
+    // Viewport rendering
+    m_ViewportFramebuffer->Bind();
+    Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
+
+    for (int i = 0; i < 100; i += 20)
+    {
+        for (int j = 0; j < 100; j += 20)
+            Renderer2D::DrawQuad({10.0f + i, 10.0f + j, 0.0f}, {10.0f, 10.0f}, {1.0f, 0.0f, 0.75f, 1.0f});
+    }
+
+    Renderer2D::EndScene();
+    m_ViewportFramebuffer->Unbind();
 }
 
 bool EditorLayer::OnEvent(Event &event)

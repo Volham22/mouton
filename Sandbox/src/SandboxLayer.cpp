@@ -76,7 +76,7 @@ void SandboxLayer::OnUpdate()
 bool SandboxLayer::OnEvent(Event &event)
 {
     EventSystem::ApplyFunction<WindowCloseEvent>(&event, [](Event &event) -> bool {
-        MTN_INFO("On window close ...");
+        MTN_TRACE("On window close ...");
         return true;
     });
 
