@@ -59,6 +59,7 @@ void EditorLayer::OnUpdate()
     static uint32_t textureID = m_ViewportFramebuffer->GetTextureAttachmentID();
 
     auto[width, height] = ImGui::GetContentRegionAvail();
+    m_Camera.SetCoords(0.0f, height, 0.0f, height);
     m_ViewportFramebuffer->CreateBlankTexture(width, height);
 
     ImGui::Image((void*)textureID, { width, height });

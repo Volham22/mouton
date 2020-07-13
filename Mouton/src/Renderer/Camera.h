@@ -20,6 +20,7 @@ namespace Mouton
         virtual void SetPosition(const glm::vec3& position) override;
         virtual const glm::mat4& GetViewProjectionMatrix() const override { return m_VP; };
         void SetRotation(float rotation);
+        void SetCoords(float left, float right, float top, float bottom, float near=-1.0f, float far=1.0f);
 
     private:
         glm::mat4 m_Position, m_Rotation;

@@ -26,6 +26,11 @@ namespace Mouton
         m_VP = m_Proj * m_View;
     }
 
+    void OrthographicCamera::SetCoords(float left, float right, float top, float bottom, float near, float far)
+    {
+        m_Proj = glm::ortho(left, right, bottom, top, near, far);
+    }
+
     PerspectiveCamera::PerspectiveCamera(float aspectRatio, float fov, const glm::vec3& position, const glm::vec3& direction)
         : m_Position(position), m_Direction(direction), m_Projection(1.0f), m_VP(1.0f)
     {
