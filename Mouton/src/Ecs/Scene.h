@@ -16,11 +16,12 @@ namespace Mouton
         ~Scene();
 
         bool AddEntity(Entity* entity);
-        bool RemoveEntity(Entity* entity);
+        bool RemoveEntity(const std::string& entityName);
         bool AddComponentToEntity(const std::string& entityName, Component::ComponentType type, const std::string& componentName);
         bool RemoveComponentToEntity(const std::string& entityName, Component::ComponentType type, const std::string& componentName);
         // A new component must be heap allocated. It will be destroyed when needed
         bool AddComponent(Component::ComponentType type, Component* newComponent);
+        bool RemoveComponent(Component::ComponentType type, const std::string& componentName);
 
         template<typename T>
         void ForEachComponents(T callback)

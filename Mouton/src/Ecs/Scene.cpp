@@ -53,12 +53,45 @@ namespace Mouton
         return true;
     }
 
-    bool Scene::RemoveEntity(Entity* entity)
+    bool Scene::RemoveEntity(const std::string& entityName)
     {
-        if(m_Entities.find(entity->GetName()) == m_Entities.end()) return false;
+        Entity* entity = nullptr;
+        if(m_Entities.find(entityName) != m_Entities.end())
+            entity = m_Entities[entityName];
+        else
+            return false;
 
-        m_Entities.erase(entity->GetName());
+        if(m_Entities.find(entityName) == m_Entities.end()) return false;
+
+        for(auto& categories : m_SceneData)
+        {
+            for(auto&[_, comp] : categories.second)
+            {
+                auto& entities = comp->GetEntitiesIDs();
+                if(entities.find(entity->GetID()) != entities.end())
+                {
+                    decComponent(comp->GetComponentType(), comp->GetComponentName());
+                    entities.erase(entity->GetID());
+                }
+            }
+        }
+
+        m_Entities.erase(entityName);
         return true;
+    }
+
+    bool Scene::RemoveComponent(Component::ComponentType type, const std::string& componentName)
+    {
+        if(m_SceneData[type].find(componentName) != m_SceneData[type].end())
+        {
+            delete m_SceneData[type][componentName];
+            m_SceneData[type].erase(componentName);
+            // Delete the reference counter
+            m_ComponentsReferenceCount.erase(componentName);
+            return true;
+        }
+
+        return false;
     }
 
     void Scene::decComponent(Component::ComponentType type, const std::string& componentName)

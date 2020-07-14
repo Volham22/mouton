@@ -35,6 +35,9 @@ SandboxLayer::SandboxLayer()
         MTN_TRACE("Got {}", x->GetComponentName().c_str());
     
     m_Scene.RemoveComponentToEntity("test", Component::ComponentType::QuadComponent, "Quad");
+    m_Scene.RemoveEntity("test");
+    m_Scene.RemoveEntity("test2");
+    m_Scene.RemoveComponent(Component::ComponentType::QuadComponent, "Quad");
 }
 
 void SandboxLayer::OnBind()
