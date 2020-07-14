@@ -25,4 +25,7 @@ namespace Mouton
 #define MTN_ERROR(...) ::Mouton::Log::GetLogger()->error(__VA_ARGS__);
 #define MTN_FATAL(...) ::Mouton::Log::GetLogger()->critical(__VA_ARGS__);
 
+#define MTN_ASSERT(x, ...) if(!x) \
+        MTN_ERROR("Assertion Failed at {0} : {1} with the following message : {2}", __FILE__, __LINE__, __VA_ARGS__);
+
 #endif

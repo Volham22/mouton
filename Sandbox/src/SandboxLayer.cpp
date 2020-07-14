@@ -38,6 +38,8 @@ SandboxLayer::SandboxLayer()
     m_Scene.RemoveEntity("test");
     m_Scene.RemoveEntity("test2");
     m_Scene.RemoveComponent(Component::ComponentType::QuadComponent, "Quad");
+
+    MTN_ASSERT(false, "Ooops");
 }
 
 void SandboxLayer::OnBind()
