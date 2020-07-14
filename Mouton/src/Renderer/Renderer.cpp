@@ -8,7 +8,7 @@ namespace Mouton
     void Renderer::InitRenderer()
     {
         RenderCommand::Init();
-        RenderCommand::SetDebugMessage();
+        // RenderCommand::SetDebugMessage();
     }
 
     void Renderer::BeginScene(const glm::vec4& color)

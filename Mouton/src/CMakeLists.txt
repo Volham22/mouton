@@ -41,4 +41,7 @@ set(MTN_SRC
     src/Platform/imguiImplementation/imgui_impl_glfw.cpp
     src/Platform/imguiImplementation/imgui_impl_opengl3.cpp
     src/Platform/Assimp/AssimpModelLoader.cpp
+    src/Ecs/Components.cpp
+    src/Ecs/Entity.cpp
+    src/Ecs/Scene.cpp
     PARENT_SCOPE)

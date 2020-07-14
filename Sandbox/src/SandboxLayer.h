@@ -4,11 +4,13 @@
 
 #include "Renderer/Model.h"
 #include "Renderer/Camera.h"
+#include "Ecs/Scene.h"
 
 class SandboxLayer : public Mouton::Layer
 {
 public:
     SandboxLayer();
+    ~SandboxLayer();
 
     virtual void OnBind() override;
     virtual void OnUpdate() override;
@@ -18,4 +20,6 @@ public:
 private:
         std::shared_ptr<Mouton::Model> m_Model;
         Mouton::OrthographicCamera m_Camera;
+        Mouton::Scene m_Scene;
+        Mouton::QuadComponent* m_QuadComp;
 };
