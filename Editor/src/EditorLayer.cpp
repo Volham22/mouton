@@ -3,8 +3,9 @@
 
 #include "Renderer/RendererContext.h"
 #include "Renderer/Renderer.h"
-
 #include "Renderer/Renderer2D.h"
+
+#include "MoutonComponents/TransformComponent.h"
 
 using namespace Mouton;
 
@@ -19,6 +20,13 @@ EditorLayer::EditorLayer()
 
     m_Scene.AddEntity(new Entity("RedQuad"));
     m_Scene.AddEntity(new Entity("GreenQuad"));
+
+    {
+        using Type = Component::ComponentType;
+        m_Scene.AddComponent(Type::Transform, new TransformComponent());
+        m_Scene.AddComponentToEntity("RedQuad", Type::Transform, "TransformComponent");
+        m_Scene.AddComponentToEntity("GreenQuad", Type::Transform, "TransformComponent");
+    }
 }
 
 void EditorLayer::OnBind()
@@ -84,7 +92,26 @@ void EditorLayer::OnUpdate()
         {
             if(ImGui::TreeNode(ent->GetName().c_str()))
             {
-                ImGui::Text("Entity says hello !");
+                const auto& entityComponents = m_Scene.GetEntityComponent(ent->GetName());
+
+                for(Component* comp : entityComponents)
+                {
+                    if(ImGui::TreeNode(comp->GetComponentName().c_str()))
+                    {
+                        if(ImGui::Button("Remove", { 150, 20 }))
+                        {
+                            m_Scene.RemoveComponentToEntity(ent->GetName().c_str(),
+                                comp->GetComponentType(),
+                                comp->GetComponentName());
+                        }
+
+                        if(ImGui::Button("Show properties", { 150, 20 }))
+                            MTN_TRACE("Not implemented yet");
+
+                        ImGui::TreePop();
+                    }
+                }
+
                 ImGui::TreePop();
             }
         }

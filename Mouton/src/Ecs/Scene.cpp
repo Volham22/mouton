@@ -104,6 +104,25 @@ namespace Mouton
         return entities;
     }
 
+    std::vector<Component*> Scene::GetEntityComponent(const std::string& entityName)
+    {
+        std::vector<Component*> components;
+        uint32_t entityID = m_Entities[entityName]->GetID();
+
+        for(auto&[type, typeComp] : m_SceneData)
+        {
+            for(auto&[_, comp] : typeComp)
+            {
+                auto& compIds = comp->GetEntitiesIDs();
+
+                if(compIds.find(entityID) != compIds.end())
+                    components.push_back(comp);
+            }
+        }
+
+        return components;
+    }
+
     void Scene::decComponent(Component::ComponentType type, const std::string& componentName)
     {
         if(!(-- m_ComponentsReferenceCount[componentName]))

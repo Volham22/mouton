@@ -23,6 +23,7 @@ namespace Mouton
         bool AddComponent(Component::ComponentType type, Component* newComponent);
         bool RemoveComponent(Component::ComponentType type, const std::string& componentName);
         std::vector<Entity*> GetEntities();
+        std::vector<Component*> GetEntityComponent(const std::string& entityName);
 
         template<typename T>
         void ForEachComponents(T callback)
