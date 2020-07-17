@@ -1,27 +1,29 @@
 # Mouton
 
-## What is it ?
+What is it ?
+------
 
-Mouton is a 3D engine.
+Mouton is a 2D / 3D engine. It aims to be easy to master.
 
-## How to install ?
+How to install ?
+------
 
 You will need a C++17 compiler.
 
-Clone this repository
+First, Clone this repository
 
 ```
-git clone https://gitlab.com/Volham/mouton.git
-```
-Then use cmake to create makefiles
-```
-cd mouton && cmake .
-```
-Compile the whole source code
-```
-make
+git clone https://gitlab.com/Volham/mouton.git --recursive
 ```
 
-## Documentation
+Make sure cmake and make are installed, and be patient it may take some time to compile on some potato computer.
+Run the build script
 
-TODO
+```
+./build.sh
+```
+
+Documentation
+------
+
+TODO : I'll do it at some points ...

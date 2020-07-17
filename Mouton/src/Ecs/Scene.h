@@ -52,6 +52,19 @@ namespace Mouton
         template<typename T, typename ...U>
         std::vector<Component*> GetComponents(T t, U... args)
         {
+            if(t == Component::ComponentType::Any)
+            {
+                std::vector<Component*> res;
+
+                for(auto&[_, components] : m_SceneData)
+                {
+                    for(auto& values : components)
+                        res.push_back(values.second);
+                }
+
+                return res;
+            }
+
             std::vector<Component*> append;
             for(auto&[name, component] : m_SceneData[t])
                 append.push_back(component);

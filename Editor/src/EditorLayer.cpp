@@ -6,6 +6,7 @@
 #include "Renderer/Renderer2D.h"
 
 #include "MoutonComponents/TransformComponent.h"
+#include "MoutonComponents/Material2DComponent.h"
 
 using namespace Mouton;
 
@@ -24,6 +25,7 @@ EditorLayer::EditorLayer()
     {
         using Type = Component::ComponentType;
         m_Scene.AddComponent(Type::Transform, new TransformComponent());
+        m_Scene.AddComponent(Type::Material2DComponent, new Material2DComponent());
         m_Scene.AddComponentToEntity("RedQuad", Type::Transform, "TransformComponent");
         m_Scene.AddComponentToEntity("GreenQuad", Type::Transform, "TransformComponent");
     }
@@ -82,7 +84,7 @@ void EditorLayer::OnUpdate()
         ImGui::GetIO().Framerate);
     ImGui::End();
 
-    ImGui::Begin("Application Entities");
+    ImGui::Begin("Scene explorer");
 
     if(ImGui::CollapsingHeader("Scene Entities"))
     {
@@ -112,8 +114,28 @@ void EditorLayer::OnUpdate()
                     }
                 }
 
+                if(ImGui::Button("Add Component"))
+                    ImGui::OpenPopup("components_add");
+
+                if(ImGui::BeginPopup("components_add"))
+                {
+                    ImGui::Text("Choose a component to add");
+                    ImGui::Separator();
+
+                    const auto& components = m_Scene.GetComponents(Component::ComponentType::Any);
+                    for(Component* comp : components)
+                    {
+                        if(ImGui::Selectable(comp->GetComponentName().c_str()))
+                            m_Scene.AddComponentToEntity(ent->GetName().c_str(), comp->GetComponentType(), comp->GetComponentName().c_str());
+                    }
+
+                    ImGui::EndPopup();
+                }
+
                 ImGui::TreePop();
             }
+
+            ImGui::Separator();
         }
     }
 

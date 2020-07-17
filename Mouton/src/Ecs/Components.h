@@ -11,7 +11,7 @@ namespace Mouton
     public:
 
         enum class ComponentType : uint16_t {
-            UnknownType = 0, Transform = 1, Material2DComponent = 2
+            Any = 0, Transform = 1, Material2DComponent = 2
         };
 
         Component(ComponentType type, const std::string& name);
