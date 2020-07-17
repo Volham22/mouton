@@ -9,35 +9,11 @@
 using namespace Mouton;
 
 SandboxLayer::SandboxLayer()
-    : Layer("Sandbox Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(), m_QuadComp(new QuadComponent("myQuad"))
+    : Layer("Sandbox Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene()
 {
     RendererContext::InitContext(GraphicAPI::OpenGL);
     Renderer::InitRenderer();
     Renderer2D::Init();
-
-    // Some tests to the ECS
-    m_Scene.AddEntity(new Entity("test"));
-    m_Scene.AddEntity(new Entity("test2"));
-    m_Scene.AddComponent(Component::ComponentType::QuadComponent, new QuadComponent("Quad"));
-    m_Scene.AddComponentToEntity("test", Component::ComponentType::QuadComponent, "Quad");
-
-    m_Scene.ForEachEntities([](Entity& ent) {
-        MTN_INFO(ent.GetName().c_str());
-    });
-
-    m_Scene.ForEachComponents([](Component& comp) {
-        MTN_INFO(comp.GetComponentName().c_str());
-    }, *m_QuadComp);
-
-    auto c = m_Scene.GetComponents(Component::ComponentType::QuadComponent);
-
-    for(auto x : c)
-        MTN_TRACE("Got {}", x->GetComponentName().c_str());
-    
-    m_Scene.RemoveComponentToEntity("test", Component::ComponentType::QuadComponent, "Quad");
-    m_Scene.RemoveEntity("test");
-    m_Scene.RemoveEntity("test2");
-    m_Scene.RemoveComponent(Component::ComponentType::QuadComponent, "Quad");
 
     MTN_ASSERT(false, "Ooops");
 }
@@ -111,5 +87,4 @@ bool SandboxLayer::OnEvent(Event &event)
 
 SandboxLayer::~SandboxLayer()
 {
-    delete m_QuadComp;
 }

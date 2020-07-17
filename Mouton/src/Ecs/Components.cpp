@@ -24,9 +24,15 @@ namespace Mouton
         return true;
     }
 
-    QuadComponent::QuadComponent(const std::string& name)
-        : Component(ComponentType::QuadComponent, name)
+    bool Component::operator==(const Component& other) const
     {
+        return p_ComponentID == other.p_ComponentID;
     }
+
+    bool Component::operator!=(const Component& other) const
+    {
+        return p_ComponentID != other.p_ComponentID;
+    }
+
 
 } // namespace Mouton

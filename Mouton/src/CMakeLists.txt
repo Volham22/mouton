@@ -44,4 +44,6 @@ set(MTN_SRC
     src/Ecs/Components.cpp
     src/Ecs/Entity.cpp
     src/Ecs/Scene.cpp
+    src/MoutonComponents/TransformComponent.cpp
+    src/MoutonComponents/Material2DComponent.cpp
     PARENT_SCOPE)
