@@ -22,6 +22,7 @@ namespace Mouton
         // A new component must be heap allocated. It will be destroyed when needed
         bool AddComponent(Component::ComponentType type, Component* newComponent);
         bool RemoveComponent(Component::ComponentType type, const std::string& componentName);
+        std::vector<Entity*> GetEntities();
 
         template<typename T>
         void ForEachComponents(T callback)

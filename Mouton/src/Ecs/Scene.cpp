@@ -94,6 +94,16 @@ namespace Mouton
         return false;
     }
 
+    std::vector<Entity*> Scene::GetEntities()
+    {
+        std::vector<Entity*> entities;
+    
+        for(auto&[_, entity] : m_Entities)
+            entities.push_back(entity);
+
+        return entities;
+    }
+
     void Scene::decComponent(Component::ComponentType type, const std::string& componentName)
     {
         if(!(-- m_ComponentsReferenceCount[componentName]))
