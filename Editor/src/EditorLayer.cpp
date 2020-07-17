@@ -9,14 +9,16 @@
 using namespace Mouton;
 
 EditorLayer::EditorLayer()
-    : Layer("Editor Layer"),
-      m_Camera(0.0f, 100.0f, 0.0f, 100.0f)
+    : Layer("Editor Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene()
 {
     RendererContext::InitContext(GraphicAPI::OpenGL);
     Renderer::InitRenderer();
     Renderer2D::Init();
 
     m_ViewportFramebuffer = Framebuffer::CreateFramebuffer();
+
+    m_Scene.AddEntity(new Entity("RedQuad"));
+    m_Scene.AddEntity(new Entity("GreenQuad"));
 }
 
 void EditorLayer::OnBind()
@@ -70,6 +72,24 @@ void EditorLayer::OnUpdate()
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
         1000.0f / ImGui::GetIO().Framerate,
         ImGui::GetIO().Framerate);
+    ImGui::End();
+
+    ImGui::Begin("Application Entities");
+
+    if(ImGui::CollapsingHeader("Scene Entities"))
+    {
+        const auto& entities = m_Scene.GetEntities();
+
+        for(Entity* ent : entities)
+        {
+            if(ImGui::TreeNode(ent->GetName().c_str()))
+            {
+                ImGui::Text("Entity says hello !");
+                ImGui::TreePop();
+            }
+        }
+    }
+
     ImGui::End();
 
     // Viewport rendering

@@ -5,6 +5,8 @@
 #include "Renderer/Camera.h"
 #include "Renderer/Framebuffer.h"
 
+#include "Ecs/Scene.h"
+
 class EditorLayer : public Mouton::Layer
 {
 public:
@@ -18,4 +20,5 @@ public:
 private:
         std::shared_ptr<Mouton::Framebuffer> m_ViewportFramebuffer;
         Mouton::OrthographicCamera m_Camera;
+        Mouton::Scene m_Scene;
 };
