@@ -12,6 +12,20 @@
 
 using namespace Mouton;
 
+static Component* CreateComponentFromType(Component::ComponentType type, const std::string& name)
+{
+    switch(type)
+    {
+        case Component::ComponentType::Material2DComponent:
+            return new Material2DComponent(name);
+        case Component::ComponentType::Transform:
+            return new TransformComponent(name);
+        
+        default:
+            return nullptr;
+    }
+}
+
 EditorLayer::EditorLayer()
     : Layer("Editor Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(),
       m_ComponentShown(nullptr)
@@ -139,6 +153,50 @@ void EditorLayer::OnUpdate()
             }
 
             ImGui::Separator();
+        }
+
+        if(ImGui::Button("Create a new Component ..."))
+            ImGui::OpenPopup("Create component");
+        
+        if(ImGui::BeginPopupModal("Create component", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoMove))
+        {
+            static char nameBuffer[200] = "";
+            ImGui::Text("Create a new Component");
+            static int item = 1;
+            // The item value must match with the Mouton::Component::ComponentType enum
+            ImGui::Combo("Select Component Type", &item, "Transform\0Material2D\0\0", 5);
+            ImGui::InputTextWithHint("Component Name", "type a name", nameBuffer, IM_ARRAYSIZE(nameBuffer));
+            ImGui::Separator();
+
+            auto toComponentType = [](auto x) {
+                return (Component::ComponentType)(x + 1);
+            };
+
+            if(ImGui::Button("Add"))
+            {
+                if(std::strlen(nameBuffer) > 0 && m_Scene.AddComponent(toComponentType(item),
+                    CreateComponentFromType(toComponentType(item), std::string(nameBuffer))))
+                    ImGui::CloseCurrentPopup();
+                else
+                    ImGui::OpenPopup("Incorrect Name !");
+            }
+
+            if(ImGui::BeginPopupModal("Incorrect Name !"))
+            {
+                ImGui::Text("Component name not valid or already used !");
+                ImGui::Separator();
+
+                if(ImGui::Button("Close."))
+                    ImGui::CloseCurrentPopup();
+                
+                ImGui::EndPopup();
+            }
+
+            ImGui::SameLine();
+            if(ImGui::Button("Cancel"))
+                ImGui::CloseCurrentPopup();
+            
+            ImGui::EndPopup();
         }
     }
 
