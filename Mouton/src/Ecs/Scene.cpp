@@ -40,7 +40,7 @@ namespace Mouton
             return false;
 
         components[componentName] = newComponent;
-        m_ComponentsReferenceCount[componentName]++;
+        m_ComponentsReferenceCount[componentName] = 1;
         return true;
     }
 
@@ -125,7 +125,7 @@ namespace Mouton
 
     void Scene::decComponent(Component::ComponentType type, const std::string& componentName)
     {
-        if(!(-- m_ComponentsReferenceCount[componentName]))
+        if((--m_ComponentsReferenceCount[componentName]) == 1)
         {
             delete m_SceneData[type][componentName];
             m_SceneData[type].erase(componentName);

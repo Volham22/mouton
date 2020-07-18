@@ -8,10 +8,13 @@
 #include "MoutonComponents/TransformComponent.h"
 #include "MoutonComponents/Material2DComponent.h"
 
+#include "EditorPropertiesPanels.h"
+
 using namespace Mouton;
 
 EditorLayer::EditorLayer()
-    : Layer("Editor Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene()
+    : Layer("Editor Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(),
+      m_ComponentShown(nullptr)
 {
     RendererContext::InitContext(GraphicAPI::OpenGL);
     Renderer::InitRenderer();
@@ -108,7 +111,7 @@ void EditorLayer::OnUpdate()
                         }
 
                         if(ImGui::Button("Show properties", { 150, 20 }))
-                            MTN_TRACE("Not implemented yet");
+                            m_ComponentShown = comp;
 
                         ImGui::TreePop();
                     }
@@ -141,6 +144,14 @@ void EditorLayer::OnUpdate()
 
     ImGui::End();
 
+    // Show Component Properties panel if any is selected
+    if(m_ComponentShown)
+    {
+        ImGui::Begin("Component Properties");
+        ShowProperties();
+        ImGui::End();
+    }
+
     // Viewport rendering
     m_ViewportFramebuffer->Bind();
     Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
@@ -162,5 +173,30 @@ bool EditorLayer::OnEvent(Event &event)
         return true;
     });
 
+    EventSystem::ApplyFunction<MouseScrolledEvent>(&event, [](Event& event) -> bool {
+        MTN_TRACE("Mouse scrolled !");
+        return true;
+    });
+
     return event.Handled();
+}
+
+void EditorLayer::ShowProperties()
+{
+    using Type = Mouton::Component::ComponentType;
+
+    switch(m_ComponentShown->GetComponentType())
+    {
+        case Type::Transform:
+            EditorPropertiesPanels::ShowTransformComponent(reinterpret_cast<TransformComponent*>(m_ComponentShown));
+            break;
+        
+        case Type::Material2DComponent:
+            EditorPropertiesPanels::ShowMaterial2DComponent(reinterpret_cast<Material2DComponent*>(m_ComponentShown));
+            break;
+        
+        default:
+            MTN_WARN("Unknown Component Properties to show !");
+    }
+
 }

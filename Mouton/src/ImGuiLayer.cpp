@@ -15,6 +15,7 @@ namespace Mouton
 
         auto& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     }
 
     void ImGUILayer::OnBind()

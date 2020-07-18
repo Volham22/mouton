@@ -12,6 +12,7 @@ namespace Mouton
 
         glm::vec3 Transform = { 0.0f, 0.0f, 0.0f };
         glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
+        glm::vec3 Scale = { 0.0f, 0.0f, 0.0f };
     };
 
 } // namespace Mouton

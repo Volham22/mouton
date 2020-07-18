@@ -21,4 +21,7 @@ private:
         std::shared_ptr<Mouton::Framebuffer> m_ViewportFramebuffer;
         Mouton::OrthographicCamera m_Camera;
         Mouton::Scene m_Scene;
+        Mouton::Component* m_ComponentShown;
+
+        void ShowProperties();
 };
