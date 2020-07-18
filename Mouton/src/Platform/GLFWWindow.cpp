@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "imguiImplementation/imgui_impl_glfw.h"
+
 namespace Mouton
 {
 
@@ -98,7 +100,14 @@ namespace Mouton
             }
             else
                 MTN_WARN("Unknown key action from GLFW !");
+            
+            // Call the ImGui callback
+            ImGui_ImplGlfw_KeyCallback(win, key, scancode, action, mods);
+        });
 
+        // To Enable ImGUI typing
+        glfwSetCharCallback(m_GLFWWindow, [](GLFWwindow* win, uint32_t key) {
+            ImGui_ImplGlfw_CharCallback(win, key);
         });
 
         glfwSetMouseButtonCallback(m_GLFWWindow, [](GLFWwindow* win, int key, int action, int mods) {
@@ -139,6 +148,8 @@ namespace Mouton
 
             MouseScrolledEvent ev = MouseScrolledEvent(xOff, yOff);
             func(ev);
+
+            ImGui_ImplGlfw_ScrollCallback(win, xOff, yOff);
         });
     }
 

@@ -12,7 +12,7 @@ namespace Mouton
             MTN_WARN("Imgui version check failed !");
 
         auto& io = ImGui::GetIO();
-        ImGui::StyleColorsDark();
+        ImGui::StyleColorsClassic();
 
         // Enable some flags
         // Mouton support ImGui docking and viewports

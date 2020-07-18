@@ -84,6 +84,12 @@ bool SandboxLayer::OnEvent(Event &event)
         return true;
     });
 
+    EventSystem::ApplyFunction<MouseButtonPressedEvent>(&event, [](Event &event) -> bool {
+        MTN_TRACE("Mouse Button pressed !");
+
+        return true;
+    });
+
     return event.Handled();
 }
 
