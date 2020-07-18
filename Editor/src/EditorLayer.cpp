@@ -198,6 +198,44 @@ void EditorLayer::OnUpdate()
             
             ImGui::EndPopup();
         }
+
+        ImGui::SameLine();
+        if(ImGui::Button("Add new Entity"))
+            ImGui::OpenPopup("Add Entity");
+        
+        if(ImGui::BeginPopupModal("Add Entity"))
+        {
+            ImGui::Text("Add a new entity");
+            static char entityNameBuffer[200] = "";
+
+            ImGui::InputTextWithHint("Entity name", "enter new entity name ...", entityNameBuffer, IM_ARRAYSIZE(entityNameBuffer));
+
+            ImGui::Separator();
+            if(ImGui::Button("Add Entity"))
+            {
+                if(strlen(entityNameBuffer) > 0 && strlen(entityNameBuffer) < 200 && m_Scene.AddEntity(new Entity(std::string(entityNameBuffer))))
+                    ImGui::CloseCurrentPopup();
+                else
+                    ImGui::OpenPopup("Incorrect Entity name !");
+            }
+
+            if(ImGui::BeginPopupModal("Incorrect Entity name !"))
+            {
+                ImGui::Text("Entity name not valid or already used !");
+                ImGui::Separator();
+
+                if(ImGui::Button("Close"))
+                    ImGui::CloseCurrentPopup();
+
+                ImGui::EndPopup();
+            }
+
+            ImGui::SameLine();
+            if(ImGui::Button("Cancel."))
+                ImGui::CloseCurrentPopup();
+            
+            ImGui::EndPopup();
+        }
     }
 
     ImGui::End();
