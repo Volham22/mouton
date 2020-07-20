@@ -149,6 +149,26 @@ void EditorLayer::OnUpdate()
                     ImGui::EndPopup();
                 }
 
+                ImGui::SameLine();
+                if(ImGui::Button("Remove entity"))
+                    ImGui::OpenPopup("Do you really want to do it ?");
+                
+                if(ImGui::BeginPopup("Do you really want to do it ?"))
+                {
+                    ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "You're about to remove an entity do you really want to do it ?");
+                    ImGui::Separator();
+
+                    if(ImGui::Button("Yes"))
+                        m_Scene.RemoveEntity(ent->GetName());
+                    
+                    ImGui::SameLine();
+
+                    if(ImGui::Button("No keep my entity !"))
+                        ImGui::CloseCurrentPopup();
+
+                    ImGui::EndPopup();
+                }
+
                 ImGui::TreePop();
             }
 
