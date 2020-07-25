@@ -60,6 +60,8 @@ namespace Mouton
             entity = m_Entities[entityName];
         else
             return false;
+        
+        std::vector<std::pair<Component::ComponentType, Component*>> toDecRef;
 
         if(m_Entities.find(entityName) == m_Entities.end()) return false;
 
@@ -70,9 +72,15 @@ namespace Mouton
                 auto& entities = comp->GetEntitiesIDs();
                 if(entities.find(entity->GetID()) != entities.end())
                 {
-                    decComponent(comp->GetComponentType(), comp->GetComponentName());
+                    toDecRef.push_back(std::make_pair(categories.first, comp));
                     entities.erase(entity->GetID());
                 }
+            }
+
+            for(auto[type, comp] : toDecRef)
+            {
+                if(comp)
+                    decComponent(type, comp->GetComponentName());
             }
         }
 
