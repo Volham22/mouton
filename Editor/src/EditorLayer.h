@@ -7,9 +7,13 @@
 
 #include "Ecs/Scene.h"
 
+#include "SceneExplorer.h"
+
 class EditorLayer : public Mouton::Layer
 {
 public:
+    friend SceneExplorer;
+
     EditorLayer();
 
     virtual void OnBind() override;
@@ -22,6 +26,7 @@ private:
         Mouton::OrthographicCamera m_Camera;
         Mouton::Scene m_Scene;
         Mouton::Component* m_ComponentShown;
+        SceneExplorer m_SceneExplorer;
 
         void ShowProperties();
 };

@@ -40,7 +40,7 @@ namespace Mouton
             return false;
 
         components[componentName] = newComponent;
-        m_ComponentsReferenceCount[componentName] = 1;
+        m_ComponentsReferenceCount[componentName] = 0;
         return true;
     }
 
@@ -76,6 +76,7 @@ namespace Mouton
             }
         }
 
+        delete m_Entities[entityName];
         m_Entities.erase(entityName);
         return true;
     }
@@ -123,11 +124,12 @@ namespace Mouton
         return components;
     }
 
-    void Scene::decComponent(Component::ComponentType type, const std::string& componentName)
+    void Scene::decComponent(Component::ComponentType type, std::string componentName)
     {
-        if((--m_ComponentsReferenceCount[componentName]) == 1)
+        if((--m_ComponentsReferenceCount[componentName]) == 0)
         {
-            delete m_SceneData[type][componentName];
+            Component* component = m_SceneData[type][componentName];
+            delete component;
             m_SceneData[type].erase(componentName);
         }
     }

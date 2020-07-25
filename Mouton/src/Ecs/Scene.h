@@ -80,7 +80,7 @@ namespace Mouton
         std::unordered_map<std::string, Entity*> m_Entities;
         int m_EntityNumber = 0;
 
-        void decComponent(Component::ComponentType type, const std::string& componentName);
+        void decComponent(Component::ComponentType type, std::string componentName);
     };
 
 } // namespace Mouton
