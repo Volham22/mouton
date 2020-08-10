@@ -17,7 +17,7 @@ namespace Mouton
         virtual void Bind() override;
         virtual void Unbind() override;
         virtual void CreateBlankTexture(uint32_t width, uint32_t height) override;
-        virtual uint32_t GetTextureAttachmentID() const override { return m_ColorAttachmentID;  };
+        virtual uint32_t GetTextureAttachmentID() const override { return m_ColorAttachmentID; };
 
         private:
             uint32_t m_FramebufferID;

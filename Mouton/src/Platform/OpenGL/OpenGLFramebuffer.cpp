@@ -9,8 +9,8 @@ namespace Mouton
         : m_FramebufferID(0), m_TextureAttachmentID(0), m_ColorAttachmentID(0)
     {
         glGenFramebuffers(1, &m_FramebufferID);
-        glGenTextures(1, &m_TextureAttachmentID);
-        glGenTextures(1, &m_ColorAttachmentID);
+        glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureAttachmentID);
+        glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachmentID);
     }
 
     void OpenGLFramebuffer::Bind()
@@ -25,13 +25,15 @@ namespace Mouton
 
     void OpenGLFramebuffer::CreateBlankTexture(uint32_t width, uint32_t height)
     {
+        MTN_ASSERT((width > 0 && height > 0), "Invalid Framebuffer values !");
+
         // Recreate a texture iff a texture already exists
         if(m_TextureAttachmentID && m_ColorAttachmentID)
         {
             glDeleteTextures(1, &m_TextureAttachmentID);
             glDeleteTextures(1, &m_ColorAttachmentID);
-            glGenTextures(1, &m_TextureAttachmentID);
-            glGenTextures(1, &m_ColorAttachmentID);
+            glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureAttachmentID);
+            glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachmentID);
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, m_FramebufferID);
@@ -64,9 +66,7 @@ namespace Mouton
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
             GL_TEXTURE_2D, m_ColorAttachmentID, 0);
 
-        // Check if everything is ok
-        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            MTN_ERROR("Framebuffer not complete !!");
+        MTN_ASSERT((glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE), "Framebuffer not complete !!");
 
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);

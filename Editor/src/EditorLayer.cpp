@@ -68,14 +68,12 @@ void EditorLayer::OnUpdate()
 
     ImGui::End();
 
-    // m_ViewportFramebuffer->CreateBlankTexture(500, 500);
-
     ImGui::Begin("Game Viewport");
-    static uint32_t textureID = m_ViewportFramebuffer->GetTextureAttachmentID();
 
     auto[width, height] = ImGui::GetContentRegionAvail();
-    m_Camera.SetCoords(0.0f, height, 0.0f, height);
+    m_Camera.SetCoords(0.0f, height, 0.0f, width);
     m_ViewportFramebuffer->CreateBlankTexture(width, height);
+    uint32_t textureID = m_ViewportFramebuffer->GetTextureAttachmentID();
 
     ImGui::Image((void*)textureID, { width, height });
     ImGui::End();
@@ -86,9 +84,6 @@ void EditorLayer::OnUpdate()
         1000.0f / ImGui::GetIO().Framerate,
         ImGui::GetIO().Framerate);
     ImGui::End();
-
-    // Does ImGui calls for the Scene explorer
-    m_SceneExplorer.ShowSceneExplorer(m_Scene);
 
     // Viewport rendering
     m_ViewportFramebuffer->Bind();
@@ -102,6 +97,9 @@ void EditorLayer::OnUpdate()
 
     Mouton::Renderer2D::EndScene();
     m_ViewportFramebuffer->Unbind();
+
+    // Does ImGui calls for the Scene explorer
+    m_SceneExplorer.ShowSceneExplorer(m_Scene);
 }
 
 bool EditorLayer::OnEvent(Mouton::Event &event)
