@@ -38,7 +38,7 @@ namespace Mouton
             for(auto&[name, compo] : components)
                 callback((*compo));
             
-            ForEachComponents(callback, args...);
+            ForEachComponents(args..., callback);
         }
 
         void ForEachEntities(const std::function<void(Entity&)>& callback);
@@ -49,7 +49,7 @@ namespace Mouton
             return res;
         }
 
-        template<typename T, typename ...U>
+        template<typename T, typename... U>
         std::vector<Component*> GetComponents(T t, U... args)
         {
             if(t == Component::ComponentType::Any)
