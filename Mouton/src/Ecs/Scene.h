@@ -31,12 +31,12 @@ namespace Mouton
         }
 
         template<typename T, typename U, typename... Args>
-        void ForEachComponents(U callback, T comp, Args... args)
+        void ForEachComponents(T comp, Args... args, U callback)
         {
-            auto& components = m_SceneData[comp.GetComponentType()];
+            auto& components = m_SceneData[comp];
 
-            for(auto&[name, comp] : components)
-                callback((*comp));
+            for(auto&[name, compo] : components)
+                callback((*compo));
             
             ForEachComponents(callback, args...);
         }

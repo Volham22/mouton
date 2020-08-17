@@ -5,8 +5,7 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/Renderer2D.h"
 
-#include "MoutonComponents/TransformComponent.h"
-#include "MoutonComponents/Material2DComponent.h"
+#include "MoutonComponents/SpriteComponent.h"
 
 #include "EditorPropertiesPanels.h"
 #include "SceneExplorer.h"
@@ -27,10 +26,19 @@ EditorLayer::EditorLayer()
 
     {
         using Type = Mouton::Component::ComponentType;
-        m_Scene.AddComponent(Type::Transform, new Mouton::TransformComponent());
-        m_Scene.AddComponent(Type::Material2DComponent, new Mouton::Material2DComponent());
-        m_Scene.AddComponentToEntity("RedQuad", Type::Transform, "TransformComponent");
-        m_Scene.AddComponentToEntity("GreenQuad", Type::Transform, "TransformComponent");
+
+        Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
+        Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
+
+        red->position = { 25.0f, 2.0f, 0.0f };
+        red->scale = { 5.0f, 5.0f };
+        green->position = { 75.0f, 32.0f, 0.0f };
+        green->scale = { 3.0f, 6.0f };
+
+        m_Scene.AddComponent(Type::SpriteComponent, red);
+        m_Scene.AddComponent(Type::SpriteComponent, green);
+        m_Scene.AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
+        m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
     }
 }
 
@@ -45,6 +53,8 @@ void EditorLayer::OnUnbind()
 
 void EditorLayer::OnUpdate()
 {
+    using Type = Mouton::Component::ComponentType;
+
     static ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_PassthruCentralNode;
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     static bool dockSpaceOpened = true;
@@ -89,17 +99,21 @@ void EditorLayer::OnUpdate()
     m_ViewportFramebuffer->Bind();
     Mouton::Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
 
-    for (int i = 0; i < 100; i += 20)
-    {
-        for (int j = 0; j < 100; j += 20)
-            Mouton::Renderer2D::DrawQuad({10.0f + i, 10.0f + j, 0.0f}, {10.0f, 10.0f}, {1.0f, 0.0f, 0.75f, 1.0f});
-    }
+    m_Scene.ForEachComponents(Type::SpriteComponent, [](Mouton::Component& comp) {
+        Mouton::SpriteComponent& sprite = static_cast<Mouton::SpriteComponent&>(comp);
+        MTN_INFO("Render {}", sprite.GetComponentName().c_str());
+
+        if(sprite.isTextured)
+            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.texture, sprite.rotation);
+        else
+            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.color, sprite.rotation);
+    });
 
     Mouton::Renderer2D::EndScene();
     m_ViewportFramebuffer->Unbind();
 
     // Does ImGui calls for the Scene explorer
-    m_SceneExplorer.ShowSceneExplorer(m_Scene);
+    // m_SceneExplorer.ShowSceneExplorer(m_Scene);
 }
 
 bool EditorLayer::OnEvent(Mouton::Event &event)
