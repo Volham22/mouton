@@ -32,8 +32,10 @@ EditorLayer::EditorLayer()
 
         red->position = { 25.0f, 2.0f, 0.0f };
         red->scale = { 5.0f, 5.0f };
+
         green->position = { 75.0f, 32.0f, 0.0f };
         green->scale = { 3.0f, 6.0f };
+        green->color = { 0.0f, 1.0f, 0.0f, 1.0f };
 
         m_Scene.AddComponent(Type::SpriteComponent, red);
         m_Scene.AddComponent(Type::SpriteComponent, green);
@@ -113,7 +115,7 @@ void EditorLayer::OnUpdate()
     m_ViewportFramebuffer->Unbind();
 
     // Does ImGui calls for the Scene explorer
-    // m_SceneExplorer.ShowSceneExplorer(m_Scene);
+    m_SceneExplorer.ShowSceneExplorer(m_Scene);
 }
 
 bool EditorLayer::OnEvent(Mouton::Event &event)
