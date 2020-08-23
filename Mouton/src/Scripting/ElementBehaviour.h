@@ -12,10 +12,8 @@ namespace Mouton
     class Behaviour
     {
     public:
-        template<typename... Args>
-        Behaviour(Args... args) : m_Element(args...)
-        {
-        }
+        Behaviour() = default;
+        Behaviour(T* element) : m_Element(element) {};
 
         void SetOnSceneBegin(std::function<void(T&)> callback) { m_OnSceneBeginCallback = callback; };
         void SetOnSceneUpdate(std::function<void(T&)> callback) { m_OnSceneUpdateCallback = callback; };
@@ -26,7 +24,7 @@ namespace Mouton
         bool DoEnd() { return CallIfExists(m_OnSceneEndCallback); };
 
     private:
-        T m_Element;
+        T* m_Element = nullptr;
 
         std::function<void(T&)> m_OnSceneBeginCallback;
         std::function<void(T&)> m_OnSceneUpdateCallback;
@@ -37,7 +35,7 @@ namespace Mouton
         {
             if(!callback) return false;
 
-            callback(m_Element);
+            callback(*m_Element);
             return true;
         }
     };

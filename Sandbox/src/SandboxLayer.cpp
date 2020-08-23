@@ -10,7 +10,7 @@ using namespace Mouton;
 
 SandboxLayer::SandboxLayer()
     : Layer("Sandbox Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(),
-      m_Vec2Behaviour(2.0f, 5.0f)
+      m_Vec2Behaviour(new glm::vec2(2.0, 42.0f))
 {
     RendererContext::InitContext(GraphicAPI::OpenGL);
     Renderer::InitRenderer();
