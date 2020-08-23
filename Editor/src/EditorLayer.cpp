@@ -6,6 +6,7 @@
 #include "Renderer/Renderer2D.h"
 
 #include "MoutonComponents/SpriteComponent.h"
+#include "Scripting/ElementBehaviour.h"
 
 #include "EditorPropertiesPanels.h"
 #include "SceneExplorer.h"
@@ -29,6 +30,14 @@ EditorLayer::EditorLayer()
 
         Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
         Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
+        Mouton::Behaviour<Mouton::SpriteComponent>*  behaviour = new Mouton::Behaviour(red);
+
+        behaviour->SetOnSceneUpdate([](Mouton::SpriteComponent& comp) {
+            comp.color.r += 0.01f;
+
+            if(comp.color.r >= 1.0f)
+                comp.color.r = 0.0f;
+        });
 
         red->position = { 25.0f, 2.0f, 0.0f };
         red->scale = { 5.0f, 5.0f };
@@ -39,7 +48,9 @@ EditorLayer::EditorLayer()
 
         m_Scene.AddComponent(Type::SpriteComponent, red);
         m_Scene.AddComponent(Type::SpriteComponent, green);
+        m_Scene.AddComponent(Type::BehaviourComponent, behaviour);
         m_Scene.AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
+        m_Scene.AddComponentToEntity("RedQuadBehaviour", Type::BehaviourComponent, "RedSprite");
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
     }
 }
@@ -96,6 +107,12 @@ void EditorLayer::OnUpdate()
         1000.0f / ImGui::GetIO().Framerate,
         ImGui::GetIO().Framerate);
     ImGui::End();
+
+    // Update Behaviour component if any
+    m_Scene.ForEachComponents(Type::BehaviourComponent, [](Mouton::Component& comp) {
+        auto& behaviour = MTN_COMPONENT_TO_BEHAVIOUR(comp);
+        behaviour.DoUpdate();
+    });
 
     // Viewport rendering
     m_ViewportFramebuffer->Bind();
