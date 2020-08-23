@@ -30,7 +30,7 @@ EditorLayer::EditorLayer()
 
         Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
         Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
-        Mouton::Behaviour<Mouton::SpriteComponent>*  behaviour = new Mouton::Behaviour(red);
+        Mouton::Behaviour<Mouton::SpriteComponent>*  behaviour = new Mouton::Behaviour(red, "RedQuadBehaviour");
 
         behaviour->SetOnSceneUpdate([](Mouton::SpriteComponent& comp) {
             comp.color.r += 0.01f;
@@ -50,7 +50,7 @@ EditorLayer::EditorLayer()
         m_Scene.AddComponent(Type::SpriteComponent, green);
         m_Scene.AddComponent(Type::BehaviourComponent, behaviour);
         m_Scene.AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
-        m_Scene.AddComponentToEntity("RedQuadBehaviour", Type::BehaviourComponent, "RedSprite");
+        MTN_ASSERT(m_Scene.AddComponentToEntity("RedQuad", Type::BehaviourComponent, "RedQuadBehaviour"), "Not added");
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
     }
 }
@@ -120,7 +120,7 @@ void EditorLayer::OnUpdate()
 
     m_Scene.ForEachComponents(Type::SpriteComponent, [](Mouton::Component& comp) {
         Mouton::SpriteComponent& sprite = static_cast<Mouton::SpriteComponent&>(comp);
-        MTN_INFO("Render {}", sprite.GetComponentName().c_str());
+        // MTN_INFO("Render {}", sprite.GetComponentName().c_str());
 
         if(sprite.isTextured)
             Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.texture, sprite.rotation);
