@@ -5,6 +5,7 @@
 #include "Renderer/Model.h"
 #include "Renderer/Camera.h"
 #include "Ecs/Scene.h"
+#include "Scripting/ElementBehaviour.h"
 
 class SandboxLayer : public Mouton::Layer
 {
@@ -21,4 +22,5 @@ private:
         std::shared_ptr<Mouton::Model> m_Model;
         Mouton::OrthographicCamera m_Camera;
         Mouton::Scene m_Scene;
+        Mouton::Behaviour<glm::vec2> m_Vec2Behaviour;
 };

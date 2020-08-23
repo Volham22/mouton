@@ -45,4 +45,5 @@ set(MTN_SRC
     src/Ecs/Entity.cpp
     src/Ecs/Scene.cpp
     src/MoutonComponents/SpriteComponent.cpp
+    src/Scripting/ElementBehaviour.cpp
     PARENT_SCOPE)
