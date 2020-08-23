@@ -9,8 +9,8 @@ namespace Mouton
         : m_FramebufferID(0), m_TextureAttachmentID(0), m_ColorAttachmentID(0)
     {
         glGenFramebuffers(1, &m_FramebufferID);
-        glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureAttachmentID);
-        glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachmentID);
+        glGenTextures(1, &m_TextureAttachmentID);
+        glGenTextures(1, &m_ColorAttachmentID);
     }
 
     void OpenGLFramebuffer::Bind()
@@ -32,8 +32,8 @@ namespace Mouton
         {
             glDeleteTextures(1, &m_TextureAttachmentID);
             glDeleteTextures(1, &m_ColorAttachmentID);
-            glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureAttachmentID);
-            glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachmentID);
+            glGenTextures(1, &m_TextureAttachmentID);
+            glGenTextures(1, &m_ColorAttachmentID);
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, m_FramebufferID);
