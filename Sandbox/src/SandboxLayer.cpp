@@ -9,21 +9,13 @@
 using namespace Mouton;
 
 SandboxLayer::SandboxLayer()
-    : Layer("Sandbox Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(),
-      m_Vec2Behaviour(new glm::vec2(2.0, 42.0f))
+    : Layer("Sandbox Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene()
 {
     RendererContext::InitContext(GraphicAPI::OpenGL);
     Renderer::InitRenderer();
     Renderer2D::Init();
 
     MTN_ASSERT(false, "Ooops");
-
-    m_Vec2Behaviour.SetOnSceneUpdate([](glm::vec2& vec) {
-        vec.x += 0.01f;
-        vec.y += 0.01f;
-
-        MTN_TRACE("x: {0} y: {1}", vec.x, vec.y);
-    });
 }
 
 void SandboxLayer::OnBind()
@@ -44,8 +36,6 @@ void SandboxLayer::OnUpdate()
             Renderer2D::DrawQuad({10.0f + i, 10.0f + j, 0.0f}, {10.0f, 10.0f}, {1.0f, 0.0f, 0.75f, 1.0f});
     }
     Renderer2D::EndScene();
-
-    m_Vec2Behaviour.DoUpdate();
 }
 
 bool SandboxLayer::OnEvent(Event &event)
