@@ -6,7 +6,7 @@ MOUTON_CORE_INCLUDED
 
 int main()
 {
-    printf("-- MOUTON Sandbox application --\n");
+    printf("-- MOUTON Editor --\n");
 
     Mouton::Application::InitApplication();
 

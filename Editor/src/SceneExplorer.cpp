@@ -93,7 +93,7 @@ void SceneExplorer::ShowSceneExplorer(Scene& scene)
             ImGui::Text("Create a new Component");
             static int item = 1;
             // The item value must match with the Mouton::Component::ComponentType enum
-            ImGui::Combo("Select Component Type", &item, "Transform\0Material2D\0\0", 5);
+            ImGui::Combo("Select Component Type", &item, "SpriteComponent\0Behaviour Component\0\0", 5);
             ImGui::InputTextWithHint("Component Name", "type a name", nameBuffer, IM_ARRAYSIZE(nameBuffer));
             ImGui::Separator();
 

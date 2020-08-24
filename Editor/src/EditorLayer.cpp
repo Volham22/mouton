@@ -30,13 +30,25 @@ EditorLayer::EditorLayer()
 
         Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
         Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
-        Mouton::Behaviour<Mouton::SpriteComponent>*  behaviour = new Mouton::Behaviour(red, "RedQuadBehaviour");
+        Mouton::Behaviour<Mouton::SpriteComponent>* redBehaviour = new Mouton::Behaviour(red, "RedQuadBehaviour");
+        Mouton::Behaviour<Mouton::SpriteComponent>* greenBehaviour = new Mouton::Behaviour(green, "GreenQuadBehaviour");
 
-        behaviour->SetOnSceneUpdate([](Mouton::SpriteComponent& comp) {
+       redBehaviour->SetOnSceneUpdate([](Mouton::SpriteComponent& comp) {
             comp.color.r += 0.01f;
 
             if(comp.color.r >= 1.0f)
                 comp.color.r = 0.0f;
+        });
+
+        greenBehaviour->SetOnSceneUpdate([](Mouton::SpriteComponent& comp) {
+            comp.color.g += 0.01f;
+            comp.color.b += 0.001;
+
+            if(comp.color.g >= 1.0f)
+                comp.color.g = 0.0f;
+
+            if(comp.color.b >= 1.0f)
+                comp.color.b = 0.0f;
         });
 
         red->position = { 25.0f, 2.0f, 0.0f };
@@ -48,9 +60,11 @@ EditorLayer::EditorLayer()
 
         m_Scene.AddComponent(Type::SpriteComponent, red);
         m_Scene.AddComponent(Type::SpriteComponent, green);
-        m_Scene.AddComponent(Type::BehaviourComponent, behaviour);
+        m_Scene.AddComponent(Type::BehaviourComponent, redBehaviour);
+        m_Scene.AddComponent(Type::BehaviourComponent, greenBehaviour);
         m_Scene.AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
-        MTN_ASSERT(m_Scene.AddComponentToEntity("RedQuad", Type::BehaviourComponent, "RedQuadBehaviour"), "Not added");
+        m_Scene.AddComponentToEntity("RedQuad", Type::BehaviourComponent, "RedQuadBehaviour");
+        m_Scene.AddComponentToEntity("GreenQuad", Type::BehaviourComponent, "GreenQuadBehaviour");
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
     }
 }
