@@ -45,5 +45,8 @@ set(MTN_SRC
     src/Ecs/Entity.cpp
     src/Ecs/Scene.cpp
     src/MoutonComponents/SpriteComponent.cpp
+    src/MoutonComponents/PythonBehaviourComponent.cpp
     src/Scripting/ElementBehaviour.cpp
+    src/Scripting/PythonScriptEngine.cpp
+    src/Scripting/PythonBehaviourBinder.cpp
     PARENT_SCOPE)

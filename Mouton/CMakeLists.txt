@@ -18,6 +18,9 @@ add_subdirectory(vendor/imgui)
 # Assimp
 add_subdirectory(vendor/assimp)
 
+# Pybind11
+add_subdirectory(vendor/pybind11)
+
 add_library(Mouton ${MTN_SRC})
 target_precompile_headers(Mouton PUBLIC src/MoutonPch.h)
 
@@ -28,7 +31,7 @@ else()
 endif()
 
 
-target_link_libraries(Mouton glfw Glad imgui assimp)
+target_link_libraries(Mouton glfw Glad imgui assimp pybind11::embed)
 target_include_directories(Mouton PRIVATE
     src/
     includes/
@@ -38,4 +41,5 @@ target_include_directories(Mouton PRIVATE
     vendor/Glad/include
     vendor/imgui
     vendor/glm/
-    vendor/assimp/include)
+    vendor/assimp/include
+    vendor/pybind11/include)

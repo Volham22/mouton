@@ -3,32 +3,40 @@
 
 #include "Renderer/RendererContext.h"
 #include "Renderer/Renderer.h"
-
 #include "Renderer/Renderer2D.h"
+
+#include "MoutonComponents/SpriteComponent.h"
+#include "Scripting/PythonScriptEngine.h"
 
 using namespace Mouton;
 
 SandboxLayer::SandboxLayer()
-    : Layer("Sandbox Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene()
+    : Layer("Sandbox Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(),
+      m_PythonComponentBehaviour(nullptr)
 {
     RendererContext::InitContext(GraphicAPI::OpenGL);
     Renderer::InitRenderer();
     Renderer2D::Init();
 
-    MTN_ASSERT(false, "Ooops");
+    PythonScriptEngine::Init();
+
+    m_PythonComponentBehaviour = new SpriteComponentScriptable("myComp", new SpriteComponent("myComp"));
 }
 
 void SandboxLayer::OnBind()
 {
-
+    m_PythonComponentBehaviour->OnSceneBegin();
 }
 
 void SandboxLayer::OnUnbind()
 {
+    m_PythonComponentBehaviour->OnSceneEnd();
 }
 
 void SandboxLayer::OnUpdate()
 {
+    m_PythonComponentBehaviour->OnSceneUpdate();
+
     Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
     for (int i = 0; i < 100; i += 20)
     {
@@ -56,4 +64,6 @@ bool SandboxLayer::OnEvent(Event &event)
 
 SandboxLayer::~SandboxLayer()
 {
+    delete m_PythonComponentBehaviour;
+    PythonScriptEngine::Stop();
 }

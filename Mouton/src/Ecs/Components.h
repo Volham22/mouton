@@ -11,7 +11,7 @@ namespace Mouton
     public:
 
         enum class ComponentType : uint16_t {
-            Any = 0, SpriteComponent = 1, BehaviourComponent = 2
+            Any = 0, SpriteComponent = 1, BehaviourComponent = 2, PythonBehaviourComponent = 3
         };
 
         Component(ComponentType type, const std::string& name);

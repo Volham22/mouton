@@ -5,6 +5,9 @@
 # Visual studio code
 /.vscode
 
+# Python cache folders
+__pycache__/
+
 # CMake stuff
 CMakeFiles/
 Makefile

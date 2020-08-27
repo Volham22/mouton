@@ -15,6 +15,7 @@ public:
     friend SceneExplorer;
 
     EditorLayer();
+    ~EditorLayer();
 
     virtual void OnBind() override;
     virtual void OnUpdate() override;

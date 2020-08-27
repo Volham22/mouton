@@ -6,7 +6,9 @@
 #include "Renderer/Renderer2D.h"
 
 #include "MoutonComponents/SpriteComponent.h"
-#include "Scripting/ElementBehaviour.h"
+#include "MoutonComponents/PythonBehaviourComponent.h"
+#include "Scripting/PythonBehaviourBinder.h"
+#include "Scripting/PythonScriptEngine.h"
 
 #include "EditorPropertiesPanels.h"
 #include "SceneExplorer.h"
@@ -19,6 +21,7 @@ EditorLayer::EditorLayer()
     Mouton::RendererContext::InitContext(Mouton::GraphicAPI::OpenGL);
     Mouton::Renderer::InitRenderer();
     Mouton::Renderer2D::Init();
+    Mouton::PythonScriptEngine::Init();
 
     m_ViewportFramebuffer = Mouton::Framebuffer::CreateFramebuffer();
 
@@ -30,56 +33,44 @@ EditorLayer::EditorLayer()
 
         Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
         Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
-        Mouton::Behaviour<Mouton::SpriteComponent>* redBehaviour = new Mouton::Behaviour(red, "RedQuadBehaviour");
-        Mouton::Behaviour<Mouton::SpriteComponent>* greenBehaviour = new Mouton::Behaviour(green, "GreenQuadBehaviour");
-
-       redBehaviour->SetOnSceneUpdate([](Mouton::SpriteComponent& comp) {
-            comp.color.r += 0.01f;
-
-            if(comp.color.r >= 1.0f)
-                comp.color.r = 0.0f;
-        });
-
-        greenBehaviour->SetOnSceneUpdate([](Mouton::SpriteComponent& comp) {
-            comp.color.g += 0.01f;
-            comp.color.b += 0.001;
-
-            if(comp.color.g >= 1.0f)
-                comp.color.g = 0.0f;
-
-            if(comp.color.b >= 1.0f)
-                comp.color.b = 0.0f;
-        });
-
-        red->position = { 25.0f, 2.0f, 0.0f };
-        red->scale = { 5.0f, 5.0f };
-
-        green->position = { 75.0f, 32.0f, 0.0f };
-        green->scale = { 3.0f, 6.0f };
-        green->color = { 0.0f, 1.0f, 0.0f, 1.0f };
+        Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>* behaviour = new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSprite", "RedSprite", red);
 
         m_Scene.AddComponent(Type::SpriteComponent, red);
         m_Scene.AddComponent(Type::SpriteComponent, green);
-        m_Scene.AddComponent(Type::BehaviourComponent, redBehaviour);
-        m_Scene.AddComponent(Type::BehaviourComponent, greenBehaviour);
+        m_Scene.AddComponent(Type::PythonBehaviourComponent, behaviour);
         m_Scene.AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
-        m_Scene.AddComponentToEntity("RedQuad", Type::BehaviourComponent, "RedQuadBehaviour");
-        m_Scene.AddComponentToEntity("GreenQuad", Type::BehaviourComponent, "GreenQuadBehaviour");
+        m_Scene.AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "RedSprite");
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
     }
 }
 
 void EditorLayer::OnBind()
 {
+    m_Scene.ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
+        [](Mouton::Component& comp) {
+            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
+            behaviour.pythonBehaviour->OnSceneBegin();
+        });
 }
 
 void EditorLayer::OnUnbind()
 {
+    m_Scene.ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
+        [](Mouton::Component& comp) {
+            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
+            behaviour.pythonBehaviour->OnSceneEnd();
+        });
+
     Mouton::Renderer2D::EndScene();
 }
 
 void EditorLayer::OnUpdate()
 {
+    m_Scene.ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
+        [](Mouton::Component& comp) {
+            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
+            behaviour.pythonBehaviour->OnSceneUpdate();
+        });
     using Type = Mouton::Component::ComponentType;
 
     static ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -122,12 +113,6 @@ void EditorLayer::OnUpdate()
         ImGui::GetIO().Framerate);
     ImGui::End();
 
-    // Update Behaviour component if any
-    m_Scene.ForEachComponents(Type::BehaviourComponent, [](Mouton::Component& comp) {
-        auto& behaviour = MTN_COMPONENT_TO_BEHAVIOUR(comp);
-        behaviour.DoUpdate();
-    });
-
     // Viewport rendering
     m_ViewportFramebuffer->Bind();
     Mouton::Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
@@ -162,4 +147,9 @@ bool EditorLayer::OnEvent(Mouton::Event &event)
     });
 
     return event.Handled();
+}
+
+EditorLayer::~EditorLayer()
+{
+    Mouton::PythonScriptEngine::Stop();
 }

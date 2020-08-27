@@ -10,3 +10,6 @@
 [submodule "Mouton/vendor/assimp"]
 	path = Mouton/vendor/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "Mouton/vendor/pybind11"]
+	path = Mouton/vendor/pybind11
+	url = https://github.com/pybind/pybind11.git
