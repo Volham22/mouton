@@ -1,5 +1,6 @@
 #include "Engine.h"
 
+#include "Core/Timestep.h"
 #include "Core/Inputs.h"
 
 namespace Mouton
@@ -66,7 +67,7 @@ namespace Mouton
         while(!m_WindowShouldClose)
         {
             m_ImGuiLayer.OnBind();
-            m_ImGuiLayer.OnUpdate();
+            m_ImGuiLayer.OnUpdate(Timestep());
             m_LayerManager.UpdateLayers();
             m_ImGuiLayer.OnUnbind();
             m_WindowInstance->OnUpdate();

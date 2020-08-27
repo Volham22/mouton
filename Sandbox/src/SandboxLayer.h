@@ -15,7 +15,7 @@ public:
     ~SandboxLayer();
 
     virtual void OnBind() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(Mouton::Timestep delta) override;
     virtual void OnUnbind() override;
     virtual bool OnEvent(Mouton::Event& event) override;
 

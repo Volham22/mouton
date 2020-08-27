@@ -39,7 +39,6 @@ namespace Mouton
         LayerManager m_LayerManager;
         ImGUILayer m_ImGuiLayer;
         bool m_WindowShouldClose;
-
     };
 
 }

@@ -2,6 +2,8 @@
 #define LAYER_MANAGER_H
 
 #include "MoutonPch.h"
+#include "Core/Timestep.h"
+
 #include "Layer.h"
 
 namespace Mouton
@@ -20,6 +22,7 @@ namespace Mouton
 
     private:
         std::vector<Layer*> m_Layers;
+        Chrono m_Chrono;
     };
 
 } // namespace Mouton

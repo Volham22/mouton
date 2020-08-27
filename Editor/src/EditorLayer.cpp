@@ -66,7 +66,7 @@ void EditorLayer::OnUnbind()
     Mouton::Renderer2D::EndScene();
 }
 
-void EditorLayer::OnUpdate()
+void EditorLayer::OnUpdate(Mouton::Timestep delta)
 {
     m_Scene.ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
         [](Mouton::Component& comp) {
@@ -121,7 +121,6 @@ void EditorLayer::OnUpdate()
 
     m_Scene.ForEachComponents(Type::SpriteComponent, [](Mouton::Component& comp) {
         Mouton::SpriteComponent& sprite = static_cast<Mouton::SpriteComponent&>(comp);
-        // MTN_INFO("Render {}", sprite.GetComponentName().c_str());
 
         if(sprite.isTextured)
             Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.texture, sprite.rotation);

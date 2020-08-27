@@ -3,7 +3,7 @@
 namespace Mouton
 {
     LayerManager::LayerManager()
-    :   m_Layers()
+    :   m_Layers(), m_Chrono()
     {
     }
 
@@ -30,9 +30,11 @@ namespace Mouton
         for(Layer* l : m_Layers)
         {
             l->OnBind();
-            l->OnUpdate();
+            l->OnUpdate(m_Chrono.GetDeltaTime());
             l->OnUnbind();
         }
+
+        m_Chrono.Reset();
     }
 
     bool LayerManager::OnLayersEvent(Event& event)

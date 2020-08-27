@@ -33,7 +33,7 @@ void SandboxLayer::OnUnbind()
     m_PythonComponentBehaviour->OnSceneEnd();
 }
 
-void SandboxLayer::OnUpdate()
+void SandboxLayer::OnUpdate(Timestep delta)
 {
     m_PythonComponentBehaviour->OnSceneUpdate();
 

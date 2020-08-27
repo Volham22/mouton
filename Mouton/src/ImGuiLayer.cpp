@@ -28,7 +28,7 @@ namespace Mouton
         NewImguiMoutonFrame();
     }
 
-    void ImGUILayer::OnUpdate()
+    void ImGUILayer::OnUpdate(Timestep delta)
     {
     }
 
