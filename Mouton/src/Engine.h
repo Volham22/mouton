@@ -20,6 +20,8 @@ namespace Mouton
         static void InitApplication();
         static void PushLayer(Layer* layer);
         static void Run();
+        static bool ApplicationShouldStop();
+        static void SetApplicationShouldStop(bool state = false);
         static void EndApplication();
 
     private:
@@ -28,12 +30,15 @@ namespace Mouton
         void RunImpl();
         void PushLayerImpl(Layer* layer);
         bool OnEvent(Event& event);
+        bool GetWindowShouldCloseImpl() const { return m_WindowShouldClose; };
+        void SetWindowShouldCloseImpl(bool state = false) { m_WindowShouldClose = state; };
 
     private:
         static Application* s_Application;
         std::unique_ptr<Window> m_WindowInstance;
         LayerManager m_LayerManager;
         ImGUILayer m_ImGuiLayer;
+        bool m_WindowShouldClose;
 
     };
 

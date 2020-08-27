@@ -164,6 +164,11 @@ namespace Mouton
         return m_IsVSync;
     }
 
+    bool GLFWWindowInstance::WindowShouldClose() const
+    {
+        return glfwWindowShouldClose(m_GLFWWindow);
+    }
+
     int GLFWWindowInstance::GetWindowWidth()
     {
         int res = -1;

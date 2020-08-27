@@ -10,13 +10,12 @@ int main()
 
     Mouton::Application::InitApplication();
 
+    // No need to manually free the memory the Application will do it
     EditorLayer* editorLayer = new EditorLayer();
 
     Mouton::Application::PushLayer(editorLayer);
     Mouton::Application::Run();
     Mouton::Application::EndApplication();
-
-    delete editorLayer;
 
     return 0;
 }

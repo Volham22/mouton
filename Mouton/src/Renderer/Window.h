@@ -27,6 +27,7 @@ namespace Mouton
 
         virtual void EnableVSync(bool enable = true) = 0;
         virtual bool IsVSync() = 0;
+        virtual bool WindowShouldClose() const  = 0;
 
         virtual int GetWindowWidth() = 0;
         virtual int GetWindowHeight() = 0;

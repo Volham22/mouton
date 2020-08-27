@@ -19,6 +19,7 @@ namespace Mouton
 
         virtual void EnableVSync(bool enable = true) override;
         virtual bool IsVSync() override;
+        virtual bool WindowShouldClose() const override;
 
         virtual int GetWindowWidth() override;
         virtual int GetWindowHeight() override;

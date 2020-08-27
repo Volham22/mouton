@@ -7,7 +7,7 @@ namespace Mouton
 
     Application::Application(const WindowProperties& properties)
         : m_WindowInstance(Window::CreateWindowInstance(properties)), m_LayerManager(),
-          m_ImGuiLayer(m_WindowInstance->GetWindowInternalInstance())
+          m_ImGuiLayer(m_WindowInstance->GetWindowInternalInstance()), m_WindowShouldClose(false)
     {
         Inputs::InitInputs(m_WindowInstance->GetWindowInternalInstance());
     }
@@ -28,6 +28,16 @@ namespace Mouton
     void Application::Run()
     {
         s_Application->RunImpl();
+    }
+
+    bool Application::ApplicationShouldStop()
+    {
+        return s_Application->GetWindowShouldCloseImpl();
+    }
+
+    void Application::SetApplicationShouldStop(bool state)
+    {
+        s_Application->SetWindowShouldCloseImpl(state);
     }
 
     void Application::EndApplication()
@@ -53,7 +63,7 @@ namespace Mouton
     {
         // Main Mouton Application Loop
         // ImGUi layer is always on the top
-        while(true)
+        while(!m_WindowShouldClose)
         {
             m_ImGuiLayer.OnBind();
             m_ImGuiLayer.OnUpdate();

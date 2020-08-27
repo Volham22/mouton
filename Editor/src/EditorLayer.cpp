@@ -1,6 +1,8 @@
 #include "EditorLayer.h"
 #include "imgui.h"
 
+#include "Engine.h"
+
 #include "Renderer/RendererContext.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Renderer2D.h"
@@ -138,6 +140,7 @@ bool EditorLayer::OnEvent(Mouton::Event &event)
 {
     Mouton::EventSystem::ApplyFunction<Mouton::WindowCloseEvent>(&event, [](Mouton::Event &event) -> bool {
         MTN_INFO("On window close ...");
+        Mouton::Application::SetApplicationShouldStop(true);
         return true;
     });
 
