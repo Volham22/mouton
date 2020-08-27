@@ -140,6 +140,7 @@ bool EditorLayer::OnEvent(Mouton::Event &event)
 {
     Mouton::EventSystem::ApplyFunction<Mouton::WindowCloseEvent>(&event, [](Mouton::Event &event) -> bool {
         MTN_INFO("On window close ...");
+        Mouton::PythonScriptEngine::Stop();
         Mouton::Application::SetApplicationShouldStop(true);
         return true;
     });
