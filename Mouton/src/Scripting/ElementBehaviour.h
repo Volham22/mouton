@@ -3,6 +3,7 @@
 
 #include "MoutonPch.h"
 
+#include "Core/Timestep.h"
 #include "Renderer/Layer.h"
 #include "Ecs/Components.h"
 
@@ -30,7 +31,7 @@ namespace Mouton
         }
 
         void SetOnSceneBegin(std::function<void(T&)> callback) { m_OnSceneBeginCallback = callback; };
-        void SetOnSceneUpdate(std::function<void(T&)> callback) { m_OnSceneUpdateCallback = callback; };
+        void SetOnSceneUpdate(std::function<void(T&, Timestep)> callback) { m_OnSceneUpdateCallback = callback; };
         void SetOnSceneEnd(std::function<void(T&)> callback) { m_OnSceneEndCallback = callback; };
 
         bool DoBegin() { return CallIfExists(m_OnSceneBeginCallback); };

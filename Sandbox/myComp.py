@@ -8,7 +8,7 @@ class myComp(Mouton.SpriteComponent):
     def OnBegin(self):
         print("Called OnBegin !")
 
-    def OnUpdate(self):
+    def OnUpdate(self, delta):
         print("Called OnUpdate !")
         self.color.x += 0.001
 

@@ -1,6 +1,8 @@
 #include "PythonScriptEngine.h"
 
+#include "Core/Timestep.h"
 #include "PythonBehaviourBinder.h"
+#include "PythonCoreAPI.h"
 #include "MoutonComponents/SpriteComponent.h"
 
 #include <pybind11/embed.h>
@@ -73,6 +75,17 @@ PYBIND11_EMBEDDED_MODULE(Mouton, m)
     .def_readwrite("rotation", &SpriteComponent::rotation)
     .def_readwrite("scale", &SpriteComponent::scale)
     .def_readwrite("isTextured", &SpriteComponent::isTextured);
+
+    py::class_<Timestep>(m, "Timestep")
+    .def(py::init<float>())
+    .def("GetSeconds", &Timestep::GetSeconds)
+    .def("GetMilliseconds", &Timestep::GetMilliseconds)
+    .def(py::self + float())
+    .def(py::self - float())
+    .def(py::self * float());
+
+    py::class_<PythonAPI::Core>(m, "Core")
+    .def_static("Print", &PythonAPI::Core::Print);
 }
 
 namespace Mouton

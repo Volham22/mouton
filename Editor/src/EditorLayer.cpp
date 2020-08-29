@@ -69,9 +69,9 @@ void EditorLayer::OnUnbind()
 void EditorLayer::OnUpdate(Mouton::Timestep delta)
 {
     m_Scene.ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
-        [](Mouton::Component& comp) {
+        [delta](Mouton::Component& comp) {
             auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
-            behaviour.pythonBehaviour->OnSceneUpdate();
+            behaviour.pythonBehaviour->OnSceneUpdate(delta);
         });
     using Type = Mouton::Component::ComponentType;
 

@@ -31,11 +31,11 @@ namespace Mouton
         }
     }
 
-    void SpriteComponentScriptable::OnSceneUpdate()
+    void SpriteComponentScriptable::OnSceneUpdate(Timestep delta)
     {
         try
         {
-            m_Instance.attr("OnUpdate")();
+            m_Instance.attr("OnUpdate")(delta);
             UpdateAttributes();
         }
         catch(const std::exception& e)

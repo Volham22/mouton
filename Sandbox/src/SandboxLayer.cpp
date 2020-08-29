@@ -35,7 +35,7 @@ void SandboxLayer::OnUnbind()
 
 void SandboxLayer::OnUpdate(Timestep delta)
 {
-    m_PythonComponentBehaviour->OnSceneUpdate();
+    m_PythonComponentBehaviour->OnSceneUpdate(delta);
 
     Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
     for (int i = 0; i < 100; i += 20)

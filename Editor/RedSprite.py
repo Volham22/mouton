@@ -9,25 +9,35 @@ class RedSprite(Mouton.SpriteComponent):
         self.scale = Mouton.Vector2(3.0, 5.0)
         self.position = Mouton.Vector3(50.0)
         self.position.z = 0.0
-        self.time = time.time()
         self.frame = 0.0
 
+    """
+    Call once when the scene begin (not implemented in the Engine yet)
+    """
     def OnBegin(self):
         pass
+    
+    """
+    Called when RedSprite is being updated
+    Parameters:
+        Timestep delta : the actual frametime
+    """
+    def OnUpdate(self, delta):
 
-    def OnUpdate(self):
-        elapsed = time.time() - self.time
-        self.time = time.time()
-
-        incX = math.cos(self.frame) * elapsed * 10
-        incY = math.sin(self.frame) * elapsed * 10
+        incX = delta * math.cos(self.frame) * 10.0
+        incY = delta * math.sin(self.frame) * 10.0
         
         self.position.x += incX
         self.position.y += incY
         self.scale.x += incX
         self.scale.y += incY
 
-        self.frame += elapsed
+        self.frame += delta.GetSeconds()
 
+        Mouton.Core.Print(__file__ + " Hello from RedSprite::OnUpdate")
+
+    """
+    Called once when the Scene end (not implemented in the Engine yet)
+    """
     def OnEnd(self):
         pass
