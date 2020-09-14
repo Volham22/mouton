@@ -7,6 +7,7 @@
 
 using namespace Mouton;
 
+static void CallPythonBehaviourProperties(Mouton::Component* behaviourComp);
 
 void SceneExplorer::ShowSceneExplorer(Scene& scene)
 {
@@ -193,14 +194,25 @@ Component* SceneExplorer::CreateComponentFromType(Component::ComponentType type,
 void SceneExplorer::ShowProperties()
 {
     using Type = Component::ComponentType;
+    using namespace Mouton;
 
     switch(m_ComponentShown->GetComponentType())
     {
         case Type::SpriteComponent:
-            EditorPropertiesPanels::ShowSpriteComponentPanel(reinterpret_cast<SpriteComponent*>(m_ComponentShown));
+            EditorPropertiesPanels::ShowSpriteComponentPanel(static_cast<SpriteComponent*>(m_ComponentShown));
+            break;
+
+        case Type::PythonBehaviourComponent:
+            CallPythonBehaviourProperties(m_ComponentShown);
             break;
 
         default:
             MTN_WARN("Unknown Component Properties to show !");
     }
+}
+
+static void CallPythonBehaviourProperties(Mouton::Component* behaviourComp)
+{
+    auto* ptr = static_cast<PythonBehaviourComponent<PythonBinder>*>(behaviourComp);
+    EditorPropertiesPanels::ShowPythonBehaviourComponentPanel(ptr);
 }

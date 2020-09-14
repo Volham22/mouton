@@ -35,13 +35,14 @@ EditorLayer::EditorLayer()
 
         Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
         Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
-        Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>* behaviour = new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSprite", "RedSprite", red);
+        Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>* behaviour =
+            new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSpriteScript", "RedSpriteScript", red);
 
         m_Scene.AddComponent(Type::SpriteComponent, red);
         m_Scene.AddComponent(Type::SpriteComponent, green);
         m_Scene.AddComponent(Type::PythonBehaviourComponent, behaviour);
         m_Scene.AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
-        m_Scene.AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "RedSprite");
+        m_Scene.AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "RedSpriteScript");
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
     }
 }

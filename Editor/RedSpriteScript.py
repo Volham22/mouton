@@ -2,7 +2,7 @@ import Mouton
 import time
 import math
 
-class RedSprite(Mouton.SpriteComponent):
+class RedSpriteScript(Mouton.SpriteComponent):
     def __init__(self):
         Mouton.SpriteComponent.__init__(self, "SpriteComponent")
         self.color = Mouton.Vector4(0.5, 0.8, 0.2, 1.0)
