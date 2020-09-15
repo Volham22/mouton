@@ -37,6 +37,7 @@ void SceneExplorer::ShowSceneExplorer(Scene& scene)
                         if(ImGui::Button("Show properties", { 150, 20 }))
                             m_ComponentShown = comp;
 
+
                         ImGui::TreePop();
                     }
                 }

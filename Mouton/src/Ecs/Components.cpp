@@ -3,8 +3,8 @@
 namespace Mouton
 {
 
-    Component::Component(ComponentType type, const std::string& name)
-        : p_Type(type), p_Name(name), p_ComponentID()
+    Component::Component(ComponentType type, const std::string& name, bool isScriptable)
+        : p_Type(type), p_Name(name), p_ComponentID(), p_IsScriptable(isScriptable)
     {
     }
 

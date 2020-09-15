@@ -14,7 +14,7 @@ namespace Mouton
             Any = 0, SpriteComponent = 1, BehaviourComponent = 2, PythonBehaviourComponent = 3
         };
 
-        Component(ComponentType type, const std::string& name);
+        Component(ComponentType type, const std::string& name, bool isScriptable = false);
         virtual ~Component() {};
 
         virtual bool operator==(const Component& other) const;
@@ -25,11 +25,13 @@ namespace Mouton
         bool RemoveEntityID(uint32_t entityID);
         ComponentType GetComponentType() const { return p_Type; };
         const std::string& GetComponentName() const {  return p_Name; };
+        bool IsScriptable() const { return p_IsScriptable; };
 
     protected:
         ComponentType p_Type;
         std::string p_Name;
         std::unordered_set<uint32_t> p_ComponentID;
+        bool p_IsScriptable;
     };
 
 } // namespace Mouton
