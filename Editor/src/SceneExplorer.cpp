@@ -5,9 +5,16 @@
 
 #include "EditorPropertiesPanels.h"
 
+#include <sstream>
+
 using namespace Mouton;
 
-static void CallPythonBehaviourProperties(Mouton::Component *behaviourComp);
+static bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
+    const std::array<char, 255>& moduleName, Component* boundComponent);
+static void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& moduleName,
+    int& selectedBehaviourType, Component*& boundComponent);
+static std::string CreateComponentComboList(Scene& scene);
+static std::string GetElementSequenceName(const std::string& sequence, int n);
 
 void SceneExplorer::ShowSceneExplorer(Scene &scene)
 {
@@ -38,12 +45,15 @@ void SceneExplorer::ShowSceneExplorer(Scene &scene)
     }
 }
 
-Component* SceneExplorer::CreateComponentFromType(Component::ComponentType type, const std::string &name) const
+Component* SceneExplorer::CreateComponentFromType(Scene& scene, Component::ComponentType type, const std::string &name) const
 {
     switch (type)
     {
     case Component::ComponentType::SpriteComponent:
         return new SpriteComponent(name);
+
+    case Component::ComponentType::PythonBehaviourComponent:
+        return nullptr;
 
     default:
         return nullptr;
@@ -62,7 +72,7 @@ void SceneExplorer::ShowProperties()
         break;
 
     case Type::PythonBehaviourComponent:
-        CallPythonBehaviourProperties(m_ComponentShown);
+        EditorPropertiesPanels::ShowPythonBehaviourComponentPanel(static_cast<PythonBehaviourComponent<PythonBinder>*>(m_ComponentShown));
         break;
 
     default:
@@ -146,11 +156,19 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
 
     if (ImGui::BeginPopupModal("Create component", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoMove))
     {
-        static char nameBuffer[200] = "";
         ImGui::Text("Create a new Component");
+
+        static char nameBuffer[200] = "";
         static int item = 1;
+
+        // Python Behaviour creation
+        static int selectedPythonBehaviourType = 0;
+        static std::array<char, 255> pythonModuleName;
+        static Component* boundComponent = nullptr;
+
+
         // The item value must match with the Mouton::Component::ComponentType enum
-        ImGui::Combo("Select Component Type", &item, "SpriteComponent\0Behaviour Component\0\0", 5);
+        ImGui::Combo("Select Component Type", &item, "SpriteComponent\0Behaviour Component\0Python Behaviour Component\0\0", 5);
         ImGui::InputTextWithHint("Component Name", "type a name", nameBuffer, IM_ARRAYSIZE(nameBuffer));
         ImGui::Separator();
 
@@ -158,13 +176,38 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
             return (Component::ComponentType)(x + 1);
         };
 
+        if(toComponentType(item) == Component::ComponentType::PythonBehaviourComponent)
+            ShowPythonBehaviourCreation(scene, pythonModuleName, selectedPythonBehaviourType, boundComponent);
+
         if (ImGui::Button("Add"))
         {
             if (std::strlen(nameBuffer) > 0 && scene.AddComponent(toComponentType(item),
-                                                                  CreateComponentFromType(toComponentType(item), std::string(nameBuffer))))
+                                                    CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
                 ImGui::CloseCurrentPopup();
             else
                 ImGui::OpenPopup("Incorrect Name !");
+
+            switch(toComponentType(item))
+            {
+            case Component::ComponentType::SpriteComponent:
+                if(!scene.AddComponent(toComponentType(item),
+                                                    CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
+                    ImGui::OpenPopup("Incorrect Name !");
+                else
+                    ImGui::CloseCurrentPopup();
+                break;
+
+            case Component::ComponentType::PythonBehaviourComponent:
+                if(!AddPythonBehaviourComponent(scene, std::string(nameBuffer), pythonModuleName, boundComponent))
+                    ImGui::OpenPopup("Incorrect Name !");
+                else
+                    ImGui::CloseCurrentPopup();
+                break;
+
+            default:
+                MTN_ERROR("Unknow component to create !");
+                ImGui::CloseCurrentPopup();
+            }
         }
 
         if (ImGui::BeginPopupModal("Incorrect Name !"))
@@ -229,8 +272,62 @@ void SceneExplorer::ShowCreateEntity(Mouton::Scene& scene) const
     }
 }
 
-    static void CallPythonBehaviourProperties(Mouton::Component * behaviourComp)
+// TODO: Handle different component type properly, for now it's only SpriteBehaviour
+bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
+    const std::array<char, 255>& moduleName, Component* boundComponent)
+{
+    auto* comp = new PythonBehaviourComponent<SpriteComponentScriptable>(name, moduleName.data(), static_cast<SpriteComponent*>(boundComponent));
+    return scene.AddComponent(Component::ComponentType::PythonBehaviourComponent, comp);
+}
+
+void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& moduleName, int& selectedBehaviourType, Component*& boundComponent)
+{
+    static int selectedScriptableComponent = 0;
+    std::string componentComboSequence = CreateComponentComboList(scene);
+    ImGui::Separator();
+
+    auto onTypeCallback = [](ImGuiInputTextCallbackData* event) -> int {
+        if(!strstr(event->Buf, ".py"))
+            ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "Please do not put .py in module name !");
+
+        return 0;
+    };
+
+    ImGui::InputTextWithHint("Python Module name", "type Python module name", moduleName.data(), moduleName.size(), 0, onTypeCallback);
+
+    ImGui::Combo("Python behaviour type", &selectedBehaviourType, "SpriteBehaviour\0\0");
+
+    ImGui::Combo("Choosed scriptable components", &selectedScriptableComponent, componentComboSequence.c_str());
+
+    boundComponent = scene.GetComponentByName(GetElementSequenceName(componentComboSequence, selectedScriptableComponent));
+}
+
+std::string CreateComponentComboList(Scene& scene)
+{
+    std::stringstream ss;
+
+    scene.ForEachComponents([&ss](Component& comp) {
+        if(comp.IsScriptable())
+            ss << comp.GetComponentName() << '\0';
+    });
+
+    ss << '\0';
+
+    return ss.str();
+}
+
+std::string GetElementSequenceName(const std::string& sequence, int n)
+{
+    uint32_t index = 0;
+    for(uint32_t zerosSeen = 0; (index < sequence.size()) && ((int)zerosSeen < n); index++)
     {
-        auto *ptr = static_cast<PythonBehaviourComponent<PythonBinder> *>(behaviourComp);
-        EditorPropertiesPanels::ShowPythonBehaviourComponentPanel(ptr);
+        if(sequence[index] == '\0')
+            zerosSeen++;
     }
+
+    uint32_t seqSize = 0;
+    while(((index + seqSize) < sequence.size()) && (sequence[index + seqSize] != '\0'))
+        seqSize++;
+
+    return sequence.substr(index, index + seqSize);
+}

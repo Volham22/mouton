@@ -16,7 +16,7 @@ class RedSpriteScript(Mouton.SpriteComponent):
     """
     def OnBegin(self):
         pass
-    
+
     """
     Called when RedSprite is being updated
     Parameters:
@@ -33,8 +33,6 @@ class RedSpriteScript(Mouton.SpriteComponent):
         self.scale.y += incY
 
         self.frame += delta.GetSeconds()
-
-        Mouton.Core.Print(__file__ + " Hello from RedSprite::OnUpdate")
 
     """
     Called once when the Scene end (not implemented in the Engine yet)

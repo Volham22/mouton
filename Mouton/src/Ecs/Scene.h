@@ -24,6 +24,7 @@ namespace Mouton
         bool RemoveComponent(Component::ComponentType type, const std::string& componentName);
         std::vector<Entity*> GetEntities();
         std::vector<Component*> GetEntityComponent(const std::string& entityName);
+        Component* GetComponentByName(const std::string& name);
 
         template<typename T>
         void ForEachComponents(T callback)

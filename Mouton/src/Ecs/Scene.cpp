@@ -132,6 +132,17 @@ namespace Mouton
         return components;
     }
 
+    Component* Scene::GetComponentByName(const std::string& name)
+    {
+        for(auto&[_, components] : m_SceneData)
+        {
+            if(auto it = components.find(name); it != components.end())
+                return it->second;
+        }
+
+        return nullptr;
+    }
+
     void Scene::decComponent(Component::ComponentType type, std::string componentName)
     {
         if((--m_ComponentsReferenceCount[componentName]) == 0)

@@ -25,17 +25,17 @@ SandboxLayer::SandboxLayer()
 
 void SandboxLayer::OnBind()
 {
-    m_PythonComponentBehaviour->OnSceneBegin();
+    // m_PythonComponentBehaviour->OnSceneBegin();
 }
 
 void SandboxLayer::OnUnbind()
 {
-    m_PythonComponentBehaviour->OnSceneEnd();
+    // m_PythonComponentBehaviour->OnSceneEnd();
 }
 
 void SandboxLayer::OnUpdate(Timestep delta)
 {
-    m_PythonComponentBehaviour->OnSceneUpdate(delta);
+    // m_PythonComponentBehaviour->OnSceneUpdate(delta);
 
     Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
     for (int i = 0; i < 100; i += 20)
@@ -44,6 +44,8 @@ void SandboxLayer::OnUpdate(Timestep delta)
             Renderer2D::DrawQuad({10.0f + i, 10.0f + j, 0.0f}, {10.0f, 10.0f}, {1.0f, 0.0f, 0.75f, 1.0f});
     }
     Renderer2D::EndScene();
+
+    ImGui::ShowDemoWindow();
 }
 
 bool SandboxLayer::OnEvent(Event &event)

@@ -17,7 +17,8 @@ public:
 private:
     Mouton::Component* m_ComponentShown = nullptr;
 
-    Mouton::Component* CreateComponentFromType(Mouton::Component::ComponentType type, const std::string& name) const;
+    Mouton::Component* CreateComponentFromType(Mouton::Scene& scene, Mouton::Component::ComponentType type,
+        const std::string& name) const;
     void ShowProperties();
 
     void ShowEntity(Mouton::Entity* entity, Mouton::Scene& scene);

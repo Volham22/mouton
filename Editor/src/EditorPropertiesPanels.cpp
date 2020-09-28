@@ -18,5 +18,4 @@ void EditorPropertiesPanels::ShowSpriteComponentPanel(Mouton::SpriteComponent* s
     }
     else
         ImGui::ColorEdit4("Color", glm::value_ptr(spriteComp->color));
-    
 }
