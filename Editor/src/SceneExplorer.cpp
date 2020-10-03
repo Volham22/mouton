@@ -4,6 +4,7 @@
 #include "Ecs/Entity.h"
 
 #include "EditorPropertiesPanels.h"
+#include "Scripting/ScriptSkeletonFactory.h"
 
 #include <sstream>
 
@@ -278,7 +279,9 @@ void SceneExplorer::ShowCreateEntity(Mouton::Scene& scene) const
 bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
     const std::array<char, 255>& moduleName, Component* boundComponent)
 {
+    ScriptSkeletonFactory::CreateSpriteComponentSkeleton(std::string(moduleName.data()));
     auto* comp = new PythonBehaviourComponent<SpriteComponentScriptable>(name, moduleName.data(), static_cast<SpriteComponent*>(boundComponent));
+
     return scene.AddComponent(Component::ComponentType::PythonBehaviourComponent, comp);
 }
 
@@ -301,6 +304,8 @@ void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& moduleName
     ImGui::Combo("Choosed scriptable components", &selectedScriptableComponent, componentComboSequence.c_str());
 
     boundComponent = scene.GetComponentByName(GetElementSequenceName(componentComboSequence, selectedScriptableComponent));
+
+    ImGui::Separator();
 }
 
 std::string CreateComponentComboList(Scene& scene)

@@ -51,4 +51,5 @@ set(MTN_SRC
     src/Scripting/PythonScriptEngine.cpp
     src/Scripting/PythonBehaviourBinder.cpp
     src/Scripting/PythonCoreAPI.cpp
+    src/Scripting/ScriptSkeletonFactory.cpp
     PARENT_SCOPE)

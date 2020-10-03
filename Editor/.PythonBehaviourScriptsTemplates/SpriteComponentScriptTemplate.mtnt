@@ -1,0 +1,29 @@
+import Mouton
+
+# Your additionnal imports goes here ...
+
+class %name%(Mouton.SpriteComponent):
+    def __init__(self):
+        Mouton.SpriteComponent.__init__(self, "%name%Component")
+        # Your members initialisation goes here ...
+
+    """
+    Call once when the scene begin (not implemented in the Engine yet)
+    """
+    def OnBegin(self):
+        pass
+
+    """
+    Called when %name% is being updated by Mouton.
+    This is usually called before each new frame.
+    Parameters:
+        Timestep delta : the actual frametime
+    """
+    def OnUpdate(self, delta):
+        pass
+
+    """
+    Called once when the Scene end (not implemented in the Engine yet)
+    """
+    def OnEnd(self):
+        pass
