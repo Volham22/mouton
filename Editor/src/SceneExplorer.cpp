@@ -11,8 +11,10 @@ using namespace Mouton;
 
 static bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
     const std::array<char, 255>& moduleName, Component* boundComponent);
+
 static void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& moduleName,
     int& selectedBehaviourType, Component*& boundComponent);
+
 static std::string CreateComponentComboList(Scene& scene);
 static std::string GetElementSequenceName(const std::string& sequence, int n);
 
@@ -52,8 +54,8 @@ Component* SceneExplorer::CreateComponentFromType(Scene& scene, Component::Compo
     case Component::ComponentType::SpriteComponent:
         return new SpriteComponent(name);
 
-    case Component::ComponentType::PythonBehaviourComponent:
-        return nullptr;
+    // case Component::ComponentType::PythonBehaviourComponent:
+    //     return AddPythonBehaviourComponent(scene, name, pythonModuleName, boundComponent);
 
     default:
         return nullptr;
@@ -181,11 +183,11 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
 
         if (ImGui::Button("Add"))
         {
-            if (std::strlen(nameBuffer) > 0 && scene.AddComponent(toComponentType(item),
-                                                    CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
-                ImGui::CloseCurrentPopup();
-            else
-                ImGui::OpenPopup("Incorrect Name !");
+            // if (std::strlen(nameBuffer) > 0 && scene.AddComponent(toComponentType(item),
+            //                                         CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
+            //     ImGui::CloseCurrentPopup();
+            // else
+            //     ImGui::OpenPopup("Incorrect Name !");
 
             switch(toComponentType(item))
             {
@@ -284,7 +286,6 @@ void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& moduleName
 {
     static int selectedScriptableComponent = 0;
     std::string componentComboSequence = CreateComponentComboList(scene);
-    ImGui::Separator();
 
     auto onTypeCallback = [](ImGuiInputTextCallbackData* event) -> int {
         if(!strstr(event->Buf, ".py"))
@@ -306,7 +307,7 @@ std::string CreateComponentComboList(Scene& scene)
 {
     std::stringstream ss;
 
-    scene.ForEachComponents([&ss](Component& comp) {
+    scene.ForEachComponents(Component::ComponentType::Any, [&ss](Component& comp) {
         if(comp.IsScriptable())
             ss << comp.GetComponentName() << '\0';
     });

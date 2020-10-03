@@ -34,6 +34,17 @@ namespace Mouton
         template<typename T, typename U, typename... Args>
         void ForEachComponents(T comp, Args... args, U callback)
         {
+            if(comp == Component::ComponentType::Any)
+            {
+                for(auto&[type, components] : m_SceneData)
+                {
+                    for(auto&[name, comp] : components)
+                        callback(*comp);
+                }
+
+                return;
+            }
+
             auto& components = m_SceneData[comp];
 
             for(auto&[name, compo] : components)
