@@ -9,6 +9,7 @@ set(MTN_SRC
     src/Core/Events/WindowEvents.cpp
     src/Core/Inputs.cpp
     src/Core/Timestep.cpp
+    src/Core/Utils/FileUtils.cpp
     src/Renderer/Window.cpp
     src/Renderer/Layer.cpp
     src/Renderer/LayerManager.cpp
