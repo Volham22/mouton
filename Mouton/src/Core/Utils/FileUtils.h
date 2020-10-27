@@ -25,6 +25,7 @@ namespace Mouton::Utils
     class Directory
     {
     public:
+        Directory() = delete;
         Directory(const std::string& dirPath);
 
         const std::string& GetPath() const { return m_DirPath; };
@@ -37,12 +38,12 @@ namespace Mouton::Utils
 
             if constexpr(Recursive)
             {
-                for(const auto& item : fs::directory_iterator(m_DirPath))
+                for(const auto& item : fs::recursive_directory_iterator(m_DirPath))
                         items.push_back(DirectoryItem(item.path(), item.is_directory()));
             }
             else
             {
-                for(const auto& item : fs::recursive_directory_iterator(m_DirPath))
+                for(const auto& item : fs::directory_iterator(m_DirPath))
                     items.push_back(DirectoryItem(item.path(), item.is_directory()));
             }
 
