@@ -23,11 +23,11 @@ public:
     virtual bool OnEvent(Mouton::Event& event) override;
 
 private:
-        std::shared_ptr<Mouton::Framebuffer> m_ViewportFramebuffer;
-        Mouton::OrthographicCamera m_Camera;
-        Mouton::Scene m_Scene;
-        Mouton::Component* m_ComponentShown;
-        SceneExplorer m_SceneExplorer;
+    std::shared_ptr<Mouton::Framebuffer> m_ViewportFramebuffer;
+    Mouton::OrthographicCamera m_Camera;
+    Mouton::Scene m_Scene;
+    Mouton::Component* m_ComponentShown;
+    SceneExplorer m_SceneExplorer;
 
-        void ShowProperties();
+    void ShowProperties();
 };

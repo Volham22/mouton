@@ -11,9 +11,9 @@ class EditorPropertiesPanels
 {
 public:
     static void Init();
-
+    static void Stop();
+    static void LoadProjectTextures();
     static void ShowSpriteComponentPanel(Mouton::SpriteComponent* spriteComponent);
-
     static void ShowPythonBehaviourComponentPanel(Mouton::PythonBehaviourComponent<Mouton::PythonBinder>* behaviourComponent)
     {
         ImGui::Text(("PythonBehaviour Script ! " + behaviourComponent->GetComponentName()).c_str());
@@ -23,9 +23,9 @@ public:
     }
 
 private:
-    using CachedTextures = std::unordered_map<const char*, std::shared_ptr<Mouton::Texture2D>>;
+    using CachedTextures = std::unordered_map<std::string, std::shared_ptr<Mouton::Texture2D>>;
 
-    static EditorPropertiesPanels s_Instance;
+    static EditorPropertiesPanels* s_Instance;
     CachedTextures m_CachedTextures;
 
 private:

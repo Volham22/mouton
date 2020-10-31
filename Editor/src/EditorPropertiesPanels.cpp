@@ -6,22 +6,31 @@
 
 namespace MtnUtils = Mouton::Utils;
 
-EditorPropertiesPanels EditorPropertiesPanels::s_Instance;
+EditorPropertiesPanels* EditorPropertiesPanels::s_Instance;
 
 void EditorPropertiesPanels::ShowSpriteComponentPanel(Mouton::SpriteComponent* spriteComp)
 {
-    s_Instance.ShowSpriteComponentPanelImpl(spriteComp);
+    s_Instance->ShowSpriteComponentPanelImpl(spriteComp);
 }
 
 void EditorPropertiesPanels::Init()
 {
-    s_Instance = EditorPropertiesPanels();
+    s_Instance = new EditorPropertiesPanels();
+}
+
+void EditorPropertiesPanels::Stop()
+{
+    delete s_Instance;
+}
+
+void EditorPropertiesPanels::LoadProjectTextures()
+{
+    s_Instance->PopulateCache();
 }
 
 EditorPropertiesPanels::EditorPropertiesPanels()
     : m_CachedTextures()
 {
-    PopulateCache();
 }
 
 void EditorPropertiesPanels::PopulateCache()
@@ -38,7 +47,7 @@ void EditorPropertiesPanels::PopulateCache()
         // TODO: Handle invalid textures
         // Just adding texture in cache for now note that is a texture 
         // isn't loaded properly the engine will probably crash
-        m_CachedTextures[item.GetPath().c_str()] = texture;
+        m_CachedTextures[item.GetPath()] = texture;
     }
 }
 
@@ -66,7 +75,7 @@ void EditorPropertiesPanels::ShowSpriteComponentPanelImpl(Mouton::SpriteComponen
         int i = 0;
         for(auto&[path, texture] : m_CachedTextures)
         {
-            if(ImGui::Selectable(path, textureSelected == i))
+            if(ImGui::Selectable(path.c_str(), textureSelected == i))
             {
                 spriteComp->isTextured = true;
                 spriteComp->texture = texture;

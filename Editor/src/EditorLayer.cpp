@@ -25,6 +25,12 @@ EditorLayer::EditorLayer()
     Mouton::Renderer2D::Init();
     Mouton::PythonScriptEngine::Init();
 
+    // This will load texures and some other stuff in the future
+    // Since this method loads textures, the Renderer context has to be
+    // initialized before.
+    // InitProperties must be called AFTER Mouton::RendererContext::InitContext();
+    m_SceneExplorer.InitProperties();
+
     m_ViewportFramebuffer = Mouton::Framebuffer::CreateFramebuffer();
 
     m_Scene.AddEntity(new Mouton::Entity("RedQuad"));

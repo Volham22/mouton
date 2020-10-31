@@ -12,6 +12,9 @@ class SceneExplorer
 {
 public:
     SceneExplorer();
+    ~SceneExplorer();
+
+    void InitProperties();
     void ShowSceneExplorer(Mouton::Scene& scene);
 
 private:

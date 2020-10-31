@@ -25,6 +25,11 @@ SceneExplorer::SceneExplorer()
     EditorPropertiesPanels::Init();
 }
 
+void SceneExplorer::InitProperties()
+{
+    EditorPropertiesPanels::LoadProjectTextures();
+}
+
 void SceneExplorer::ShowSceneExplorer(Scene &scene)
 {
     ImGui::Begin("Scene explorer");
@@ -279,6 +284,11 @@ void SceneExplorer::ShowCreateEntity(Mouton::Scene& scene) const
 
         ImGui::EndPopup();
     }
+}
+
+SceneExplorer::~SceneExplorer()
+{
+    EditorPropertiesPanels::Stop();
 }
 
 // TODO: Handle different component type properly, for now it's only SpriteBehaviour
