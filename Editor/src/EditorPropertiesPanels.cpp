@@ -62,11 +62,11 @@ void EditorPropertiesPanels::ShowSpriteComponentPanelImpl(Mouton::SpriteComponen
 
     ImGui::Separator();
 
-    static bool isSpriteTextured = false;
+    static bool useColor = !spriteComp->isTextured;
 
-    ImGui::Checkbox("Has texture", &isSpriteTextured);
+    ImGui::Checkbox("Use built'in colors", &useColor);
 
-    if(isSpriteTextured)
+    if(!useColor)
     {
         static int textureSelected = 1;
 
@@ -85,5 +85,10 @@ void EditorPropertiesPanels::ShowSpriteComponentPanelImpl(Mouton::SpriteComponen
         }
     }
     else
+    {
+        if(spriteComp->isTextured)
+            spriteComp->isTextured = false;
+
         ImGui::ColorEdit4("Color", glm::value_ptr(spriteComp->color));
+    }
 }
