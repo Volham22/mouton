@@ -11,11 +11,11 @@ class EditorLayer;
 class SceneExplorer
 {
 public:
-    SceneExplorer() = default;
+    SceneExplorer();
     void ShowSceneExplorer(Mouton::Scene& scene);
 
 private:
-    Mouton::Component* m_ComponentShown = nullptr;
+    Mouton::Component* m_ComponentShown;
 
     Mouton::Component* CreateComponentFromType(Mouton::Scene& scene, Mouton::Component::ComponentType type,
         const std::string& name) const;

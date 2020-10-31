@@ -19,6 +19,12 @@ static void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& mod
 static std::string CreateComponentComboList(Scene& scene);
 static std::string GetElementSequenceName(const std::string& sequence, int n);
 
+SceneExplorer::SceneExplorer()
+    : m_ComponentShown(nullptr)
+{
+    EditorPropertiesPanels::Init();
+}
+
 void SceneExplorer::ShowSceneExplorer(Scene &scene)
 {
     ImGui::Begin("Scene explorer");
