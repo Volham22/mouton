@@ -25,6 +25,7 @@ set(MTN_SRC
     src/Renderer/Mesh.cpp
     src/Renderer/Model.cpp
     src/Renderer/OrbitalCameraController.cpp
+    src/Renderer/OrthographicCameraController.cpp
     src/Renderer/Node.cpp
     src/Renderer/Framebuffer.cpp
     src/Renderer/Animations/Bone.cpp
@@ -48,6 +49,7 @@ set(MTN_SRC
     src/Ecs/Scene.cpp
     src/MoutonComponents/SpriteComponent.cpp
     src/MoutonComponents/PythonBehaviourComponent.cpp
+    src/MoutonComponents/OrthographicCameraComponent.cpp
     src/Scripting/ElementBehaviour.cpp
     src/Scripting/PythonScriptEngine.cpp
     src/Scripting/PythonBehaviourBinder.cpp
