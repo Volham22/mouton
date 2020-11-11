@@ -4,6 +4,7 @@
 #include "PythonBehaviourBinder.h"
 #include "PythonCoreAPI.h"
 #include "MoutonComponents/SpriteComponent.h"
+#include "MoutonComponents/PythonBehaviourComponent.h"
 
 #include <pybind11/embed.h>
 #include <pybind11/operators.h>
@@ -75,6 +76,12 @@ PYBIND11_EMBEDDED_MODULE(Mouton, m)
     .def_readwrite("rotation", &SpriteComponent::rotation)
     .def_readwrite("scale", &SpriteComponent::scale)
     .def_readwrite("isTextured", &SpriteComponent::isTextured);
+
+    py::class_<OrthographicCameraComponent>(m, "OrthographicCameraComponent")
+    .def(py::init<const std::string&, const std::shared_ptr<OrthographicCameraController>&>())
+    .def("Move", &OrthographicCameraComponent::Move)
+    .def("Rotate", &OrthographicCameraComponent::Rotate)
+    .def("SetCoords", &OrthographicCameraComponent::SetCoords);
 
     py::class_<Timestep>(m, "Timestep")
     .def(py::init<float>())

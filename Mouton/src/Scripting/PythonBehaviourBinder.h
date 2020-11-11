@@ -4,6 +4,7 @@
 #include "MoutonPch.h"
 #include "Core/Timestep.h"
 #include "MoutonComponents/SpriteComponent.h"
+#include "MoutonComponents/OrthographicCameraComponent.h"
 
 #include <pybind11/embed.h>
 
@@ -32,6 +33,24 @@ namespace Mouton
         SpriteComponent* m_ScriptedComponent;
         pybind11::object m_Instance;
     
+    private:
+        void UpdateAttributes();
+    };
+
+    class OrthographicCameraComponentScriptable : public PythonBinder
+    {
+    public:
+        OrthographicCameraComponentScriptable(const char* moduleName, OrthographicCameraComponent* comp);
+
+        virtual void OnSceneBegin() override;
+        virtual void OnSceneUpdate(Timestep delta) override;
+        virtual void OnSceneEnd()  override;
+
+    private:
+        const char* m_ModuleName;
+        OrthographicCameraComponent* m_ScriptedComponent;
+        pybind11::object m_Instance;
+
     private:
         void UpdateAttributes();
     };

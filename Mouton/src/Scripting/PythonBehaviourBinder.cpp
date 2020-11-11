@@ -65,5 +65,59 @@ namespace Mouton
         m_ScriptedComponent->rotation = py::cast<float>(m_Instance.attr("rotation"));
     }
 
+    OrthographicCameraComponentScriptable::OrthographicCameraComponentScriptable(const char* moduleName,
+            OrthographicCameraComponent* comp)
+        : m_ModuleName(moduleName), m_ScriptedComponent(comp), m_Instance()
+    {
+        try
+        {
+            m_Instance = py::module::import(m_ModuleName).attr(m_ModuleName)();
+        }
+        catch(const std::exception& e)
+        {
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+        }
+    }
+
+    void OrthographicCameraComponentScriptable::OnSceneBegin()
+    {
+        try
+        {
+            m_Instance.attr("OnSceneBegin")();
+        }
+        catch(std::exception& e)
+        {
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+        }
+    }
+
+    void OrthographicCameraComponentScriptable::OnSceneUpdate(Timestep delta)
+    {
+        try
+        {
+            m_Instance.attr("OnSceneUpdate")(delta);
+        }
+        catch(std::exception& e)
+        {
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+        }
+    }
+
+    void OrthographicCameraComponentScriptable::OnSceneEnd()
+    {
+        try
+        {
+            m_Instance.attr("OnSceneEnd")();
+        }
+        catch(std::exception& e)
+        {
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+        }
+    }
+
+    void OrthographicCameraComponentScriptable::UpdateAttributes()
+    {
+        // Nothing to do here, since the Python script should called the inherited methods
+    }
 
 } // namespace Mouton
