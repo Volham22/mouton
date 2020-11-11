@@ -79,7 +79,8 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
         [delta](Mouton::Component& comp) {
             auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
             behaviour.pythonBehaviour->OnSceneUpdate(delta);
-        });
+    });
+
     using Type = Mouton::Component::ComponentType;
 
     static ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_PassthruCentralNode;

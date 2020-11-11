@@ -115,9 +115,4 @@ namespace Mouton
         }
     }
 
-    void OrthographicCameraComponentScriptable::UpdateAttributes()
-    {
-        // Nothing to do here, since the Python script should called the inherited methods
-    }
-
 } // namespace Mouton

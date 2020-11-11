@@ -50,9 +50,6 @@ namespace Mouton
         const char* m_ModuleName;
         OrthographicCameraComponent* m_ScriptedComponent;
         pybind11::object m_Instance;
-
-    private:
-        void UpdateAttributes();
     };
 
 } // namespace Mouton
