@@ -7,6 +7,7 @@ class EditorLayer;
 
 #include "Ecs/Components.h"
 #include "Ecs/Scene.h"
+#include "Renderer/OrthographicCameraController.h"
 
 class SceneExplorer
 {
@@ -16,9 +17,13 @@ public:
 
     void InitProperties();
     void ShowSceneExplorer(Mouton::Scene& scene);
+    auto& GetUserCamera() { return m_CustomCamera; }
+    void SetUserCamera(std::shared_ptr<Mouton::OrthographicCameraController>& camera);
+    void SetDefaultCamera();
 
 private:
     Mouton::Component* m_ComponentShown;
+    std::shared_ptr<Mouton::OrthographicCamera> m_CustomCamera;
 
     Mouton::Component* CreateComponentFromType(Mouton::Scene& scene, Mouton::Component::ComponentType type,
         const std::string& name) const;

@@ -134,7 +134,10 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
 
     // Viewport rendering
     m_ViewportFramebuffer->Bind();
-    Mouton::Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
+    if(m_SceneExplorer.GetUserCamera())
+        Mouton::Renderer2D::BeginScene(m_SceneExplorer.GetUserCamera()->GetViewProjectionMatrix());
+    else
+        Mouton::Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
 
     m_Scene.ForEachComponents(Type::SpriteComponent, [](Mouton::Component& comp) {
         Mouton::SpriteComponent& sprite = static_cast<Mouton::SpriteComponent&>(comp);

@@ -12,8 +12,6 @@
 class EditorLayer : public Mouton::Layer
 {
 public:
-    friend SceneExplorer;
-
     EditorLayer();
     ~EditorLayer();
 

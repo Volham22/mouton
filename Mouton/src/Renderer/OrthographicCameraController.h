@@ -16,6 +16,7 @@ namespace Mouton
 
         glm::vec3& GetPosition() { return m_Position; }
         float& GetRotation() { return m_Rotation; }
+        auto GetCameraInstance() { return m_Camera; }
 
         void Move(const glm::vec3& movePosition);
         void Rotate(float angle);

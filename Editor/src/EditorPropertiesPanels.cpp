@@ -13,9 +13,9 @@ void EditorPropertiesPanels::ShowSpriteComponentPanel(Mouton::SpriteComponent* s
     s_Instance->ShowSpriteComponentPanelImpl(spriteComp);
 }
 
-void EditorPropertiesPanels::ShowOrthographicCameraComponent(Mouton::OrthographicCameraComponent* cameraComponent)
+void EditorPropertiesPanels::ShowOrthographicCameraComponent(Mouton::OrthographicCameraComponent* cameraComponent, SceneExplorer* scene)
 {
-    s_Instance->ShowOrthographicCameraBehaviourPanelImpl(cameraComponent);
+    s_Instance->ShowOrthographicCameraBehaviourPanelImpl(cameraComponent, scene);
 }
 
 void EditorPropertiesPanels::Init()
@@ -99,10 +99,32 @@ void EditorPropertiesPanels::ShowSpriteComponentPanelImpl(Mouton::SpriteComponen
 }
 
 
-void EditorPropertiesPanels::ShowOrthographicCameraBehaviourPanelImpl(Mouton::OrthographicCameraComponent* cameraComponent)
+void EditorPropertiesPanels::ShowOrthographicCameraBehaviourPanelImpl(Mouton::OrthographicCameraComponent* cameraComponent, SceneExplorer* scene)
 {
     ImGui::Text("Orthographic Camera Component");
 
-    ImGui::SliderFloat3("Camera position", glm::value_ptr(cameraComponent->GetPosition()), -1000.0f, 1000.0f, "%.3f", 5.0f);
-    ImGui::SliderFloat("Camera rotation", &cameraComponent->GetRotation(), -360.0f, 360.0f, "%.3f", 5.0f);
+    static glm::vec3 cameraComponentPosition = cameraComponent->GetPosition();
+    static float cameraComponentRotation = cameraComponent->GetRotation();
+
+    ImGui::SliderFloat3("Camera position", glm::value_ptr(cameraComponentPosition), -1000.0f, 1000.0f, "%.3f", 5.0f);
+    ImGui::SliderFloat("Camera rotation", &cameraComponentRotation, -360.0f, 360.0f, "%.3f", 5.0f);
+
+    const float buttonWidth = ImGui::GetContentRegionAvailWidth() / 2.0f;
+
+    if(ImGui::Button("Use default camera", { buttonWidth, 0.0f }))
+        scene->SetDefaultCamera();
+
+    ImGui::SameLine();
+
+    if(ImGui::Button("View camera in Viewport", { buttonWidth, 0.0f }))
+    {
+        auto&& controller = cameraComponent->GetCameraControllerInstance();
+        scene->SetUserCamera(controller);
+    }
+
+    if(ImGui::Button("Apply values", { ImGui::GetContentRegionAvailWidth(), 0.0f }))
+    {
+        cameraComponent->Move(cameraComponentPosition);
+        cameraComponent->Rotate(cameraComponentRotation);
+    }
 }

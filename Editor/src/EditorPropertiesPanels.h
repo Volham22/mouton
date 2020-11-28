@@ -5,6 +5,8 @@
 #include "MoutonComponents/SpriteComponent.h"
 #include "MoutonComponents/PythonBehaviourComponent.h"
 
+#include "SceneExplorer.h"
+
 #include "imgui.h"
 
 class EditorPropertiesPanels
@@ -14,7 +16,7 @@ public:
     static void Stop();
     static void LoadProjectTextures();
     static void ShowSpriteComponentPanel(Mouton::SpriteComponent* spriteComponent);
-    static void ShowOrthographicCameraComponent(Mouton::OrthographicCameraComponent* cameraComponent);
+    static void ShowOrthographicCameraComponent(Mouton::OrthographicCameraComponent* cameraComponent, SceneExplorer* scene);
     static void ShowPythonBehaviourComponentPanel(Mouton::PythonBehaviourComponent<Mouton::PythonBinder>* behaviourComponent)
     {
         ImGui::Text(("PythonBehaviour Script ! " + behaviourComponent->GetComponentName()).c_str());
@@ -33,7 +35,7 @@ private:
     EditorPropertiesPanels();
     void PopulateCache();
     void ShowSpriteComponentPanelImpl(Mouton::SpriteComponent* spriteComponent);
-    void ShowOrthographicCameraBehaviourPanelImpl(Mouton::OrthographicCameraComponent* cameraComponent);
+    void ShowOrthographicCameraBehaviourPanelImpl(Mouton::OrthographicCameraComponent* cameraComponent, SceneExplorer* scene);
 };
 
 #endif

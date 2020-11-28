@@ -20,7 +20,7 @@ static std::string CreateComponentComboList(Scene& scene);
 static std::string GetElementSequenceName(const std::string& sequence, int n);
 
 SceneExplorer::SceneExplorer()
-    : m_ComponentShown(nullptr)
+    : m_ComponentShown(nullptr), m_CustomCamera(nullptr)
 {
     EditorPropertiesPanels::Init();
 }
@@ -59,6 +59,16 @@ void SceneExplorer::ShowSceneExplorer(Scene &scene)
     }
 }
 
+void SceneExplorer::SetUserCamera(std::shared_ptr<OrthographicCameraController>& camera)
+{
+    m_CustomCamera = camera->GetCameraInstance();
+}
+
+void SceneExplorer::SetDefaultCamera()
+{
+    m_CustomCamera = nullptr;
+}
+
 Component* SceneExplorer::CreateComponentFromType(Scene& scene, Component::ComponentType type, const std::string &name) const
 {
     switch (type)
@@ -90,7 +100,7 @@ void SceneExplorer::ShowProperties()
         break;
 
     case Type::OrthographicCamera:
-        EditorPropertiesPanels::ShowOrthographicCameraComponent(static_cast<OrthographicCameraComponent*>(m_ComponentShown));
+        EditorPropertiesPanels::ShowOrthographicCameraComponent(static_cast<OrthographicCameraComponent*>(m_ComponentShown), this);
         break;
 
     default:
