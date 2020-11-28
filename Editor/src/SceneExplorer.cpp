@@ -322,24 +322,25 @@ SceneExplorer::~SceneExplorer()
     EditorPropertiesPanels::Stop();
 }
 
-// TODO: Handle different component type properly, for now it's only SpriteBehaviour
 bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
     const std::array<char, 255>& moduleName, Component* boundComponent, PythonBehaviourType type)
 {
-    ScriptSkeletonFactory::CreateSpriteComponentSkeleton(std::string(moduleName.data()));
     PythonBehaviourComponent<PythonBinder>* comp = nullptr;
 
     switch(type)
     {
     case PythonBehaviourType::SpriteBehaviour:
     {
+        ScriptSkeletonFactory::CreateSpriteComponentSkeleton(std::string(moduleName.data()), "SpriteComponentScriptTemplate.mtnt");
         auto spriteComp = new PythonBehaviourComponent<SpriteComponentScriptable>(name, moduleName.data(), static_cast<SpriteComponent*>(boundComponent));
         return scene.AddComponent(Component::ComponentType::PythonBehaviourComponent, spriteComp);
     }
 
     case PythonBehaviourType::OrthographicCameraBehaviour:
     {
-        auto orthoComp = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(name, moduleName.data(), static_cast<OrthographicCameraComponent*>(boundComponent));
+        ScriptSkeletonFactory::CreateSpriteComponentSkeleton(std::string(moduleName.data()), "OrthographicCameraScriptTemplate.mtnt");
+        auto orthoComp = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(name, moduleName.data(),
+            static_cast<OrthographicCameraComponent*>(boundComponent)->GetCameraControllerInstance());
         return scene.AddComponent(Component::ComponentType::PythonBehaviourComponent, orthoComp);
     }
 

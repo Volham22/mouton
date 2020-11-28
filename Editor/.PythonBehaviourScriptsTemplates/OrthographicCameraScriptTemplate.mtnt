@@ -3,8 +3,8 @@ import Mouton
 # Your additionnal imports goes here ...
 
 class %name%(Mouton.OrthographicCameraComponent):
-    def __init__(self):
-        Mouton.OrthographicCameraComponent.__init__(self, "%name%Component")
+    def __init__(self, cameraController):
+        Mouton.OrthographicCameraComponent.__init__(self, "%name%Component", cameraController)
         # Your members initialisation goes here ...
 
     """
