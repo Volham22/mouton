@@ -14,6 +14,7 @@ public:
     static void Stop();
     static void LoadProjectTextures();
     static void ShowSpriteComponentPanel(Mouton::SpriteComponent* spriteComponent);
+    static void ShowOrthographicCameraBehaviourPanel(Mouton::OrthographicCameraComponent* cameraComponent);
     static void ShowPythonBehaviourComponentPanel(Mouton::PythonBehaviourComponent<Mouton::PythonBinder>* behaviourComponent)
     {
         ImGui::Text(("PythonBehaviour Script ! " + behaviourComponent->GetComponentName()).c_str());
@@ -32,6 +33,7 @@ private:
     EditorPropertiesPanels();
     void PopulateCache();
     void ShowSpriteComponentPanelImpl(Mouton::SpriteComponent* spriteComponent);
+    void ShowOrthographicCameraBehaviourPanelImpl(Mouton::OrthographicCameraComponent* cameraComponent);
 };
 
 #endif

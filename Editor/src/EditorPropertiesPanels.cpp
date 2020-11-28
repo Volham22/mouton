@@ -13,6 +13,11 @@ void EditorPropertiesPanels::ShowSpriteComponentPanel(Mouton::SpriteComponent* s
     s_Instance->ShowSpriteComponentPanelImpl(spriteComp);
 }
 
+void EditorPropertiesPanels::ShowOrthographicCameraBehaviourPanel(Mouton::OrthographicCameraComponent* cameraComponent)
+{
+    s_Instance->ShowOrthographicCameraBehaviourPanelImpl(cameraComponent);
+}
+
 void EditorPropertiesPanels::Init()
 {
     s_Instance = new EditorPropertiesPanels();
@@ -91,4 +96,11 @@ void EditorPropertiesPanels::ShowSpriteComponentPanelImpl(Mouton::SpriteComponen
 
         ImGui::ColorEdit4("Color", glm::value_ptr(spriteComp->color));
     }
+}
+
+
+void EditorPropertiesPanels::ShowOrthographicCameraBehaviourPanelImpl(Mouton::OrthographicCameraComponent* cameraComponent)
+{
+    ImGui::Text("Orthographic Camera Component");
+
 }
