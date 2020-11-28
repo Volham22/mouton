@@ -76,8 +76,11 @@ Component* SceneExplorer::CreateComponentFromType(Scene& scene, Component::Compo
     case Component::ComponentType::SpriteComponent:
         return new SpriteComponent(name);
 
-    // case Component::ComponentType::PythonBehaviourComponent:
-    //     return AddPythonBehaviourComponent(scene, name, pythonModuleName, boundComponent);
+    case Component::ComponentType::OrthographicCamera:
+        return new OrthographicCameraComponent(name,
+            std::make_shared<Mouton::OrthographicCameraController>(
+                std::make_shared<Mouton::OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f)));
+        break;
 
     default:
         return nullptr;
@@ -197,7 +200,7 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
 
         // The item value must match with the Mouton::Component::ComponentType enum
         ImGui::Combo("Select Component Type", &item,
-                "SpriteComponent\0Behaviour Component\0Python Behaviour Component\0\0", 5);
+                "SpriteComponent\0Behaviour Component\0Python Behaviour Component\0Orthographic Camera Component\0\0", 5);
 
         ImGui::InputTextWithHint("Component Name", "type a name", nameBuffer, IM_ARRAYSIZE(nameBuffer));
         ImGui::Separator();
@@ -220,6 +223,14 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
             switch(toComponentType(item))
             {
             case Component::ComponentType::SpriteComponent:
+                if(!scene.AddComponent(toComponentType(item),
+                                                    CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
+                    ImGui::OpenPopup("Incorrect Name !");
+                else
+                    ImGui::CloseCurrentPopup();
+                break;
+
+            case Component::ComponentType::OrthographicCamera:
                 if(!scene.AddComponent(toComponentType(item),
                                                     CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
                     ImGui::OpenPopup("Incorrect Name !");
