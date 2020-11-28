@@ -10,6 +10,10 @@
 namespace Mouton
 {
 
+    enum class PythonBehaviourType : uint16_t {
+        Unknown = 0, SpriteBehaviour = 1, OrthographicCameraBehaviour = 2
+    };
+
     // Python Behaviour Component is here to hold any PythonBinder implementation
     // in order to be a component in the ECS.
     template<typename T>
