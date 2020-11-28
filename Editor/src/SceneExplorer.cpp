@@ -89,6 +89,10 @@ void SceneExplorer::ShowProperties()
         EditorPropertiesPanels::ShowPythonBehaviourComponentPanel(static_cast<PythonBehaviourComponent<PythonBinder>*>(m_ComponentShown));
         break;
 
+    case Type::OrthographicCamera:
+        EditorPropertiesPanels::ShowOrthographicCameraComponent(static_cast<OrthographicCameraComponent*>(m_ComponentShown));
+        break;
+
     default:
         MTN_WARN("Unknown Component Properties to show !");
     }

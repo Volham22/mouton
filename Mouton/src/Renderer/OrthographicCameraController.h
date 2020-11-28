@@ -14,6 +14,9 @@ namespace Mouton
         OrthographicCameraController() = delete;
         OrthographicCameraController(std::shared_ptr<OrthographicCamera> camera);
 
+        glm::vec3& GetPosition() { return m_Position; }
+        float& GetRotation() { return m_Rotation; }
+
         void Move(const glm::vec3& movePosition);
         void Rotate(float angle);
         void SetCoords(float left, float right, float top, float bottom, float near=-1.0f, float far=1.0f);

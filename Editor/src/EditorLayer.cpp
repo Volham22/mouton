@@ -39,17 +39,26 @@ EditorLayer::EditorLayer()
     {
         using Type = Mouton::Component::ComponentType;
 
+        auto cameraInstance =
+            std::make_shared<Mouton::OrthographicCameraController>(std::make_shared<Mouton::OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f));
+
         Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
         Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
         Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>* behaviour =
             new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSpriteScript", "RedSpriteScript", red);
+        Mouton::OrthographicCameraComponent* camera =
+            new Mouton::OrthographicCameraComponent(
+                "cameraComponent",
+                cameraInstance);
 
         m_Scene.AddComponent(Type::SpriteComponent, red);
         m_Scene.AddComponent(Type::SpriteComponent, green);
         m_Scene.AddComponent(Type::PythonBehaviourComponent, behaviour);
+        m_Scene.AddComponent(Type::OrthographicCamera, camera);
         m_Scene.AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
         m_Scene.AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "RedSpriteScript");
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
+        m_Scene.AddComponentToEntity("RedQuad", Type::OrthographicCamera, "cameraComponent");
     }
 }
 
