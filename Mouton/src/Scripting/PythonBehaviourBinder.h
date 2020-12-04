@@ -40,7 +40,8 @@ namespace Mouton
     class OrthographicCameraComponentScriptable : public PythonBinder
     {
     public:
-        OrthographicCameraComponentScriptable(const char* moduleName, OrthographicCameraComponent* comp);
+        OrthographicCameraComponentScriptable(const char* moduleName,
+           OrthographicCameraController* comp);
 
         virtual void OnSceneBegin() override;
         virtual void OnSceneUpdate(Timestep delta) override;
@@ -48,7 +49,6 @@ namespace Mouton
 
     private:
         const char* m_ModuleName;
-        OrthographicCameraComponent* m_ScriptedComponent;
         pybind11::object m_Instance;
     };
 

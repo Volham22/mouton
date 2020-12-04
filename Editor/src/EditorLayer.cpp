@@ -40,7 +40,7 @@ EditorLayer::EditorLayer()
         using Type = Mouton::Component::ComponentType;
 
         auto cameraInstance =
-            std::make_shared<Mouton::OrthographicCameraController>(std::make_shared<Mouton::OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f));
+            new Mouton::OrthographicCameraController(std::make_shared<Mouton::OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f));
 
         Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
         Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");

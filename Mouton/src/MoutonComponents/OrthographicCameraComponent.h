@@ -13,8 +13,10 @@ namespace Mouton
     {
     public:
         OrthographicCameraComponent(const std::string& name,
-            const std::shared_ptr<OrthographicCameraController>& controller);
+            OrthographicCameraController* controller);
         OrthographicCameraComponent() = delete;
+
+        ~OrthographicCameraComponent();
 
         glm::vec3& GetPosition() { return m_CameraController->GetPosition(); }
         float& GetRotation() { return m_CameraController->GetRotation(); }
@@ -26,7 +28,7 @@ namespace Mouton
                 float near=-1.0f, float far=1.0f);
 
     private:
-        std::shared_ptr<OrthographicCameraController> m_CameraController;
+        OrthographicCameraController* m_CameraController;
     };
 
 } // namespace Mouton

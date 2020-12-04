@@ -66,12 +66,12 @@ namespace Mouton
     }
 
     OrthographicCameraComponentScriptable::OrthographicCameraComponentScriptable(const char* moduleName,
-            OrthographicCameraComponent* comp)
-        : m_ModuleName(moduleName), m_ScriptedComponent(comp), m_Instance()
+           OrthographicCameraController* comp)
+        : m_ModuleName(moduleName), m_Instance()
     {
         try
         {
-            m_Instance = py::module::import(m_ModuleName).attr(m_ModuleName)();
+            m_Instance = py::module::import(m_ModuleName).attr(m_ModuleName)(comp);
         }
         catch(const std::exception& e)
         {
@@ -83,7 +83,7 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnSceneBegin")();
+            m_Instance.attr("OnBegin")();
         }
         catch(std::exception& e)
         {
@@ -95,7 +95,7 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnSceneUpdate")(delta);
+            m_Instance.attr("OnUpdate")(delta);
         }
         catch(std::exception& e)
         {
@@ -107,7 +107,7 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnSceneEnd")();
+            m_Instance.attr("OnEnd")();
         }
         catch(std::exception& e)
         {

@@ -18,7 +18,7 @@ public:
     void InitProperties();
     void ShowSceneExplorer(Mouton::Scene& scene);
     auto& GetUserCamera() { return m_CustomCamera; }
-    void SetUserCamera(std::shared_ptr<Mouton::OrthographicCameraController>& camera);
+    void SetUserCamera(Mouton::OrthographicCameraController* camera);
     void SetDefaultCamera();
 
 private:

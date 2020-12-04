@@ -4,7 +4,7 @@ namespace Mouton
 {
 
     OrthographicCameraComponent::OrthographicCameraComponent(const std::string& name,
-        const std::shared_ptr<OrthographicCameraController>& controller)
+        OrthographicCameraController* controller)
         : Component(ComponentType::OrthographicCamera, name, true), m_CameraController(controller)
     {
     }
@@ -23,6 +23,11 @@ namespace Mouton
             float top, float bottom, float near, float far)
     {
         m_CameraController->SetCoords(left, right, top, bottom, near, far);
+    }
+
+    OrthographicCameraComponent::~OrthographicCameraComponent()
+    {
+        delete m_CameraController;
     }
 
 } // namespace Mouton

@@ -77,8 +77,13 @@ PYBIND11_EMBEDDED_MODULE(Mouton, m)
     .def_readwrite("scale", &SpriteComponent::scale)
     .def_readwrite("isTextured", &SpriteComponent::isTextured);
 
+    // This object is not supposed to be used in the python side
+    // it's to make the Python interpreter happy while instancing
+    // a class derived from OrthographicCameraComponent
+    py::class_<OrthographicCameraController>(m, "OrthographicCameraController");
+
     py::class_<OrthographicCameraComponent>(m, "OrthographicCameraComponent")
-    .def(py::init<const std::string&, const std::shared_ptr<OrthographicCameraController>&>())
+    .def(py::init<const std::string&, OrthographicCameraController*>())
     .def("Move", &OrthographicCameraComponent::Move)
     .def("Rotate", &OrthographicCameraComponent::Rotate)
     .def("SetCoords", &OrthographicCameraComponent::SetCoords);

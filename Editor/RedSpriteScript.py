@@ -26,9 +26,9 @@ class RedSpriteScript(Mouton.SpriteComponent):
 
         incX = delta * math.cos(self.frame) * 10.0
         incY = delta * math.sin(self.frame) * 10.0
-        
-        self.position.x += incX
-        self.position.y += incY
+
+        # self.position.x += incX
+        # self.position.y += incY
         self.scale.x += incX
         self.scale.y += incY
 

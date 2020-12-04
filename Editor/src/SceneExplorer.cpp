@@ -59,7 +59,7 @@ void SceneExplorer::ShowSceneExplorer(Scene &scene)
     }
 }
 
-void SceneExplorer::SetUserCamera(std::shared_ptr<OrthographicCameraController>& camera)
+void SceneExplorer::SetUserCamera(OrthographicCameraController* camera)
 {
     m_CustomCamera = camera->GetCameraInstance();
 }
@@ -78,7 +78,7 @@ Component* SceneExplorer::CreateComponentFromType(Scene& scene, Component::Compo
 
     case Component::ComponentType::OrthographicCamera:
         return new OrthographicCameraComponent(name,
-            std::make_shared<Mouton::OrthographicCameraController>(
+            new OrthographicCameraController(
                 std::make_shared<Mouton::OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f)));
         break;
 
