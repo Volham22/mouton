@@ -11,6 +11,7 @@
 #include "MoutonComponents/PythonBehaviourComponent.h"
 #include "Scripting/PythonBehaviourBinder.h"
 #include "Scripting/PythonScriptEngine.h"
+#include "Scripting/ScriptSkeletonFactory.h"
 
 #include "EditorPropertiesPanels.h"
 #include "SceneExplorer.h"
@@ -50,15 +51,20 @@ EditorLayer::EditorLayer()
             new Mouton::OrthographicCameraComponent(
                 "cameraComponent",
                 cameraInstance);
+        // Mouton::ScriptSkeletonFactory::CreateSpriteComponentSkeleton("CameraBehaviour", "OrthographicCameraScriptTemplate.mtnt");
+        auto orthoBehaviour = new
+            Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour",cameraInstance);
 
         m_Scene.AddComponent(Type::SpriteComponent, red);
         m_Scene.AddComponent(Type::SpriteComponent, green);
         m_Scene.AddComponent(Type::PythonBehaviourComponent, behaviour);
         m_Scene.AddComponent(Type::OrthographicCamera, camera);
+        m_Scene.AddComponent(Type::PythonBehaviourComponent, orthoBehaviour);
         m_Scene.AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
         m_Scene.AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "RedSpriteScript");
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
         m_Scene.AddComponentToEntity("RedQuad", Type::OrthographicCamera, "cameraComponent");
+        m_Scene.AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "CameraBehaviour");
     }
 }
 

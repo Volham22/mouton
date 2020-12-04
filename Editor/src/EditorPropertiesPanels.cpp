@@ -103,11 +103,9 @@ void EditorPropertiesPanels::ShowOrthographicCameraBehaviourPanelImpl(Mouton::Or
 {
     ImGui::Text("Orthographic Camera Component");
 
-    static glm::vec3 cameraComponentPosition = cameraComponent->GetPosition();
-    static float cameraComponentRotation = cameraComponent->GetRotation();
 
-    ImGui::SliderFloat3("Camera position", glm::value_ptr(cameraComponentPosition), -1000.0f, 1000.0f, "%.3f", 5.0f);
-    ImGui::SliderFloat("Camera rotation", &cameraComponentRotation, -360.0f, 360.0f, "%.3f", 5.0f);
+    ImGui::SliderFloat3("Camera position", glm::value_ptr(cameraComponent->GetPosition()), -1000.0f, 1000.0f, "%.3f", 5.0f);
+    ImGui::SliderFloat("Camera rotation", &cameraComponent->GetRotation(), -360.0f, 360.0f, "%.3f", 5.0f);
 
     const float buttonWidth = ImGui::GetContentRegionAvailWidth() / 2.0f;
 
@@ -124,7 +122,7 @@ void EditorPropertiesPanels::ShowOrthographicCameraBehaviourPanelImpl(Mouton::Or
 
     if(ImGui::Button("Apply values", { ImGui::GetContentRegionAvailWidth(), 0.0f }))
     {
-        cameraComponent->Move(cameraComponentPosition);
-        cameraComponent->Rotate(cameraComponentRotation);
+        cameraComponent->Move(cameraComponent->GetPosition());
+        cameraComponent->Rotate(cameraComponent->GetRotation());
     }
 }
