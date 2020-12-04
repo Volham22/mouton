@@ -6,7 +6,7 @@ from math import sin, cos
 class CameraBehaviour(Mouton.OrthographicCameraComponent):
     def __init__(self, cameraController):
         Mouton.OrthographicCameraComponent.__init__(self, "CameraBehaviourComponent", cameraController)
-        # Your members initialisation goes here ...
+        self.m_FrameCount = 0.0
 
     """
     Call once when the scene begin (not implemented in the Engine yet)
@@ -21,9 +21,11 @@ class CameraBehaviour(Mouton.OrthographicCameraComponent):
         Timestep delta : the actual frametime
     """
     def OnUpdate(self, delta):
-        move = Mouton.Vector3(0.1, 0.1, 0.0)
-        # self.Move(move)
-        # self.Rotate(1.0)
+        move = Mouton.Vector3(cos(self.m_FrameCount * delta.GetSeconds()),
+            sin(self.m_FrameCount * delta.GetSeconds()), 0.0) * 5
+        self.Translate(move)
+
+        self.m_FrameCount += 0.1
 
     """
     Called once when the Scene end (not implemented in the Engine yet)

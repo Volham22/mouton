@@ -32,6 +32,7 @@ PYBIND11_EMBEDDED_MODULE(Mouton, m)
 
     py::class_<glm::vec3>(m, "Vector3")
     .def(py::init<float>())
+    .def(py::init<float, float, float>())
     .def("length", &glm::vec3::length)
     .def(py::self * py::self)
     .def(py::self *= py::self)
@@ -85,6 +86,7 @@ PYBIND11_EMBEDDED_MODULE(Mouton, m)
     py::class_<OrthographicCameraComponent>(m, "OrthographicCameraComponent")
     .def(py::init<const std::string&, OrthographicCameraController*>())
     .def("Move", &OrthographicCameraComponent::Move)
+    .def("Translate", &OrthographicCameraComponent::Translate)
     .def("Rotate", &OrthographicCameraComponent::Rotate)
     .def("SetCoords", &OrthographicCameraComponent::SetCoords);
 

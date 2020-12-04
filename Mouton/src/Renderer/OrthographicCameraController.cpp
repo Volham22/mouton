@@ -11,7 +11,13 @@ namespace Mouton
     void OrthographicCameraController::Move(const glm::vec3& movePosition)
     {
         m_Position += movePosition;
-        m_Camera->SetPosition(movePosition);
+        m_Camera->SetPosition(m_Position);
+    }
+
+    void OrthographicCameraController::Translate(const glm::vec3& position)
+    {
+        m_Position = position;
+        m_Camera->SetPosition(m_Position);
     }
 
     void OrthographicCameraController::Rotate(float angle)

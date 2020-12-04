@@ -122,7 +122,7 @@ void EditorPropertiesPanels::ShowOrthographicCameraBehaviourPanelImpl(Mouton::Or
 
     if(ImGui::Button("Apply values", { ImGui::GetContentRegionAvailWidth(), 0.0f }))
     {
-        cameraComponent->Move(cameraComponent->GetPosition());
+        cameraComponent->Translate(cameraComponent->GetPosition());
         cameraComponent->Rotate(cameraComponent->GetRotation());
     }
 }

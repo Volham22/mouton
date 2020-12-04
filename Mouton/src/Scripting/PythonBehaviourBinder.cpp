@@ -96,6 +96,8 @@ namespace Mouton
         try
         {
             m_Instance.attr("OnUpdate")(delta);
+
+            
         }
         catch(std::exception& e)
         {

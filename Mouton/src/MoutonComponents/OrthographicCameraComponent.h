@@ -23,6 +23,7 @@ namespace Mouton
         auto GetCameraControllerInstance() { return m_CameraController; }
 
         void Move(const glm::vec3& movePosition);
+        void Translate(const glm::vec3& position);
         void Rotate(float angle);
         void SetCoords(float left, float right, float top, float bottom,
                 float near=-1.0f, float far=1.0f);
