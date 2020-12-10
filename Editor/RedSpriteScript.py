@@ -34,6 +34,9 @@ class RedSpriteScript(Mouton.SpriteComponent):
 
         self.frame += delta.GetSeconds()
 
+        for i in range(4):
+            self.color[i] = 1.0
+
     """
     Called once when the Scene end (not implemented in the Engine yet)
     """
