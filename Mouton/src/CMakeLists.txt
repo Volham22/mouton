@@ -55,4 +55,5 @@ set(MTN_SRC
     src/Scripting/PythonBehaviourBinder.cpp
     src/Scripting/PythonCoreAPI.cpp
     src/Scripting/ScriptSkeletonFactory.cpp
+    src/Scripting/InternalTypesUtilities.cpp
     PARENT_SCOPE)

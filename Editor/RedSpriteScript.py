@@ -34,6 +34,12 @@ class RedSpriteScript(Mouton.SpriteComponent):
 
         self.frame += delta.GetSeconds()
 
+        vector = Mouton.Vector3(1.0)
+        Mouton.Core.Print(vector.ToString())
+        Mouton.Core.Print(Mouton.Vector2(0.0).ToString())
+        Mouton.Core.Print(Mouton.Vector4(0.0).ToString())
+        Mouton.Core.Print(delta.ToString())
+
     """
     Called once when the Scene end (not implemented in the Engine yet)
     """
