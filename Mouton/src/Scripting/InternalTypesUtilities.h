@@ -7,11 +7,16 @@
 #include <typeinfo>
 #include <sstream>
 
+#include <pybind11/embed.h>
+
+namespace py = pybind11;
+
 namespace Mouton
 {
 
     class InternalTypeUtils
     {
+
     public:
         template<typename T>
         static std::string ToString(const T& obj)
@@ -24,6 +29,44 @@ namespace Mouton
             }
 
             return typeid(obj).name();
+        }
+
+        template<typename T, typename U>
+        static void AssignMatrixIndex(T& matrix, const py::tuple& args, const U& value)
+        {
+            if(args.size() > 2)
+                throw std::out_of_range("Incorrect number of arguments passed to __setitem__");
+
+            if constexpr(std::is_arithmetic_v<U>)
+            {
+                int32_t row = py::cast<float>(args[0]);
+                int32_t column = py::cast<float>(args[1]);
+
+                matrix[row][column] = value;
+            }
+            else
+            {
+                int32_t index = py::cast<int32_t>(args[0]);
+                matrix[index] = value;
+            }
+        }
+
+        template<typename T>
+        static float GetMatrix2DIndex(const T& matrix, const py::tuple& args)
+        {
+            if(args.size() > 2)
+                throw std::out_of_range("Incorrect number of arguments passed to __setitem__");
+
+            int32_t row = py::cast<int32_t>(args[0]);
+            int32_t column = py::cast<int32_t>(args[1]);
+
+            return matrix[row][column];
+        }
+
+        template<typename T, typename Return>
+        static Return GetMatrixIndex(const T& matrix, int32_t key)
+        {
+            return matrix[key];
         }
     };
 
