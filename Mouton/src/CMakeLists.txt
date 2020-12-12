@@ -56,4 +56,5 @@ set(MTN_SRC
     src/Scripting/PythonCoreAPI.cpp
     src/Scripting/ScriptSkeletonFactory.cpp
     src/Scripting/InternalTypesUtilities.cpp
+    src/Scripting/PythonInternalTypesMathUtils.cpp
     PARENT_SCOPE)

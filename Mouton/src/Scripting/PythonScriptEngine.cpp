@@ -6,11 +6,17 @@
 #include "MoutonComponents/SpriteComponent.h"
 #include "MoutonComponents/PythonBehaviourComponent.h"
 #include "InternalTypesUtilities.h"
+#include "PythonInternalTypesMathUtils.h"
 
 #include <pybind11/embed.h>
 #include <pybind11/operators.h>
 
 // namespace py = pybind11;
+
+int add(int a, int b)
+{
+    return a + b;
+}
 
 PYBIND11_EMBEDDED_MODULE(Mouton, m)
 {
@@ -164,6 +170,14 @@ PYBIND11_EMBEDDED_MODULE(Mouton, m)
 
     py::class_<PythonAPI::Core>(m, "Core")
     .def_static("Print", &PythonAPI::Core::Print);
+
+    py::class_<PythonInternalMath>(m, "Math")
+    .def("Cross", [](const glm::vec3& x, const glm::vec3& y) {
+        return glm::cross(x ,y);
+    })
+    .def("Normalize", [](const glm::vec2& x) { return glm::normalize(x); })
+    .def("Normalize", [](const glm::vec3& x) { return glm::normalize(x); })
+    .def("Normalize", [](const glm::vec4& x) { return glm::normalize(x); });
 }
 
 namespace Mouton
