@@ -34,13 +34,10 @@ class RedSpriteScript(Mouton.SpriteComponent):
 
         self.frame += delta.GetSeconds()
 
-        matrice = Mouton.Matrix4(1.0)
+        matrice = Mouton.Matrix3(1.0)
         matrice[0, 1] = 5.0
 
-        for i in range(4):
-            for j in range(4):
-                print(matrice[i, j], end=' ')
-            print()
+        print(matrice)
 
     """
     Called once when the Scene end (not implemented in the Engine yet)

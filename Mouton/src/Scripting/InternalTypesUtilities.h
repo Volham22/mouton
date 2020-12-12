@@ -18,7 +18,7 @@ namespace Mouton
     {
 
     public:
-        template<typename T>
+        template<typename T, typename... Args>
         static std::string ToString(const T& obj)
         {
             if constexpr(std::is_arithmetic_v<T>)
@@ -29,6 +29,25 @@ namespace Mouton
             }
 
             return typeid(obj).name();
+        }
+
+        template<int32_t T, int32_t U, typename V>
+        static std::string ToMatString(const glm::mat<T, U, V>& m)
+        {
+            static_assert(std::is_arithmetic_v<V>, "Matrix type must be arithmetic !");
+
+            std::stringstream ss;
+
+            ss << "Matrix of " << T << " x " << U << '\n';
+            for(int32_t i = 0; i < T; i++)
+            {
+                for(int32_t j = 0; j < U; j++)
+                    ss << m[i][j] << ' ';
+
+                ss << '\n';
+            }
+
+            return ss.str();
         }
 
         template<typename T, typename U>
