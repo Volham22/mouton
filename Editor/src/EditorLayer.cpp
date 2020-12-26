@@ -15,6 +15,7 @@
 
 #include "EditorPropertiesPanels.h"
 #include "SceneExplorer.h"
+#include "BarMenu.h"
 
 #include <rapidjson/prettywriter.h>
 
@@ -67,12 +68,6 @@ EditorLayer::EditorLayer()
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
         m_Scene.AddComponentToEntity("RedQuad", Type::OrthographicCamera, "cameraComponent");
         m_Scene.AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "CameraBehaviour");
-
-        rapidjson::StringBuffer sb;
-        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
-
-        m_Scene.Serialize(writer);
-        MTN_INFO("JSON scene \n{}", sb.GetString());
     }
 }
 
@@ -126,7 +121,7 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
 
     ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
     ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockFlags);
-
+    BarMenu::ShowMenu(m_Scene);
     ImGui::End();
 
     ImGui::Begin("Game Viewport");

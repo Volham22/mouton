@@ -92,7 +92,7 @@ namespace Mouton
         }
 
         template<typename Writer>
-        void Serialize(Writer& writer)
+        void Serialize(Writer& writer) const
         {
             using ComponentType = Component::ComponentType;
 
