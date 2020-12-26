@@ -17,6 +17,9 @@ namespace Mouton
         virtual void OnSceneBegin() = 0;
         virtual void OnSceneUpdate(Timestep delta) = 0;
         virtual void OnSceneEnd() = 0;
+
+        virtual const char* GetScriptableName() const = 0;
+        virtual const char* GetModuleName() const = 0;
     };
 
     class SpriteComponentScriptable : public PythonBinder
@@ -27,7 +30,10 @@ namespace Mouton
         virtual void OnSceneBegin() override;
         virtual void OnSceneUpdate(Timestep delta) override;
         virtual void OnSceneEnd()  override;
-    
+
+        virtual const char* GetScriptableName() const override { return "SpriteComponent"; }
+        virtual const char* GetModuleName() const override { return m_ModuleName; };
+
     private:
         const char* m_ModuleName;
         SpriteComponent* m_ScriptedComponent;
@@ -46,6 +52,9 @@ namespace Mouton
         virtual void OnSceneBegin() override;
         virtual void OnSceneUpdate(Timestep delta) override;
         virtual void OnSceneEnd()  override;
+
+        virtual const char* GetScriptableName() const override { return "SpriteComponent"; }
+        virtual const char* GetModuleName() const override { return m_ModuleName; };
 
     private:
         const char* m_ModuleName;

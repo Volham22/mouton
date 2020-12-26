@@ -17,12 +17,42 @@ namespace Mouton
         bool isTextured = false;
         std::shared_ptr<Texture2D> texture = nullptr;
 
-
         SpriteComponent(const std::string& name = "SpriteComponent",
             Component::ComponentType type = ComponentType::SpriteComponent);
         SpriteComponent(std::shared_ptr<Texture2D>& texture,
             const std::string& name = "SpriteComponent",
             Component::ComponentType type = ComponentType::SpriteComponent);
+
+        template<typename Writer>
+        void Serialize(Writer& writer)
+        {
+            writer.String("Color");
+            writer.StartArray();
+            writer.Double(static_cast<double>(color.r));
+            writer.Double(static_cast<double>(color.g));
+            writer.Double(static_cast<double>(color.b));
+            writer.Double(static_cast<double>(color.a));
+            writer.EndArray();
+
+            writer.String("Position");
+            writer.StartArray();
+            writer.Double(static_cast<double>(position.x));
+            writer.Double(static_cast<double>(position.y));
+            writer.Double(static_cast<double>(position.z));
+            writer.EndArray();
+
+            writer.String("Scale");
+            writer.StartArray();
+            writer.Double(static_cast<double>(scale.x));
+            writer.Double(static_cast<double>(scale.y));
+            writer.EndArray();
+
+            writer.String("IsTextured");
+            writer.Bool(isTextured);
+
+            // TODO: Serialize texture
+            // texture->Serialize();
+        }
     };
 
 } // namespace Mouton

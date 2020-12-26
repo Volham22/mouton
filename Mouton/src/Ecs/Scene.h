@@ -5,6 +5,11 @@
 #include "Entity.h"
 #include "Components.h"
 
+#include "MoutonComponents/OrthographicCameraComponent.h"
+#include "MoutonComponents/PythonBehaviourComponent.h"
+#include "MoutonComponents/SpriteComponent.h"
+#include "Scripting/ElementBehaviour.h"
+
 namespace Mouton
 {
 
@@ -84,6 +89,54 @@ namespace Mouton
             auto&& recVec = GetComponents(args...);
             recVec.insert(recVec.end(), append.begin(), append.end());
             return recVec;
+        }
+
+        template<typename Writer>
+        void Serialize(Writer& writer)
+        {
+            using ComponentType = Component::ComponentType;
+
+            writer.StartObject();
+
+            for(auto&[type, components] : m_SceneData)
+            {
+                writer.String(Component::TypeToString(type));
+                writer.StartArray();
+
+                for(auto&[name, component] : components)
+                {
+                    writer.StartObject();
+                    writer.String("Name");
+                    writer.String(name.c_str());
+
+                    switch(type)
+                    {
+                    // case ComponentType::BehaviourComponent:
+                    //     static_cast<ElementBehaviour*>(component)->Serialize(writer);
+                    //     break;
+
+                    case ComponentType::OrthographicCamera:
+                        static_cast<OrthographicCameraComponent*>(component)->Serialize(writer);
+                        break;
+
+                    case ComponentType::PythonBehaviourComponent:
+                        static_cast<PythonBehaviourComponent<PythonBinder>*>(component)->Serialize(writer);
+                        break;
+
+                    case ComponentType::SpriteComponent:
+                        static_cast<SpriteComponent*>(component)->Serialize(writer);
+                        break;
+                    
+                    // default:
+                    }
+
+                    writer.EndObject();
+                }
+
+                writer.EndArray();
+            }
+
+            writer.EndObject();
         }
 
     private:

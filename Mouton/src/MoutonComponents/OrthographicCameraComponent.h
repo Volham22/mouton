@@ -28,6 +28,20 @@ namespace Mouton
         void SetCoords(float left, float right, float top, float bottom,
                 float near=-1.0f, float far=1.0f);
 
+        template<typename Writer>
+        void Serialize(Writer& writer) const
+        {
+            writer.String("Position");
+            writer.StartArray();
+            writer.Double(static_cast<double>(m_CameraController->GetPosition().x));
+            writer.Double(static_cast<double>(m_CameraController->GetPosition().y));
+            writer.Double(static_cast<double>(m_CameraController->GetPosition().z));
+            writer.EndArray();
+
+            writer.String("Rotation");
+            writer.Double(static_cast<double>(m_CameraController->GetRotation()));
+        }
+
     private:
         OrthographicCameraController* m_CameraController;
     };

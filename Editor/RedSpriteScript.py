@@ -37,7 +37,7 @@ class RedSpriteScript(Mouton.SpriteComponent):
         matrice = Mouton.Matrix3(1.0)
         matrice[0, 1] = 5.0
 
-        print(matrice)
+        # print(matrice)
 
     """
     Called once when the Scene end (not implemented in the Engine yet)

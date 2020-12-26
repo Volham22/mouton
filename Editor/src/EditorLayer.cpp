@@ -16,6 +16,8 @@
 #include "EditorPropertiesPanels.h"
 #include "SceneExplorer.h"
 
+#include <rapidjson/prettywriter.h>
+
 
 EditorLayer::EditorLayer()
     : Layer("Editor Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(),
@@ -65,6 +67,12 @@ EditorLayer::EditorLayer()
         m_Scene.AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
         m_Scene.AddComponentToEntity("RedQuad", Type::OrthographicCamera, "cameraComponent");
         m_Scene.AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "CameraBehaviour");
+
+        rapidjson::StringBuffer sb;
+        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
+
+        m_Scene.Serialize(writer);
+        MTN_INFO("JSON scene \n{}", sb.GetString());
     }
 }
 

@@ -28,6 +28,8 @@ namespace Mouton
         const std::string& GetComponentName() const {  return p_Name; };
         bool IsScriptable() const { return p_IsScriptable; };
 
+        static const char* TypeToString(ComponentType type);
+
     protected:
         ComponentType p_Type;
         std::string p_Name;

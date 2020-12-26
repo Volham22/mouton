@@ -34,5 +34,26 @@ namespace Mouton
         return p_ComponentID != other.p_ComponentID;
     }
 
+    const char* Component::TypeToString(ComponentType type)
+    {
+        switch(type)
+        {
+        case ComponentType::Any:
+            return "Any";
+
+        case ComponentType::BehaviourComponent:
+            return "BehaviourComponent";
+
+        case ComponentType::OrthographicCamera:
+            return "OrthographicCamera";
+
+        case ComponentType::PythonBehaviourComponent:
+            return "PythonBehaviour";
+
+        case ComponentType::SpriteComponent:
+            return "SpriteComponent";
+        }
+    }
+
 
 } // namespace Mouton

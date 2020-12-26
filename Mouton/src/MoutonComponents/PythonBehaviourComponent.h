@@ -33,6 +33,15 @@ namespace Mouton
         {
             return static_cast<PythonBehaviourComponent<PythonBinder>&>(comp);
         }
+
+        template<typename Writer>
+        void Serialize(Writer& writer)
+        {
+            writer.String("Type");
+            writer.String(pythonBehaviour->GetScriptableName());
+            writer.String("ModuleName");
+            writer.String(pythonBehaviour->GetModuleName());
+        }
     };
 
 } // namespace Mouton
