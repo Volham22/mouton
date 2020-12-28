@@ -1,0 +1,90 @@
+{
+    "OrthographicCamera": [
+        {
+            "Name": "cameraComponent",
+            "Ids": [
+                1
+            ],
+            "Position": [
+                4.741113185882568,
+                1.5880321264266968,
+                0.0
+            ],
+            "Rotation": 0.0
+        }
+    ],
+    "PythonBehaviour": [
+        {
+            "Name": "CameraBehaviour",
+            "Ids": [
+                1
+            ],
+            "Type": "OrthographicCameraComponent",
+            "ModuleName": "CameraBehaviour",
+            "BoundComponent": null
+        },
+        {
+            "Name": "RedSpriteScript",
+            "Ids": [
+                1
+            ],
+            "Type": "SpriteComponent",
+            "ModuleName": "RedSpriteScript",
+            "BoundComponent": "RedSprite"
+        }
+    ],
+    "SpriteComponent": [
+        {
+            "Name": "GreenSprite",
+            "Ids": [
+                2
+            ],
+            "Color": [
+                1.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "Position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "Scale": [
+                1.0,
+                1.0
+            ],
+            "IsTextured": false
+        },
+        {
+            "Name": "RedSprite",
+            "Ids": [
+                1
+            ],
+            "Color": [
+                0.5,
+                0.800000011920929,
+                0.20000000298023225,
+                1.0
+            ],
+            "Position": [
+                50.0,
+                50.0,
+                0.0
+            ],
+            "Scale": [
+                0.7746061682701111,
+                24.53764533996582
+            ],
+            "IsTextured": false
+        }
+    ],
+    "Entities": [
+        {
+            "GreenQuad": 2
+        },
+        {
+            "RedQuad": 1
+        }
+    ]
+}

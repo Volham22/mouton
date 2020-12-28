@@ -1,5 +1,9 @@
 #include "Scene.h"
 
+#include <rapidjson/document.h>
+
+#include "Core/Utils/StringHash.h"
+
 namespace Mouton
 {
 
@@ -9,6 +13,20 @@ namespace Mouton
         if(components.find(componentName) == components.end()) return false;
 
         if(components[componentName]->AddEntityID(m_Entities[entityName]->GetID()))
+        {
+            m_ComponentsReferenceCount[componentName]++;
+            return true;
+        }
+        else
+            return false;
+    }
+
+    bool Scene::AddComponentToEntity(const uint16_t entityId, Component::ComponentType type, const std::string& componentName)
+    {
+        auto& components = m_SceneData[type];
+        if(components.find(componentName) == components.end()) return false;
+
+        if(components[componentName]->AddEntityID(entityId))
         {
             m_ComponentsReferenceCount[componentName]++;
             return true;
@@ -157,6 +175,99 @@ namespace Mouton
     {
         for(auto&[name, entity] : m_Entities)
             callback((*entity));
+    }
+
+    Scene Scene::FromJson(const std::string& json)
+    {
+        rapidjson::Document document;
+        document.Parse(json.c_str());
+        Scene scene;
+
+        constexpr size_t HASH_SPRITE_COMPONENT          = Utils::StringHash::HashString("SpriteComponent");
+        constexpr size_t HASH_BEHAVIOUR_COMPONENT       = Utils::StringHash::HashString("BehaviourComponent");
+        constexpr size_t HASH_PYTHONBEHAVIOUR_COMPONENT = Utils::StringHash::HashString("PythonBehaviourComponent");
+        constexpr size_t HASH_ORTHOGRAPHIC_CAMERA       = Utils::StringHash::HashString("OrthographicCamera");
+
+        const auto& entities = document["Entities"].GetArray();
+
+        for(auto& val : entities)
+        {
+            Entity* entity = nullptr;
+
+            for(auto it = val.MemberBegin(); it != val.MemberEnd(); it++)
+                entity = new Entity(it->name.GetString(), it->value.GetInt());
+
+            scene.AddEntity(entity);
+        }
+
+        for(auto it = document.MemberBegin(); it != document.MemberEnd(); it++)
+        {
+            auto& value = it->value;
+            size_t hashName = Utils::StringHash::HashString(std::string(it->name.GetString()));
+
+            for(auto objIt = value.MemberBegin(); objIt != value.MemberEnd(); objIt++)
+            {
+                switch(hashName)
+                {
+                case HASH_SPRITE_COMPONENT:
+                {
+                    Component* comp = SpriteComponent::LoadJson(value);
+                    scene.AddComponent(Component::ComponentType::SpriteComponent, comp);
+                    scene.BindEntities(value, comp);
+                    break;
+                }
+
+                case HASH_BEHAVIOUR_COMPONENT:
+                {
+                    Component* comp = SpriteComponent::LoadJson(value);
+                    scene.AddComponent(Component::ComponentType::BehaviourComponent, comp);
+                    scene.BindEntities(value, comp);
+                    break;
+                }
+
+                case HASH_PYTHONBEHAVIOUR_COMPONENT:
+                {
+                    Component* comp = PythonBehaviourComponent<PythonBinder>::LoadJson(value);
+                    scene.AddComponent(Component::ComponentType::PythonBehaviourComponent, comp);
+                    scene.BindEntities(value, comp);
+                    break;
+                }
+
+                case HASH_ORTHOGRAPHIC_CAMERA:
+                {
+                    Component* comp = OrthographicCameraComponent::LoadJson(value);
+                    scene.AddComponent(Component::ComponentType::OrthographicCamera, comp);
+                    scene.BindEntities(value, comp);
+                    break;
+                }
+
+                default:
+                    MTN_ERROR("Failed to determine type {0} with hash {1}", it->name.GetString(), hashName);
+                }
+            }
+        }
+
+        // Bind scritpted components to python behaviours if any
+        if(document.HasMember("PythonBehaviour"))
+        {
+            const auto& pythonBehaviours = document["PythonBehaviour"].GetArray();
+
+            for(auto& val : pythonBehaviours)
+            {
+                if(val["BoundComponent"].IsNull()) continue;
+
+                std::string name = val["Name"].GetString();
+                PythonBehaviourComponent<PythonBinder>* pythonBehaviour =
+                    static_cast<PythonBehaviourComponent<PythonBinder>*>(scene.GetComponentByName(name));
+
+                std::string boundName = val["BoundComponent"].GetString();
+                Component* boundComponent = scene.GetComponentByName(boundName);
+
+                pythonBehaviour->pythonBehaviour->SetBoundComponent(boundComponent);
+            }
+        }
+
+        return scene;
     }
 
     Scene::~Scene()

@@ -20,6 +20,9 @@ namespace Mouton
 
         virtual const char* GetScriptableName() const = 0;
         virtual const char* GetModuleName() const = 0;
+        virtual Component* GetBoundComponent() const = 0;
+
+        virtual void SetBoundComponent(Component* component) = 0;
     };
 
     class SpriteComponentScriptable : public PythonBinder
@@ -32,7 +35,10 @@ namespace Mouton
         virtual void OnSceneEnd()  override;
 
         virtual const char* GetScriptableName() const override { return "SpriteComponent"; }
-        virtual const char* GetModuleName() const override { return m_ModuleName; };
+        virtual const char* GetModuleName() const override { return m_ModuleName; }
+        virtual Component* GetBoundComponent() const override { return m_ScriptedComponent; }
+
+        virtual void SetBoundComponent(Component* component) override;
 
     private:
         const char* m_ModuleName;
@@ -53,8 +59,11 @@ namespace Mouton
         virtual void OnSceneUpdate(Timestep delta) override;
         virtual void OnSceneEnd()  override;
 
-        virtual const char* GetScriptableName() const override { return "SpriteComponent"; }
-        virtual const char* GetModuleName() const override { return m_ModuleName; };
+        virtual const char* GetScriptableName() const override { return "OrthographicCameraComponent"; }
+        virtual const char* GetModuleName() const override { return m_ModuleName; }
+        virtual Component* GetBoundComponent() const override { return nullptr; }
+
+        virtual void SetBoundComponent(Component* component) override;
 
     private:
         const char* m_ModuleName;

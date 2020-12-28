@@ -9,7 +9,7 @@
 // Show a file dialog to save the serialized scene
 static void saveToFile(const std::string& json)
 {
-    FILE* fileDialogPipe = popen("zenity --file-selection --save", "r");
+    FILE* fileDialogPipe = popen("zenity --file-selection --save --title=\"Save scene as ...\"", "r");
 
     if(fileDialogPipe)
     {
@@ -18,18 +18,21 @@ static void saveToFile(const std::string& json)
         while(!feof(fileDialogPipe))
             fgets(name, sizeof(name), fileDialogPipe);
 
-        char* transformedName = strtok(name, "\n");
-        sprintf(transformedName, "%s.mtnscn", name);
-        MTN_INFO("Selected path {}", transformedName);
-        FILE* saveFile = fopen(transformedName, "w");
-
-        if(saveFile)
+        if(strlen(name) > 0)
         {
-            fprintf(saveFile, "%s", json.c_str());
-            fclose(saveFile);
+            char* transformedName = strtok(name, "\n");
+            sprintf(transformedName, "%s.mtnscn", name);
+            MTN_INFO("Selected path {}", transformedName);
+            FILE* saveFile = fopen(transformedName, "w");
+
+            if(saveFile)
+            {
+                fprintf(saveFile, "%s", json.c_str());
+                fclose(saveFile);
+            }
+            else
+                MTN_ERROR("Unable to save file to {}", name);
         }
-        else
-            MTN_ERROR("Unable to save file to {}", name);
 
         pclose(fileDialogPipe);
     }

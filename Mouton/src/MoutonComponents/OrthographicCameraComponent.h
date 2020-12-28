@@ -2,6 +2,7 @@
 #define ORTHOGRAPHIC_CAMERA_COMPONENT_H
 
 #include "MoutonPch.h"
+#include "Core/Utils/SerializationUtils.h"
 
 #include "Ecs/Components.h"
 #include "Renderer/OrthographicCameraController.h"
@@ -40,6 +41,21 @@ namespace Mouton
 
             writer.String("Rotation");
             writer.Double(static_cast<double>(m_CameraController->GetRotation()));
+        }
+
+        template<typename Value>
+        static OrthographicCameraComponent* LoadJson(const Value& value)
+        {
+            std::string name = value["Name"].GetString();
+            auto* controller = new OrthographicCameraController(
+                std::make_shared<OrthographicCamera>(0.0f, 0.0f, 100.0f, 100.0f)
+            );
+
+            OrthographicCameraComponent* comp = new OrthographicCameraComponent(name, controller);
+            comp->Move(Utils::SerializationUtils::Vec3FromJson(value["Position"]));
+            comp->Rotate((float)value["Rotation"].GetDouble());
+
+            return comp;
         }
 
     private:

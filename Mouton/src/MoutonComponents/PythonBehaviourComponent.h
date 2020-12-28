@@ -2,6 +2,7 @@
 #define BEHAVIOUR_COMPONENT_H
 
 #include "MoutonPch.h"
+#include "Core/Utils/StringHash.h"
 
 #include "Scripting/PythonBehaviourBinder.h"
 
@@ -29,7 +30,7 @@ namespace Mouton
         {
         }
 
-        static PythonBehaviourComponent<PythonBinder>& ToPythonBehaviourComponent(Component& comp)
+        static inline PythonBehaviourComponent<PythonBinder>& ToPythonBehaviourComponent(Component& comp)
         {
             return static_cast<PythonBehaviourComponent<PythonBinder>&>(comp);
         }
@@ -41,6 +42,45 @@ namespace Mouton
             writer.String(pythonBehaviour->GetScriptableName());
             writer.String("ModuleName");
             writer.String(pythonBehaviour->GetModuleName());
+
+            writer.String("BoundComponent");
+            // TODO: Fix camera component
+            if(pythonBehaviour->GetBoundComponent())
+                writer.String(pythonBehaviour->GetBoundComponent()->GetComponentName().c_str());
+            else
+                writer.Null();
+        }
+
+        template<typename Value>
+        static Component* LoadJson(const Value& value)
+        {
+            constexpr size_t SPRITE_BEHAVIOUR_HASH  = Utils::StringHash::HashString("SpriteComponent");
+            constexpr size_t ORTHO_BEHAVIOUR_HASH  = Utils::StringHash::HashString("OrthographicCameraComponent");
+
+            const size_t valueTypeHash = Utils::StringHash::HashString(std::string(value["Type"].GetString()));
+
+            switch(valueTypeHash)
+            {
+            case SPRITE_BEHAVIOUR_HASH:
+            {
+                auto* ptr =  new PythonBehaviourComponent<SpriteComponentScriptable>(
+                    value["Name"].GetString(), value["ModuleName"].GetString(), nullptr);
+
+                return ptr;
+            }
+
+            case ORTHO_BEHAVIOUR_HASH:
+            {
+                auto* ptr = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(
+                    value["Name"].GetString(), value["ModuleName"].GetString(), nullptr);
+
+                return ptr;
+            }
+
+            default:
+                MTN_ERROR("Unknown behaviour type {} while loading scene !", value["Type"].GetString());
+                return nullptr;
+            }
         }
     };
 

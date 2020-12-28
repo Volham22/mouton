@@ -23,6 +23,7 @@ namespace Mouton
         bool AddEntity(Entity* entity);
         bool RemoveEntity(const std::string& entityName);
         bool AddComponentToEntity(const std::string& entityName, Component::ComponentType type, const std::string& componentName);
+        bool AddComponentToEntity(const uint16_t entityId, Component::ComponentType type, const std::string& componentName);
         bool RemoveComponentToEntity(const std::string& entityName, Component::ComponentType type, const std::string& componentName);
         // A new component must be heap allocated. It will be destroyed when needed
         bool AddComponent(Component::ComponentType type, Component* newComponent);
@@ -106,8 +107,7 @@ namespace Mouton
                 for(auto&[name, component] : components)
                 {
                     writer.StartObject();
-                    writer.String("Name");
-                    writer.String(name.c_str());
+                    component->Serialize(writer);
 
                     switch(type)
                     {
@@ -136,8 +136,24 @@ namespace Mouton
                 writer.EndArray();
             }
 
+            writer.String("Entities");
+
+            writer.StartArray();
+            for(auto&[name, entity] : m_Entities)
+            {
+                writer.StartObject();
+
+                writer.String(name.c_str());
+                writer.Int(entity->GetID());
+
+                writer.EndObject();
+            }
+
+            writer.EndArray();
             writer.EndObject();
         }
+
+        static Scene FromJson(const std::string& json);
 
     private:
         SceneComponentData m_SceneData;
@@ -146,6 +162,15 @@ namespace Mouton
         int m_EntityNumber = 0;
 
         void decComponent(Component::ComponentType type, std::string componentName);
+
+        template<typename Value>
+        void BindEntities(const Value& value, Component* component)
+        {
+            const Value& ids = value["Ids"];
+
+            for(auto it = ids.Begin(); it != ids.End(); it++)
+                AddComponentToEntity(it->GetInt(), component->GetComponentType(), component->GetComponentName());
+        }
     };
 
 } // namespace Mouton

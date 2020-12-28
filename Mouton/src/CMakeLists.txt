@@ -10,6 +10,8 @@ set(MTN_SRC
     src/Core/Inputs.cpp
     src/Core/Timestep.cpp
     src/Core/Utils/FileUtils.cpp
+    src/Core/Utils/SerializationUtils.cpp
+    src/Core/Utils/StringHash.cpp
     src/Renderer/Window.cpp
     src/Renderer/Layer.cpp
     src/Renderer/LayerManager.cpp

@@ -30,6 +30,19 @@ namespace Mouton
 
         static const char* TypeToString(ComponentType type);
 
+        template<typename Writer>
+        void Serialize(Writer& writer)
+        {
+            writer.String("Name");
+            writer.String(p_Name.c_str());
+
+            writer.String("Ids");
+            writer.StartArray();
+            for(uint32_t id : p_ComponentID)
+                writer.Int(id);
+            writer.EndArray();
+        }
+
     protected:
         ComponentType p_Type;
         std::string p_Name;

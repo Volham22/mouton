@@ -42,4 +42,5 @@ target_include_directories(Mouton PRIVATE
     vendor/imgui
     vendor/glm/
     vendor/assimp/include
-    vendor/pybind11/include)
+    vendor/pybind11/include
+    vendor/rapidjson/include)

@@ -2,6 +2,7 @@
 #define SPRITE_COMPONENT_H
 
 #include "MoutonPch.h"
+#include "Core/Utils/SerializationUtils.h"
 
 #include "Ecs/Components.h"
 #include "Renderer/Texture.h"
@@ -52,6 +53,22 @@ namespace Mouton
 
             // TODO: Serialize texture
             // texture->Serialize();
+        }
+
+        template<typename Value>
+        static SpriteComponent* LoadJson(const Value& value)
+        {
+            auto color = Utils::SerializationUtils::Vec4FromJson(value["Color"]);
+            auto position = Utils::SerializationUtils::Vec3FromJson(value["Position"]);
+            auto scale = Utils::SerializationUtils::Vec2FromJson(value["Scale"]);
+
+            SpriteComponent* comp = new SpriteComponent(value["Name"].GetString());
+            comp->color = color;
+            comp->position = position;
+            comp->scale = scale;
+            comp->isTextured = value["IsTextured"].GetBool();
+
+            return comp;
         }
     };
 

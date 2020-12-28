@@ -18,6 +18,11 @@ namespace Mouton
         }
     }
 
+    void SpriteComponentScriptable::SetBoundComponent(Component* component)
+    {
+        m_ScriptedComponent = static_cast<SpriteComponent*>(component);
+    }
+
     void SpriteComponentScriptable::OnSceneBegin()
     {
         try
@@ -77,6 +82,11 @@ namespace Mouton
         {
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
+    }
+
+    void OrthographicCameraComponentScriptable::SetBoundComponent(Component* component)
+    {
+        // TODO: Fix camera
     }
 
     void OrthographicCameraComponentScriptable::OnSceneBegin()
