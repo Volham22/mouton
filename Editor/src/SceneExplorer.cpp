@@ -10,13 +10,13 @@
 
 using namespace Mouton;
 
-static bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
+static bool AddPythonBehaviourComponent(std::shared_ptr<Scene>& scene, const std::string& name,
     const std::array<char, 255>& moduleName, Component* boundComponent, PythonBehaviourType type);
 
-static void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& moduleName,
+static void ShowPythonBehaviourCreation(std::shared_ptr<Scene>& scene, std::array<char, 255>& moduleName,
     int& selectedBehaviourType, Component*& boundComponent);
 
-static std::string CreateComponentComboList(Scene& scene);
+static std::string CreateComponentComboList(std::shared_ptr<Scene>& scene);
 static std::string GetElementSequenceName(const std::string& sequence, int n);
 
 SceneExplorer::SceneExplorer()
@@ -30,15 +30,15 @@ void SceneExplorer::InitProperties()
     EditorPropertiesPanels::LoadProjectTextures();
 }
 
-void SceneExplorer::ShowSceneExplorer(Scene &scene)
+void SceneExplorer::ShowSceneExplorer(std::shared_ptr<Scene>& scene)
 {
     ImGui::Begin("Scene explorer");
 
     if (ImGui::CollapsingHeader("Scene Entities"))
     {
-        const auto &entities = scene.GetEntities();
+        const auto &entities = scene->GetEntities();
 
-        for (Entity *ent : entities)
+        for (Entity* ent : entities)
         {
             ShowEntity(ent, scene);
             ImGui::Separator();
@@ -69,7 +69,7 @@ void SceneExplorer::SetDefaultCamera()
     m_CustomCamera = nullptr;
 }
 
-Component* SceneExplorer::CreateComponentFromType(Scene& scene, Component::ComponentType type, const std::string &name) const
+Component* SceneExplorer::CreateComponentFromType(std::shared_ptr<Scene>& scene, Component::ComponentType type, const std::string &name) const
 {
     switch (type)
     {
@@ -111,11 +111,11 @@ void SceneExplorer::ShowProperties()
     }
 }
 
-void SceneExplorer::ShowEntity(Mouton::Entity *entity, Mouton::Scene &scene)
+void SceneExplorer::ShowEntity(Mouton::Entity *entity, std::shared_ptr<Scene>& scene)
 {
     if (ImGui::TreeNode(entity->GetName().c_str()))
     {
-        const auto &entityComponents = scene.GetEntityComponent(entity->GetName());
+        const auto &entityComponents = scene->GetEntityComponent(entity->GetName());
 
         for (Component *comp : entityComponents)
             ShowComponent(entity, comp, scene);
@@ -128,11 +128,11 @@ void SceneExplorer::ShowEntity(Mouton::Entity *entity, Mouton::Scene &scene)
             ImGui::Text("Choose a component to add");
             ImGui::Separator();
 
-            const auto &components = scene.GetComponents(Component::ComponentType::Any);
+            const auto &components = scene->GetComponents(Component::ComponentType::Any);
             for (Component *comp : components)
             {
                 if (ImGui::Selectable(comp->GetComponentName().c_str()))
-                    scene.AddComponentToEntity(entity->GetName().c_str(), comp->GetComponentType(), comp->GetComponentName().c_str());
+                    scene->AddComponentToEntity(entity->GetName().c_str(), comp->GetComponentType(), comp->GetComponentName().c_str());
             }
 
             ImGui::EndPopup();
@@ -148,7 +148,7 @@ void SceneExplorer::ShowEntity(Mouton::Entity *entity, Mouton::Scene &scene)
             ImGui::Separator();
 
             if (ImGui::Button("Yes"))
-                scene.RemoveEntity(entity->GetName());
+                scene->RemoveEntity(entity->GetName());
 
             ImGui::SameLine();
 
@@ -162,13 +162,13 @@ void SceneExplorer::ShowEntity(Mouton::Entity *entity, Mouton::Scene &scene)
     }
 }
 
-void SceneExplorer::ShowComponent(Mouton::Entity *entity, Mouton::Component *comp, Mouton::Scene &scene)
+void SceneExplorer::ShowComponent(Mouton::Entity *entity, Mouton::Component *comp, std::shared_ptr<Scene>& scene)
 {
     if (ImGui::TreeNode(comp->GetComponentName().c_str()))
     {
         if (ImGui::Button("Remove", {150, 20}))
         {
-            scene.RemoveComponentToEntity(entity->GetName().c_str(),
+            scene->RemoveComponentToEntity(entity->GetName().c_str(),
                                           comp->GetComponentType(),
                                           comp->GetComponentName());
         }
@@ -180,7 +180,7 @@ void SceneExplorer::ShowComponent(Mouton::Entity *entity, Mouton::Component *com
     }
 }
 
-void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
+void SceneExplorer::ShowCreateComponent(std::shared_ptr<Scene>& scene) const
 {
     if (ImGui::Button("Create a new Component ..."))
         ImGui::OpenPopup("Create component");
@@ -218,7 +218,7 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
 
         if (ImGui::Button("Add"))
         {
-            // if (std::strlen(nameBuffer) > 0 && scene.AddComponent(toComponentType(item),
+            // if (std::strlen(nameBuffer) > 0 && scene->AddComponent(toComponentType(item),
             //                                         CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
             //     ImGui::CloseCurrentPopup();
             // else
@@ -227,7 +227,7 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
             switch(toComponentType(item))
             {
             case Component::ComponentType::SpriteComponent:
-                if(!scene.AddComponent(toComponentType(item),
+                if(!scene->AddComponent(toComponentType(item),
                                                     CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
                     ImGui::OpenPopup("Incorrect Name !");
                 else
@@ -235,7 +235,7 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
                 break;
 
             case Component::ComponentType::OrthographicCamera:
-                if(!scene.AddComponent(toComponentType(item),
+                if(!scene->AddComponent(toComponentType(item),
                                                     CreateComponentFromType(scene, toComponentType(item), std::string(nameBuffer))))
                     ImGui::OpenPopup("Incorrect Name !");
                 else
@@ -275,7 +275,7 @@ void SceneExplorer::ShowCreateComponent(Mouton::Scene &scene) const
     }
 }
 
-void SceneExplorer::ShowCreateEntity(Mouton::Scene& scene) const
+void SceneExplorer::ShowCreateEntity(std::shared_ptr<Scene>& scene) const
 {
     ImGui::SameLine();
     if (ImGui::Button("Add new Entity"))
@@ -292,7 +292,7 @@ void SceneExplorer::ShowCreateEntity(Mouton::Scene& scene) const
         if (ImGui::Button("Add Entity"))
         {
             if (strlen(entityNameBuffer) > 0 && strlen(entityNameBuffer) < 200 &&
-                scene.AddEntity(new Entity(std::string(entityNameBuffer))))
+                scene->AddEntity(new Entity(std::string(entityNameBuffer))))
                 ImGui::CloseCurrentPopup();
             else
                 ImGui::OpenPopup("Incorrect Entity name !");
@@ -322,7 +322,7 @@ SceneExplorer::~SceneExplorer()
     EditorPropertiesPanels::Stop();
 }
 
-bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
+bool AddPythonBehaviourComponent(std::shared_ptr<Scene>& scene, const std::string& name,
     const std::array<char, 255>& moduleName, Component* boundComponent, PythonBehaviourType type)
 {
     PythonBehaviourComponent<PythonBinder>* comp = nullptr;
@@ -333,7 +333,7 @@ bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
     {
         ScriptSkeletonFactory::CreateSpriteComponentSkeleton(std::string(moduleName.data()), "SpriteComponentScriptTemplate.mtnt");
         auto spriteComp = new PythonBehaviourComponent<SpriteComponentScriptable>(name, moduleName.data(), static_cast<SpriteComponent*>(boundComponent));
-        return scene.AddComponent(Component::ComponentType::PythonBehaviourComponent, spriteComp);
+        return scene->AddComponent(Component::ComponentType::PythonBehaviourComponent, spriteComp);
     }
 
     case PythonBehaviourType::OrthographicCameraBehaviour:
@@ -341,7 +341,7 @@ bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
         ScriptSkeletonFactory::CreateSpriteComponentSkeleton(std::string(moduleName.data()), "OrthographicCameraScriptTemplate.mtnt");
         auto orthoComp = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(name, moduleName.data(),
             static_cast<OrthographicCameraComponent*>(boundComponent)->GetCameraControllerInstance());
-        return scene.AddComponent(Component::ComponentType::PythonBehaviourComponent, orthoComp);
+        return scene->AddComponent(Component::ComponentType::PythonBehaviourComponent, orthoComp);
     }
 
     default:
@@ -349,7 +349,7 @@ bool AddPythonBehaviourComponent(Scene& scene, const std::string& name,
     }
 }
 
-void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& moduleName, int& selectedBehaviourType, Component*& boundComponent)
+void ShowPythonBehaviourCreation(std::shared_ptr<Scene>& scene, std::array<char, 255>& moduleName, int& selectedBehaviourType, Component*& boundComponent)
 {
     static int selectedScriptableComponent = 0;
     std::string componentComboSequence = CreateComponentComboList(scene);
@@ -367,16 +367,16 @@ void ShowPythonBehaviourCreation(Scene& scene, std::array<char, 255>& moduleName
 
     ImGui::Combo("Choosed scriptable components", &selectedScriptableComponent, componentComboSequence.c_str());
 
-    boundComponent = scene.GetComponentByName(GetElementSequenceName(componentComboSequence, selectedScriptableComponent));
+    boundComponent = scene->GetComponentByName(GetElementSequenceName(componentComboSequence, selectedScriptableComponent));
 
     ImGui::Separator();
 }
 
-std::string CreateComponentComboList(Scene& scene)
+std::string CreateComponentComboList(std::shared_ptr<Scene>& scene)
 {
     std::stringstream ss;
 
-    scene.ForEachComponents(Component::ComponentType::Any, [&ss](Component& comp) {
+    scene->ForEachComponents(Component::ComponentType::Any, [&ss](Component& comp) {
         if(comp.IsScriptable())
             ss << comp.GetComponentName() << '\0';
     });

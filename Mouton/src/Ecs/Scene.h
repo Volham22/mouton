@@ -153,7 +153,7 @@ namespace Mouton
             writer.EndObject();
         }
 
-        static Scene FromJson(const std::string& json);
+        static std::shared_ptr<Scene> FromJson(const std::string& json);
 
     private:
         SceneComponentData m_SceneData;
@@ -166,10 +166,10 @@ namespace Mouton
         template<typename Value>
         void BindEntities(const Value& value, Component* component)
         {
-            const Value& ids = value["Ids"];
+            const auto& ids = value["Ids"].GetArray();
 
-            for(auto it = ids.Begin(); it != ids.End(); it++)
-                AddComponentToEntity(it->GetInt(), component->GetComponentType(), component->GetComponentName());
+            for(auto& id : ids)
+                AddComponentToEntity(id.GetInt(), component->GetComponentType(), component->GetComponentName());
         }
     };
 

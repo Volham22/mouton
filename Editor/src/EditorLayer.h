@@ -20,10 +20,12 @@ public:
     virtual void OnUnbind() override;
     virtual bool OnEvent(Mouton::Event& event) override;
 
+    void SetScene(std::shared_ptr<Mouton::Scene>& scene);
+
 private:
     std::shared_ptr<Mouton::Framebuffer> m_ViewportFramebuffer;
     Mouton::OrthographicCamera m_Camera;
-    Mouton::Scene m_Scene;
+    std::shared_ptr<Mouton::Scene> m_Scene;
     Mouton::Component* m_ComponentShown;
     SceneExplorer m_SceneExplorer;
 

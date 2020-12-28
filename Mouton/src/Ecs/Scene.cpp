@@ -177,16 +177,17 @@ namespace Mouton
             callback((*entity));
     }
 
-    Scene Scene::FromJson(const std::string& json)
+    std::shared_ptr<Scene> Scene::FromJson(const std::string& json)
     {
         rapidjson::Document document;
         document.Parse(json.c_str());
-        Scene scene;
+        auto scene = std::make_shared<Scene>();
 
         constexpr size_t HASH_SPRITE_COMPONENT          = Utils::StringHash::HashString("SpriteComponent");
         constexpr size_t HASH_BEHAVIOUR_COMPONENT       = Utils::StringHash::HashString("BehaviourComponent");
-        constexpr size_t HASH_PYTHONBEHAVIOUR_COMPONENT = Utils::StringHash::HashString("PythonBehaviourComponent");
+        constexpr size_t HASH_PYTHONBEHAVIOUR_COMPONENT = Utils::StringHash::HashString("PythonBehaviour");
         constexpr size_t HASH_ORTHOGRAPHIC_CAMERA       = Utils::StringHash::HashString("OrthographicCamera");
+        constexpr size_t HASH_ENTIIES                   = Utils::StringHash::HashString("Entities");
 
         const auto& entities = document["Entities"].GetArray();
 
@@ -197,7 +198,7 @@ namespace Mouton
             for(auto it = val.MemberBegin(); it != val.MemberEnd(); it++)
                 entity = new Entity(it->name.GetString(), it->value.GetInt());
 
-            scene.AddEntity(entity);
+            scene->AddEntity(entity);
         }
 
         for(auto it = document.MemberBegin(); it != document.MemberEnd(); it++)
@@ -205,39 +206,44 @@ namespace Mouton
             auto& value = it->value;
             size_t hashName = Utils::StringHash::HashString(std::string(it->name.GetString()));
 
-            for(auto objIt = value.MemberBegin(); objIt != value.MemberEnd(); objIt++)
+            for(auto objIt = value.Begin(); objIt != value.End(); objIt++)
             {
+                const auto& objValue = objIt->GetObject();
+
                 switch(hashName)
                 {
+                case HASH_ENTIIES:
+                    continue;
+
                 case HASH_SPRITE_COMPONENT:
                 {
-                    Component* comp = SpriteComponent::LoadJson(value);
-                    scene.AddComponent(Component::ComponentType::SpriteComponent, comp);
-                    scene.BindEntities(value, comp);
+                    Component* comp = SpriteComponent::LoadJson(objValue);
+                    scene->AddComponent(Component::ComponentType::SpriteComponent, comp);
+                    scene->BindEntities(objValue, comp);
                     break;
                 }
 
                 case HASH_BEHAVIOUR_COMPONENT:
                 {
-                    Component* comp = SpriteComponent::LoadJson(value);
-                    scene.AddComponent(Component::ComponentType::BehaviourComponent, comp);
-                    scene.BindEntities(value, comp);
+                    Component* comp = SpriteComponent::LoadJson(objValue);
+                    scene->AddComponent(Component::ComponentType::BehaviourComponent, comp);
+                    scene->BindEntities(objValue, comp);
                     break;
                 }
 
                 case HASH_PYTHONBEHAVIOUR_COMPONENT:
                 {
-                    Component* comp = PythonBehaviourComponent<PythonBinder>::LoadJson(value);
-                    scene.AddComponent(Component::ComponentType::PythonBehaviourComponent, comp);
-                    scene.BindEntities(value, comp);
+                    Component* comp = PythonBehaviourComponent<PythonBinder>::LoadJson(objValue);
+                    scene->AddComponent(Component::ComponentType::PythonBehaviourComponent, comp);
+                    scene->BindEntities(objValue, comp);
                     break;
                 }
 
                 case HASH_ORTHOGRAPHIC_CAMERA:
                 {
-                    Component* comp = OrthographicCameraComponent::LoadJson(value);
-                    scene.AddComponent(Component::ComponentType::OrthographicCamera, comp);
-                    scene.BindEntities(value, comp);
+                    Component* comp = OrthographicCameraComponent::LoadJson(objValue);
+                    scene->AddComponent(Component::ComponentType::OrthographicCamera, comp);
+                    scene->BindEntities(objValue, comp);
                     break;
                 }
 
@@ -258,10 +264,10 @@ namespace Mouton
 
                 std::string name = val["Name"].GetString();
                 PythonBehaviourComponent<PythonBinder>* pythonBehaviour =
-                    static_cast<PythonBehaviourComponent<PythonBinder>*>(scene.GetComponentByName(name));
+                    static_cast<PythonBehaviourComponent<PythonBinder>*>(scene->GetComponentByName(name));
 
                 std::string boundName = val["BoundComponent"].GetString();
-                Component* boundComponent = scene.GetComponentByName(boundName);
+                Component* boundComponent = scene->GetComponentByName(boundName);
 
                 pythonBehaviour->pythonBehaviour->SetBoundComponent(boundComponent);
             }

@@ -1,9 +1,13 @@
 #include "BarMenu.h"
 
+#include "EditorLayer.h"
+
 #include <imgui.h>
 #include <rapidjson/prettywriter.h>
 
 #include <cstdio>
+#include <fstream>
+#include <sstream>
 
 
 // Show a file dialog to save the serialized scene
@@ -40,6 +44,38 @@ static void saveToFile(const std::string& json)
         MTN_ERROR("Failed to save scene to file !");
 }
 
+static std::string OpenDialog()
+{
+    FILE* fileDialogPipe = popen("zenity --file-selection --title=\"Select a Mouton scene file ...\"", "r");
+
+    if(fileDialogPipe)
+    {
+        char path[1024] = { 0 };
+
+        while(!feof(fileDialogPipe))
+            fgets(path, sizeof(path), fileDialogPipe);
+
+        pclose(fileDialogPipe);
+
+        return std::string(strtok(path, "\n"));
+    }
+
+    return std::string();
+}
+
+static std::string LoadJsonFromFile(const std::string& filepath)
+{
+    std::ifstream file(filepath);
+    std::stringstream ss;
+
+    if(file.is_open())
+        ss << file.rdbuf();
+    else
+        MTN_ERROR("Failed to read scene from file {}", filepath.c_str());
+
+    return ss.str();
+}
+
 static std::string SerializeScene(const Mouton::Scene& scene)
 {
     rapidjson::StringBuffer sb;
@@ -50,7 +86,7 @@ static std::string SerializeScene(const Mouton::Scene& scene)
     return sb.GetString();
 }
 
-void BarMenu::ShowMenu(const Mouton::Scene& scene)
+void BarMenu::ShowMenu(const std::shared_ptr<Mouton::Scene>& scene, EditorLayer* editorLayer)
 {
     static bool menuOpened = false;
     static std::string openedScene;
@@ -61,19 +97,24 @@ void BarMenu::ShowMenu(const Mouton::Scene& scene)
         {
             if(ImGui::MenuItem("New scene ...")) {}
 
-            if(ImGui::MenuItem("Open scene")) {}
+            if(ImGui::MenuItem("Open scene"))
+            {
+                // MTN_TRACE("Path {}", OpenDialog().c_str());
+                auto newScene = Mouton::Scene::FromJson(LoadJsonFromFile(OpenDialog()));
+                editorLayer->SetScene(newScene);
+            }
 
             if(ImGui::BeginMenu("Save ..."))
             {
                 if(ImGui::MenuItem("Save scene", "", nullptr, !openedScene.empty()))
                 {
-                    auto json = SerializeScene(scene);
+                    auto json = SerializeScene(*scene.get());
                     MTN_INFO("Saved scene \n{}", json.c_str());
                 }
 
                 if(ImGui::MenuItem("Save as ..."))
                 {
-                    saveToFile(SerializeScene(scene));
+                    saveToFile(SerializeScene(*scene.get()));
                 }
 
                 ImGui::EndMenu();
