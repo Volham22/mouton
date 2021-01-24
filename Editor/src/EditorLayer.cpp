@@ -56,7 +56,7 @@ EditorLayer::EditorLayer()
                 cameraInstance);
         // Mouton::ScriptSkeletonFactory::CreateSpriteComponentSkeleton("CameraBehaviour", "OrthographicCameraScriptTemplate.mtnt");
         auto orthoBehaviour = new
-            Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour", cameraInstance);
+            Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour", camera);
 
         m_Scene->AddComponent(Type::SpriteComponent, red);
         m_Scene->AddComponent(Type::SpriteComponent, green);

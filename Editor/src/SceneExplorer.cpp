@@ -339,8 +339,10 @@ bool AddPythonBehaviourComponent(std::shared_ptr<Scene>& scene, const std::strin
     case PythonBehaviourType::OrthographicCameraBehaviour:
     {
         ScriptSkeletonFactory::CreateSpriteComponentSkeleton(std::string(moduleName.data()), "OrthographicCameraScriptTemplate.mtnt");
-        auto orthoComp = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(name, moduleName.data(),
-            static_cast<OrthographicCameraComponent*>(boundComponent)->GetCameraControllerInstance());
+        auto orthoComp = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(
+            name,
+            moduleName.data(),
+            static_cast<OrthographicCameraComponent*>(boundComponent));
         return scene->AddComponent(Component::ComponentType::PythonBehaviourComponent, orthoComp);
     }
 

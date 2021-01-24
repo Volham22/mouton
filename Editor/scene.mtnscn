@@ -1,0 +1,90 @@
+{
+    "OrthographicCamera": [
+        {
+            "Name": "cameraComponent",
+            "Ids": [
+                1
+            ],
+            "Position": [
+                -4.229824066162109,
+                2.6661932468414308,
+                0.0
+            ],
+            "Rotation": 0.0
+        }
+    ],
+    "PythonBehaviour": [
+        {
+            "Name": "CameraBehaviour",
+            "Ids": [
+                1
+            ],
+            "Type": "OrthographicCameraComponent",
+            "ModuleName": "CameraBehaviour",
+            "BoundComponent": "cameraComponent"
+        },
+        {
+            "Name": "RedSpriteScript",
+            "Ids": [
+                1
+            ],
+            "Type": "SpriteComponent",
+            "ModuleName": "RedSpriteScript",
+            "BoundComponent": "RedSprite"
+        }
+    ],
+    "SpriteComponent": [
+        {
+            "Name": "GreenSprite",
+            "Ids": [
+                2
+            ],
+            "Color": [
+                0.9607843160629273,
+                0.9408365488052368,
+                0.6216840147972107,
+                1.0
+            ],
+            "Position": [
+                50.97999954223633,
+                41.17599868774414,
+                0.0
+            ],
+            "Scale": [
+                23.256000518798829,
+                37.930999755859378
+            ],
+            "IsTextured": false
+        },
+        {
+            "Name": "RedSprite",
+            "Ids": [
+                1
+            ],
+            "Color": [
+                0.5,
+                0.800000011920929,
+                0.20000000298023225,
+                1.0
+            ],
+            "Position": [
+                50.0,
+                50.0,
+                0.0
+            ],
+            "Scale": [
+                -5.333003520965576,
+                9.607772827148438
+            ],
+            "IsTextured": false
+        }
+    ],
+    "Entities": [
+        {
+            "GreenQuad": 2
+        },
+        {
+            "RedQuad": 1
+        }
+    ]
+}
