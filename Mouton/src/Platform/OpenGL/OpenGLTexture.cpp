@@ -10,7 +10,7 @@ namespace Mouton
 
     OpenGLTexture2D::OpenGLTexture2D(const char* filepath)
         : m_TextureHandle(0), m_TextureWidth(0), m_TextureHeight(0),
-          m_TextureChannels(0), m_Slot(0)
+          m_TextureChannels(0), m_Slot(0), m_Path(filepath)
     {
         glGenTextures(1, &m_TextureHandle);
         LoadTexture(filepath);

@@ -13,6 +13,7 @@ namespace Mouton
         virtual void Unbind() = 0;
         virtual int GetWidth() = 0;
         virtual int GetHeight() = 0;
+        virtual std::string GetFilename() const = 0;
     };
 
     class Texture2D : public Texture

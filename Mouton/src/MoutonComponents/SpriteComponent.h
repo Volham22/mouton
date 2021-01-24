@@ -54,8 +54,11 @@ namespace Mouton
             writer.String("IsTextured");
             writer.Bool(isTextured);
 
-            // TODO: Serialize texture
-            // texture->Serialize();
+            writer.String("Texture");
+            if(isTextured)
+                writer.String(texture->GetFilename().c_str());
+            else
+                writer.Null();
         }
 
         template<typename Value>
@@ -72,6 +75,9 @@ namespace Mouton
             comp->scale = scale;
             comp->rotation = rotation;
             comp->isTextured = value["IsTextured"].GetBool();
+
+            if(comp->isTextured)
+                comp->texture = Texture2D::CreateTexture(value["Texture"].GetString());
 
             return comp;
         }
