@@ -48,6 +48,9 @@ namespace Mouton
             writer.Double(static_cast<double>(scale.y));
             writer.EndArray();
 
+            writer.String("Rotation");
+            writer.Double(static_cast<double>(rotation));
+
             writer.String("IsTextured");
             writer.Bool(isTextured);
 
@@ -61,11 +64,13 @@ namespace Mouton
             auto color = Utils::SerializationUtils::Vec4FromJson(value["Color"]);
             auto position = Utils::SerializationUtils::Vec3FromJson(value["Position"]);
             auto scale = Utils::SerializationUtils::Vec2FromJson(value["Scale"]);
+            float rotation = static_cast<float>(value["Rotation"].GetDouble());
 
             SpriteComponent* comp = new SpriteComponent(value["Name"].GetString());
             comp->color = color;
             comp->position = position;
             comp->scale = scale;
+            comp->rotation = rotation;
             comp->isTextured = value["IsTextured"].GetBool();
 
             return comp;
