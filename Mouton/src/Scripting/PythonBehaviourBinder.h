@@ -53,7 +53,7 @@ namespace Mouton
     {
     public:
         OrthographicCameraComponentScriptable(const char* moduleName,
-           OrthographicCameraController* comp);
+           OrthographicCameraComponent* comp);
 
         virtual void OnSceneBegin() override;
         virtual void OnSceneUpdate(Timestep delta) override;
@@ -61,11 +61,12 @@ namespace Mouton
 
         virtual const char* GetScriptableName() const override { return "OrthographicCameraComponent"; }
         virtual const char* GetModuleName() const override { return m_ModuleName; }
-        virtual Component* GetBoundComponent() const override { return nullptr; }
+        virtual Component* GetBoundComponent() const override { return m_ScriptedComponent; }
 
         virtual void SetBoundComponent(Component* component) override;
 
     private:
+        OrthographicCameraComponent* m_ScriptedComponent;
         const char* m_ModuleName;
         pybind11::object m_Instance;
     };

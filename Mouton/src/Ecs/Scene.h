@@ -126,8 +126,6 @@ namespace Mouton
                     case ComponentType::SpriteComponent:
                         static_cast<SpriteComponent*>(component)->Serialize(writer);
                         break;
-                    
-                    // default:
                     }
 
                     writer.EndObject();
