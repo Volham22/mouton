@@ -48,7 +48,7 @@ namespace Mouton
         {
             std::string name = value["Name"].GetString();
             auto* controller = new OrthographicCameraController(
-                std::make_shared<OrthographicCamera>(0.0f, 0.0f, 100.0f, 100.0f)
+                std::make_shared<OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f)
             );
 
             OrthographicCameraComponent* comp = new OrthographicCameraComponent(name, controller);
