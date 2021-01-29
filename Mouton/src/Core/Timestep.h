@@ -16,6 +16,7 @@ namespace Mouton
         float operator+(float x) const;
         float operator-(float x) const;
         float operator*(float x) const;
+
     private:
         float m_Delta;
     };

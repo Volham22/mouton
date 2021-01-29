@@ -23,11 +23,22 @@ public:
     void SetScene(std::shared_ptr<Mouton::Scene>& scene);
 
 private:
+    enum class SceneStates {
+        None = 0, Playing = 1, Paused = 2, Stopped = 3
+    };
+
     std::shared_ptr<Mouton::Framebuffer> m_ViewportFramebuffer;
     Mouton::OrthographicCamera m_Camera;
     std::shared_ptr<Mouton::Scene> m_Scene;
     Mouton::Component* m_ComponentShown;
     SceneExplorer m_SceneExplorer;
+    SceneStates m_ScenePlaying;
+
+    void OnSceneStart();
+    void OnSceneUpdate(Mouton::Timestep delta);
+    void OnScenePause();
+    void OnSceneResume();
+    void OnSceneStop();
 
     void ShowProperties();
 };

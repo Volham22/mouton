@@ -22,7 +22,7 @@
 
 EditorLayer::EditorLayer()
     : Layer("Editor Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(new Mouton::Scene()),
-      m_ComponentShown(nullptr)
+      m_ComponentShown(nullptr), m_ScenePlaying(SceneStates::Stopped)
 {
     Mouton::RendererContext::InitContext(Mouton::GraphicAPI::OpenGL);
     Mouton::Renderer::InitRenderer();
@@ -54,7 +54,7 @@ EditorLayer::EditorLayer()
             new Mouton::OrthographicCameraComponent(
                 "cameraComponent",
                 cameraInstance);
-        // Mouton::ScriptSkeletonFactory::CreateSpriteComponentSkeleton("CameraBehaviour", "OrthographicCameraScriptTemplate.mtnt");
+
         auto orthoBehaviour = new
             Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour", camera);
 
@@ -73,41 +73,14 @@ EditorLayer::EditorLayer()
 
 void EditorLayer::OnBind()
 {
-    m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
-        [](Mouton::Component& comp) {
-            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
-
-            // TODO: Fix camera
-            if(behaviour.pythonBehaviour->GetBoundComponent())
-                behaviour.pythonBehaviour->OnSceneBegin();
-        });
 }
 
 void EditorLayer::OnUnbind()
 {
-    m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
-        [](Mouton::Component& comp) {
-            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
-
-            // TODO: Fix camera
-            if(behaviour.pythonBehaviour->GetBoundComponent())
-                behaviour.pythonBehaviour->OnSceneEnd();
-        });
-
-    Mouton::Renderer2D::EndScene();
 }
 
 void EditorLayer::OnUpdate(Mouton::Timestep delta)
 {
-    m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
-        [delta](Mouton::Component& comp) {
-            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
-
-            // TODO: Fix camera
-            if(behaviour.pythonBehaviour->GetBoundComponent())
-                behaviour.pythonBehaviour->OnSceneUpdate(delta);
-    });
-
     using Type = Mouton::Component::ComponentType;
 
     static ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -143,31 +116,61 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
     ImGui::Image((void*)textureID, { width, height });
     ImGui::End();
 
-    ImGui::Begin("Performance window");
+    ImGui::Begin("Debug Performance window");
     ImGui::Text("Mouton Performance.");
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
         1000.0f / ImGui::GetIO().Framerate,
         ImGui::GetIO().Framerate);
     ImGui::End();
 
-    // Viewport rendering
-    m_ViewportFramebuffer->Bind();
-    if(m_SceneExplorer.GetUserCamera())
-        Mouton::Renderer2D::BeginScene(m_SceneExplorer.GetUserCamera()->GetViewProjectionMatrix());
-    else
-        Mouton::Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
+    ImGui::Begin("Console");
 
-    m_Scene->ForEachComponents(Type::SpriteComponent, [](Mouton::Component& comp) {
-        Mouton::SpriteComponent& sprite = static_cast<Mouton::SpriteComponent&>(comp);
+    auto freeSpace = ImGui::GetContentRegionAvail();
 
-        if(sprite.isTextured)
-            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.texture, sprite.rotation);
-        else
-            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.color, sprite.rotation);
-    });
+    freeSpace.x /= 3;
+    freeSpace.y /= 4;
 
-    Mouton::Renderer2D::EndScene();
-    m_ViewportFramebuffer->Unbind();
+    if(ImGui::Button("Start Scene", freeSpace))
+    {
+        if(m_ScenePlaying == SceneStates::Paused)
+        {
+            m_ScenePlaying = SceneStates::Playing;
+            OnSceneResume();
+        }
+
+        if(m_ScenePlaying == SceneStates::Stopped)
+        {
+            m_ScenePlaying = SceneStates::Playing;
+            OnSceneStart();
+        }
+    }
+
+    ImGui::SameLine();
+
+    if(ImGui::Button("Pause scene", freeSpace))
+    {
+        if(m_ScenePlaying == SceneStates::Playing)
+        {
+            m_ScenePlaying = SceneStates::Paused;
+            OnScenePause();
+        }
+    }
+
+    ImGui::SameLine();
+
+    if(ImGui::Button("Stop Scene", freeSpace))
+    {
+        if(m_ScenePlaying == SceneStates::Paused || m_ScenePlaying == SceneStates::Playing)
+        {
+            m_ScenePlaying = SceneStates::Stopped;
+            OnSceneStop();
+        }
+    }
+
+    ImGui::End();
+
+    if(m_ScenePlaying == SceneStates::Playing)
+        OnSceneUpdate(delta);
 
     // Does ImGui calls for the Scene explorer
     m_SceneExplorer.ShowSceneExplorer(m_Scene);
@@ -196,7 +199,76 @@ void EditorLayer::SetScene(std::shared_ptr<Mouton::Scene>& scene)
     m_Scene = scene;
 }
 
+void EditorLayer::OnSceneStart()
+{
+    Mouton::PythonScriptEngine::Init();
+    MTN_TRACE("Scene Started");
+
+    m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
+        [](Mouton::Component& comp) {
+            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
+
+            if(behaviour.pythonBehaviour->GetBoundComponent())
+                behaviour.pythonBehaviour->OnSceneBegin();
+    });
+}
+
+void EditorLayer::OnSceneUpdate(Mouton::Timestep delta)
+{
+    m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
+        [delta](Mouton::Component& comp) {
+            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
+
+            if(behaviour.pythonBehaviour->GetBoundComponent())
+                behaviour.pythonBehaviour->OnSceneUpdate(delta);
+    });
+
+    // Viewport rendering
+    m_ViewportFramebuffer->Bind();
+    if(m_SceneExplorer.GetUserCamera())
+        Mouton::Renderer2D::BeginScene(m_SceneExplorer.GetUserCamera()->GetViewProjectionMatrix());
+    else
+        Mouton::Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
+
+    m_Scene->ForEachComponents(Mouton::Component::ComponentType::SpriteComponent, [](Mouton::Component& comp) {
+        Mouton::SpriteComponent& sprite = static_cast<Mouton::SpriteComponent&>(comp);
+
+        if(sprite.isTextured)
+            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.texture, sprite.rotation);
+        else
+            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.color, sprite.rotation);
+    });
+
+    Mouton::Renderer2D::EndScene();
+    m_ViewportFramebuffer->Unbind();
+}
+
+void EditorLayer::OnScenePause()
+{
+    MTN_TRACE("Scene paused");
+}
+
+void EditorLayer::OnSceneResume()
+{
+    MTN_TRACE("Scene resumed");
+}
+
+void EditorLayer::OnSceneStop()
+{
+    MTN_TRACE("Scene stopped");
+
+    m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
+        [](Mouton::Component& comp) {
+            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
+
+            if(behaviour.pythonBehaviour->GetBoundComponent())
+                behaviour.pythonBehaviour->OnSceneEnd();
+        });
+    Mouton::PythonScriptEngine::Stop();
+}
+
 EditorLayer::~EditorLayer()
 {
-    Mouton::PythonScriptEngine::Stop();
+    if(m_ScenePlaying == SceneStates::Paused || m_ScenePlaying == SceneStates::Playing)
+        Mouton::PythonScriptEngine::Stop();
 }
