@@ -4,4 +4,5 @@ set(MTN_SB_SRC
     src/EditorPropertiesPanels.cpp
     src/SceneExplorer.cpp
     src/BarMenu.cpp
+    src/Logger.cpp
     PARENT_SCOPE)

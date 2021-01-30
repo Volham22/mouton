@@ -8,6 +8,7 @@
 #include "Ecs/Scene.h"
 
 #include "SceneExplorer.h"
+#include "Logger.h"
 
 class EditorLayer : public Mouton::Layer
 {
@@ -34,6 +35,7 @@ private:
     Mouton::Component* m_ComponentShown;
     SceneExplorer m_SceneExplorer;
     SceneStates m_ScenePlaying;
+    Logger m_Logger;
 
     void OnSceneStart();
     void OnSceneUpdate(Mouton::Timestep delta);

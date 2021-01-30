@@ -1,4 +1,5 @@
 #include "EditorLayer.h"
+
 #include "imgui.h"
 
 #include "Engine.h"
@@ -22,7 +23,7 @@
 
 EditorLayer::EditorLayer()
     : Layer("Editor Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(new Mouton::Scene()),
-      m_ComponentShown(nullptr), m_ScenePlaying(SceneStates::Stopped)
+      m_ComponentShown(nullptr), m_ScenePlaying(SceneStates::Stopped), m_Logger()
 {
     Mouton::RendererContext::InitContext(Mouton::GraphicAPI::OpenGL);
     Mouton::Renderer::InitRenderer();
@@ -123,12 +124,11 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
         ImGui::GetIO().Framerate);
     ImGui::End();
 
-    ImGui::Begin("Console");
+    ImGui::Begin("Scene control");
 
     auto freeSpace = ImGui::GetContentRegionAvail();
 
     freeSpace.x /= 3;
-    freeSpace.y /= 4;
 
     if(ImGui::Button("Start Scene", freeSpace))
     {
@@ -143,6 +143,8 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
             m_ScenePlaying = SceneStates::Playing;
             OnSceneStart();
         }
+
+        m_Logger.AddLog("Scene started\n");
     }
 
     ImGui::SameLine();
@@ -152,6 +154,7 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
         if(m_ScenePlaying == SceneStates::Playing)
         {
             m_ScenePlaying = SceneStates::Paused;
+            m_Logger.AddLog("Scene Paused\n");
             OnScenePause();
         }
     }
@@ -163,6 +166,7 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
         if(m_ScenePlaying == SceneStates::Paused || m_ScenePlaying == SceneStates::Playing)
         {
             m_ScenePlaying = SceneStates::Stopped;
+            m_Logger.AddLog("Scene stopped\n");
             OnSceneStop();
         }
     }
@@ -171,6 +175,8 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
 
     if(m_ScenePlaying == SceneStates::Playing)
         OnSceneUpdate(delta);
+
+    m_Logger.Draw("Mouton Logger");
 
     // Does ImGui calls for the Scene explorer
     m_SceneExplorer.ShowSceneExplorer(m_Scene);
