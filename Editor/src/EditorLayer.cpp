@@ -243,7 +243,8 @@ void EditorLayer::OnSceneStart()
         [](Mouton::Component& comp) {
             auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
 
-            if(behaviour.pythonBehaviour->GetBoundComponent())
+            if(behaviour.pythonBehaviour->LoadScript() &&
+                behaviour.pythonBehaviour->GetBoundComponent())
                 behaviour.pythonBehaviour->OnSceneBegin();
     });
 }
@@ -254,7 +255,8 @@ void EditorLayer::OnSceneUpdate(Mouton::Timestep delta)
         [delta](Mouton::Component& comp) {
             auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
 
-            if(behaviour.pythonBehaviour->GetBoundComponent())
+            if(behaviour.pythonBehaviour->GetBoundComponent()
+                && behaviour.pythonBehaviour->IsLoaded())
                 behaviour.pythonBehaviour->OnSceneUpdate(delta);
     });
 }
@@ -277,7 +279,8 @@ void EditorLayer::OnSceneStop()
         [](Mouton::Component& comp) {
             auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
 
-            if(behaviour.pythonBehaviour->GetBoundComponent())
+            if(behaviour.pythonBehaviour->GetBoundComponent() &&
+                behaviour.pythonBehaviour->IsLoaded())
                 behaviour.pythonBehaviour->OnSceneEnd();
         });
     Mouton::PythonScriptEngine::Stop();

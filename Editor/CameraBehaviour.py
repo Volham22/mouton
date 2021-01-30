@@ -21,9 +21,9 @@ class CameraBehaviour(Mouton.OrthographicCameraComponent):
         Timestep delta : the actual frametime
     """
     def OnUpdate(self, delta):
-        move = Mouton.Vector3(cos(self.m_FrameCount * delta.GetSeconds()),
-            sin(self.m_FrameCount * delta.GetSeconds()), 0.0) * 5
-        self.Translate(move)
+        #move = Mouton.Vector3(cos(self.m_FrameCount * delta.GetSeconds()),
+        #    sin(self.m_FrameCount * delta.GetSeconds()), 0.0) * 5
+        #self.Translate(move)
 
         self.m_FrameCount += 0.1
 

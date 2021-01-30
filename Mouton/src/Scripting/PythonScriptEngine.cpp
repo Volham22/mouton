@@ -13,11 +13,6 @@
 
 // namespace py = pybind11;
 
-int add(int a, int b)
-{
-    return a + b;
-}
-
 PYBIND11_EMBEDDED_MODULE(Mouton, m)
 {
     using namespace Mouton;

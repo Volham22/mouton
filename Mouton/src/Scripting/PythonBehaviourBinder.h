@@ -22,11 +22,13 @@ namespace Mouton
         virtual const char* GetScriptableName() const = 0;
         virtual const char* GetModuleName() const = 0;
         virtual Component* GetBoundComponent() const = 0;
+        virtual bool IsLoaded() const = 0;
 
         virtual void SetBoundComponent(Component* component) = 0;
 
         using ErrorCallback = std::function<void(const std::exception&)>;
         virtual void SetPythonErrorCallback(const ErrorCallback& cb) = 0;
+        virtual bool LoadScript() = 0;
     };
 
     class SpriteComponentScriptable : public PythonBinder
@@ -42,15 +44,19 @@ namespace Mouton
         virtual const char* GetScriptableName() const override { return "SpriteComponent"; }
         virtual const char* GetModuleName() const override { return m_ModuleName; }
         virtual Component* GetBoundComponent() const override { return m_ScriptedComponent; }
+        virtual bool IsLoaded() const override { return m_IsLoaded; }
 
         virtual void SetBoundComponent(Component* component) override;
         virtual void SetPythonErrorCallback(const ErrorCallback& cb) override { m_ErrorCallback = cb; }
+
+        virtual bool LoadScript() override;
 
     private:
         const char* m_ModuleName;
         SpriteComponent* m_ScriptedComponent;
         pybind11::object m_Instance;
         ErrorCallback m_ErrorCallback;
+        bool m_IsLoaded;
 
     private:
         void UpdateAttributes();
@@ -70,15 +76,19 @@ namespace Mouton
         virtual const char* GetScriptableName() const override { return "OrthographicCameraComponent"; }
         virtual const char* GetModuleName() const override { return m_ModuleName; }
         virtual Component* GetBoundComponent() const override { return m_ScriptedComponent; }
+        virtual bool IsLoaded() const override { return m_IsLoaded; }
 
         virtual void SetBoundComponent(Component* component) override;
         virtual void SetPythonErrorCallback(const ErrorCallback& cb) override { m_ErrorCallback = cb; }
+
+        virtual bool LoadScript() override;
 
     private:
         OrthographicCameraComponent* m_ScriptedComponent;
         const char* m_ModuleName;
         pybind11::object m_Instance;
         ErrorCallback m_ErrorCallback;
+        bool m_IsLoaded;
     };
 
 } // namespace Mouton
