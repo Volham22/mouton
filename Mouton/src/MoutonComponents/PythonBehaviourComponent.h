@@ -18,7 +18,9 @@ namespace Mouton
     // Python Behaviour Component is here to hold any PythonBinder implementation
     // in order to be a component in the ECS.
     template<typename T>
-    struct PythonBehaviourComponent : public Component {
+    class PythonBehaviourComponent : public Component
+    {
+    public:
         static_assert(std::is_base_of_v<PythonBinder, T>, "T must implements PythonBinder interface !");
 
         std::unique_ptr<PythonBinder> pythonBehaviour;
@@ -44,7 +46,6 @@ namespace Mouton
             writer.String(pythonBehaviour->GetModuleName());
 
             writer.String("BoundComponent");
-            // TODO: Fix camera component
             if(pythonBehaviour->GetBoundComponent())
                 writer.String(pythonBehaviour->GetBoundComponent()->GetComponentName().c_str());
             else
@@ -64,7 +65,7 @@ namespace Mouton
             case SPRITE_BEHAVIOUR_HASH:
             {
                 auto* ptr =  new PythonBehaviourComponent<SpriteComponentScriptable>(
-                    value["Name"].GetString(), value["ModuleName"].GetString(), nullptr);
+                    value["Name"].GetString(), value["ModuleName"].GetString(), nullptr, nullptr);
 
                 return ptr;
             }
@@ -72,7 +73,7 @@ namespace Mouton
             case ORTHO_BEHAVIOUR_HASH:
             {
                 auto* ptr = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(
-                    value["Name"].GetString(), value["ModuleName"].GetString(), nullptr);
+                    value["Name"].GetString(), value["ModuleName"].GetString(), nullptr, nullptr);
 
                 return ptr;
             }
@@ -82,6 +83,9 @@ namespace Mouton
                 return nullptr;
             }
         }
+
+    private:
+
     };
 
 } // namespace Mouton

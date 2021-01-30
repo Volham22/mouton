@@ -5,8 +5,9 @@ namespace py = pybind11;
 namespace Mouton
 {
 
-    SpriteComponentScriptable::SpriteComponentScriptable(const char* moduleName, SpriteComponent* comp)
-        : m_ModuleName(moduleName), m_ScriptedComponent(comp), m_Instance()
+    SpriteComponentScriptable::SpriteComponentScriptable(const char* moduleName, SpriteComponent* comp,
+        const ErrorCallback& cb)
+        : m_ModuleName(moduleName), m_ScriptedComponent(comp), m_Instance(), m_ErrorCallback(cb)
     {
         try
         {
@@ -14,6 +15,7 @@ namespace Mouton
         }
         catch(const std::exception& e)
         {
+            OnPythonException(e);
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
     }
@@ -32,6 +34,7 @@ namespace Mouton
         }
         catch(const std::exception& e)
         {
+            OnPythonException(e);
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
     }
@@ -45,6 +48,7 @@ namespace Mouton
         }
         catch(const std::exception& e)
         {
+            OnPythonException(e);
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
     }
@@ -58,8 +62,14 @@ namespace Mouton
         }
         catch(const std::exception& e)
         {
+            OnPythonException(e);
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
+    }
+
+    void SpriteComponentScriptable::OnPythonException(const std::exception& e) const
+    {
+        m_ErrorCallback(e);
     }
 
     void SpriteComponentScriptable::UpdateAttributes()
@@ -71,8 +81,8 @@ namespace Mouton
     }
 
     OrthographicCameraComponentScriptable::OrthographicCameraComponentScriptable(const char* moduleName,
-           OrthographicCameraComponent* comp)
-        : m_ScriptedComponent(comp), m_ModuleName(moduleName), m_Instance()
+           OrthographicCameraComponent* comp, const ErrorCallback& cb)
+        : m_ScriptedComponent(comp), m_ModuleName(moduleName), m_Instance(), m_ErrorCallback(cb)
     {
         try
         {
@@ -85,6 +95,7 @@ namespace Mouton
         }
         catch(const std::exception& e)
         {
+            OnPythonException(e);
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
     }
@@ -94,8 +105,16 @@ namespace Mouton
         m_ScriptedComponent = static_cast<OrthographicCameraComponent*>(component);
 
         // Load the python Instance again because the bound component has changed
-        m_Instance = py::module::import(m_ModuleName)
-            .attr(m_ModuleName)(m_ScriptedComponent->GetCameraControllerInstance());
+        try
+        {
+            m_Instance = py::module::import(m_ModuleName)
+                .attr(m_ModuleName)(m_ScriptedComponent->GetCameraControllerInstance());
+        }
+        catch(const std::exception& e)
+        {
+            OnPythonException(e);
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+        }
     }
 
     void OrthographicCameraComponentScriptable::OnSceneBegin()
@@ -106,6 +125,7 @@ namespace Mouton
         }
         catch(std::exception& e)
         {
+            OnPythonException(e);
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
     }
@@ -118,6 +138,7 @@ namespace Mouton
         }
         catch(std::exception& e)
         {
+            OnPythonException(e);
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
     }
@@ -130,8 +151,14 @@ namespace Mouton
         }
         catch(std::exception& e)
         {
+            OnPythonException(e);
             MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
         }
+    }
+
+    void OrthographicCameraComponentScriptable::OnPythonException(const std::exception& e) const
+    {
+        m_ErrorCallback(e);
     }
 
 } // namespace Mouton
