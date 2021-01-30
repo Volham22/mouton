@@ -50,14 +50,14 @@ EditorLayer::EditorLayer()
         Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
         Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
         Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>* behaviour =
-            new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSpriteScript", "RedSpriteScript", red);
+            new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSpriteScript", "RedSpriteScript", red, m_PythonErrorCb);
         Mouton::OrthographicCameraComponent* camera =
             new Mouton::OrthographicCameraComponent(
                 "cameraComponent",
                 cameraInstance);
 
         auto orthoBehaviour = new
-            Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour", camera);
+            Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour", camera, m_PythonErrorCb);
 
         m_Scene->AddComponent(Type::SpriteComponent, red);
         m_Scene->AddComponent(Type::SpriteComponent, green);
@@ -179,7 +179,7 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
     m_Logger.Draw("Mouton Logger");
 
     // Does ImGui calls for the Scene explorer
-    m_SceneExplorer.ShowSceneExplorer(m_Scene);
+    m_SceneExplorer.ShowSceneExplorer(m_Scene, m_PythonErrorCb);
 }
 
 void EditorLayer::OnRender()
@@ -225,6 +225,13 @@ void EditorLayer::SetScene(std::shared_ptr<Mouton::Scene>& scene)
 {
     m_ComponentShown = nullptr;
     m_Scene = scene;
+
+    scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
+        [this](Mouton::Component& comp) {
+            auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
+
+            behaviour.pythonBehaviour->SetPythonErrorCallback(m_PythonErrorCb);
+        });
 }
 
 void EditorLayer::OnSceneStart()

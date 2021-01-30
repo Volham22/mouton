@@ -16,7 +16,8 @@ public:
     ~SceneExplorer();
 
     void InitProperties();
-    void ShowSceneExplorer(std::shared_ptr<Mouton::Scene>& scene);
+    void ShowSceneExplorer(std::shared_ptr<Mouton::Scene>& scene,
+        const Mouton::PythonBinder::ErrorCallback& cb);
     auto& GetUserCamera() { return m_CustomCamera; }
     void SetUserCamera(Mouton::OrthographicCameraController* camera);
     void SetDefaultCamera();
@@ -31,7 +32,7 @@ private:
 
     void ShowEntity(Mouton::Entity* entity, std::shared_ptr<Mouton::Scene>& scene);
     void ShowComponent(Mouton::Entity* entity ,Mouton::Component* comp, std::shared_ptr<Mouton::Scene>& scene);
-    void ShowCreateComponent(std::shared_ptr<Mouton::Scene>& scene) const;
+    void ShowCreateComponent(std::shared_ptr<Mouton::Scene>& scene, const Mouton::PythonBinder::ErrorCallback& cb) const;
     void ShowCreateEntity(std::shared_ptr<Mouton::Scene>& scene) const;
 };
 

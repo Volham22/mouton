@@ -37,6 +37,7 @@ private:
     SceneStates m_ScenePlaying;
     Logger m_Logger;
 
+private:
     void OnSceneStart();
     void OnSceneUpdate(Mouton::Timestep delta);
     void OnScenePause();
@@ -44,4 +45,9 @@ private:
     void OnSceneStop();
 
     void ShowProperties();
+
+    Mouton::PythonBinder::ErrorCallback m_PythonErrorCb = [this](const std::exception& e) {
+        const auto& str = std::string("Python Script Error: ") + e.what();
+        m_Logger.AddLog(str.c_str());
+    };
 };

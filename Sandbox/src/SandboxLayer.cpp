@@ -20,7 +20,7 @@ SandboxLayer::SandboxLayer()
 
     PythonScriptEngine::Init();
 
-    m_PythonComponentBehaviour = new SpriteComponentScriptable("myComp", new SpriteComponent("myComp"));
+    m_PythonComponentBehaviour = new SpriteComponentScriptable("myComp", new SpriteComponent("myComp"), [](const std::exception& e) {});
 }
 
 void SandboxLayer::OnBind()

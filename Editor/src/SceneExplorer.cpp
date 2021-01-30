@@ -11,7 +11,8 @@
 using namespace Mouton;
 
 static bool AddPythonBehaviourComponent(std::shared_ptr<Scene>& scene, const std::string& name,
-    const std::array<char, 255>& moduleName, Component* boundComponent, PythonBehaviourType type);
+    const std::array<char, 255>& moduleName, Component* boundComponent, PythonBehaviourType type,
+    const PythonBinder::ErrorCallback& cb);
 
 static void ShowPythonBehaviourCreation(std::shared_ptr<Scene>& scene, std::array<char, 255>& moduleName,
     int& selectedBehaviourType, Component*& boundComponent);
@@ -30,7 +31,8 @@ void SceneExplorer::InitProperties()
     EditorPropertiesPanels::LoadProjectTextures();
 }
 
-void SceneExplorer::ShowSceneExplorer(std::shared_ptr<Scene>& scene)
+void SceneExplorer::ShowSceneExplorer(std::shared_ptr<Scene>& scene,
+    const PythonBinder::ErrorCallback& cb)
 {
     ImGui::Begin("Scene explorer");
 
@@ -44,7 +46,7 @@ void SceneExplorer::ShowSceneExplorer(std::shared_ptr<Scene>& scene)
             ImGui::Separator();
         }
 
-        ShowCreateComponent(scene);
+        ShowCreateComponent(scene, cb);
         ShowCreateEntity(scene);
     }
 
@@ -180,7 +182,7 @@ void SceneExplorer::ShowComponent(Mouton::Entity *entity, Mouton::Component *com
     }
 }
 
-void SceneExplorer::ShowCreateComponent(std::shared_ptr<Scene>& scene) const
+void SceneExplorer::ShowCreateComponent(std::shared_ptr<Scene>& scene, const PythonBinder::ErrorCallback& cb) const
 {
     if (ImGui::Button("Create a new Component ..."))
         ImGui::OpenPopup("Create component");
@@ -243,7 +245,9 @@ void SceneExplorer::ShowCreateComponent(std::shared_ptr<Scene>& scene) const
                 break;
 
             case Component::ComponentType::PythonBehaviourComponent:
-                if(!AddPythonBehaviourComponent(scene, std::string(nameBuffer), pythonModuleName, boundComponent, toBehaviourType(selectedPythonBehaviourType)))
+                if(!AddPythonBehaviourComponent(
+                        scene, std::string(nameBuffer), pythonModuleName,
+                        boundComponent, toBehaviourType(selectedPythonBehaviourType), cb))
                     ImGui::OpenPopup("Incorrect Name !");
                 else
                     ImGui::CloseCurrentPopup();
@@ -323,7 +327,8 @@ SceneExplorer::~SceneExplorer()
 }
 
 bool AddPythonBehaviourComponent(std::shared_ptr<Scene>& scene, const std::string& name,
-    const std::array<char, 255>& moduleName, Component* boundComponent, PythonBehaviourType type)
+    const std::array<char, 255>& moduleName, Component* boundComponent, PythonBehaviourType type,
+    const PythonBinder::ErrorCallback& cb)
 {
     PythonBehaviourComponent<PythonBinder>* comp = nullptr;
 
@@ -332,7 +337,11 @@ bool AddPythonBehaviourComponent(std::shared_ptr<Scene>& scene, const std::strin
     case PythonBehaviourType::SpriteBehaviour:
     {
         ScriptSkeletonFactory::CreateSpriteComponentSkeleton(std::string(moduleName.data()), "SpriteComponentScriptTemplate.mtnt");
-        auto spriteComp = new PythonBehaviourComponent<SpriteComponentScriptable>(name, moduleName.data(), static_cast<SpriteComponent*>(boundComponent));
+        auto spriteComp = new PythonBehaviourComponent<SpriteComponentScriptable>(
+            name,
+            moduleName.data(),
+            static_cast<SpriteComponent*>(boundComponent),
+            cb);
         return scene->AddComponent(Component::ComponentType::PythonBehaviourComponent, spriteComp);
     }
 
@@ -342,7 +351,8 @@ bool AddPythonBehaviourComponent(std::shared_ptr<Scene>& scene, const std::strin
         auto orthoComp = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(
             name,
             moduleName.data(),
-            static_cast<OrthographicCameraComponent*>(boundComponent));
+            static_cast<OrthographicCameraComponent*>(boundComponent),
+            cb);
         return scene->AddComponent(Component::ComponentType::PythonBehaviourComponent, orthoComp);
     }
 
