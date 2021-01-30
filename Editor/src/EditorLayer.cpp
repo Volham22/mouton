@@ -176,6 +176,28 @@ void EditorLayer::OnUpdate(Mouton::Timestep delta)
     m_SceneExplorer.ShowSceneExplorer(m_Scene);
 }
 
+void EditorLayer::OnRender()
+{
+    // Viewport rendering
+    m_ViewportFramebuffer->Bind();
+    if(m_SceneExplorer.GetUserCamera())
+        Mouton::Renderer2D::BeginScene(m_SceneExplorer.GetUserCamera()->GetViewProjectionMatrix());
+    else
+        Mouton::Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
+
+    m_Scene->ForEachComponents(Mouton::Component::ComponentType::SpriteComponent, [](Mouton::Component& comp) {
+        Mouton::SpriteComponent& sprite = static_cast<Mouton::SpriteComponent&>(comp);
+
+        if(sprite.isTextured)
+            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.texture, sprite.rotation);
+        else
+            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.color, sprite.rotation);
+    });
+
+    Mouton::Renderer2D::EndScene();
+    m_ViewportFramebuffer->Unbind();
+}
+
 bool EditorLayer::OnEvent(Mouton::Event &event)
 {
     Mouton::EventSystem::ApplyFunction<Mouton::WindowCloseEvent>(&event, [](Mouton::Event &event) -> bool {
@@ -222,25 +244,6 @@ void EditorLayer::OnSceneUpdate(Mouton::Timestep delta)
             if(behaviour.pythonBehaviour->GetBoundComponent())
                 behaviour.pythonBehaviour->OnSceneUpdate(delta);
     });
-
-    // Viewport rendering
-    m_ViewportFramebuffer->Bind();
-    if(m_SceneExplorer.GetUserCamera())
-        Mouton::Renderer2D::BeginScene(m_SceneExplorer.GetUserCamera()->GetViewProjectionMatrix());
-    else
-        Mouton::Renderer2D::BeginScene(m_Camera.GetViewProjectionMatrix());
-
-    m_Scene->ForEachComponents(Mouton::Component::ComponentType::SpriteComponent, [](Mouton::Component& comp) {
-        Mouton::SpriteComponent& sprite = static_cast<Mouton::SpriteComponent&>(comp);
-
-        if(sprite.isTextured)
-            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.texture, sprite.rotation);
-        else
-            Mouton::Renderer2D::DrawQuad(sprite.position, sprite.scale, sprite.color, sprite.rotation);
-    });
-
-    Mouton::Renderer2D::EndScene();
-    m_ViewportFramebuffer->Unbind();
 }
 
 void EditorLayer::OnScenePause()

@@ -31,6 +31,7 @@ namespace Mouton
         {
             l->OnBind();
             l->OnUpdate(m_Chrono.GetDeltaTime());
+            l->OnRender();
             l->OnUnbind();
         }
 

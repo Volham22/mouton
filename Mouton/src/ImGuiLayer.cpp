@@ -32,6 +32,10 @@ namespace Mouton
     {
     }
 
+    void ImGUILayer::OnRender()
+    {
+    }
+
     void ImGUILayer::OnUnbind()
     {
         auto& io = ImGui::GetIO();

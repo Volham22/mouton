@@ -48,6 +48,10 @@ void SandboxLayer::OnUpdate(Timestep delta)
     ImGui::ShowDemoWindow();
 }
 
+void SandboxLayer::OnRender()
+{
+}
+
 bool SandboxLayer::OnEvent(Event &event)
 {
     EventSystem::ApplyFunction<WindowCloseEvent>(&event, [](Event &event) -> bool {

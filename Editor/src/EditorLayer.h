@@ -16,7 +16,8 @@ public:
     ~EditorLayer();
 
     virtual void OnBind() override;
-    virtual void OnUpdate(Mouton::Timestep delta) override;
+    virtual void OnUpdate(Mouton::Timestep delta);
+    virtual void OnRender() override;
     virtual void OnUnbind() override;
     virtual bool OnEvent(Mouton::Event& event) override;
 

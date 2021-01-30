@@ -19,6 +19,7 @@ namespace Mouton
         virtual void OnUpdate(Timestep delta) = 0;
         virtual void OnUnbind() = 0;
         virtual bool OnEvent(Event& event)  = 0;
+        virtual void OnRender() = 0;
     
     protected:
         std::string m_Name;
