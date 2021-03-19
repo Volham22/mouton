@@ -44,7 +44,7 @@ static void saveToFile(const std::string& json)
         MTN_ERROR("Failed to save scene to file !");
 }
 
-static std::string OpenDialog()
+static std::optional<std::string> OpenDialog()
 {
     FILE* fileDialogPipe = popen("zenity --file-selection --title=\"Select a Mouton scene file ...\"", "r");
 
@@ -57,10 +57,11 @@ static std::string OpenDialog()
 
         pclose(fileDialogPipe);
 
-        return std::string(strtok(path, "\n"));
+        if(strlen(path) > 0)
+            return std::string(strtok(path, "\n"));
     }
 
-    return std::string();
+    return std::nullopt;
 }
 
 static std::string LoadJsonFromFile(const std::string& filepath)
@@ -100,8 +101,13 @@ void BarMenu::ShowMenu(const std::shared_ptr<Mouton::Scene>& scene, EditorLayer*
             if(ImGui::MenuItem("Open scene"))
             {
                 // MTN_TRACE("Path {}", OpenDialog().c_str());
-                auto newScene = Mouton::Scene::FromJson(LoadJsonFromFile(OpenDialog()));
-                editorLayer->SetScene(newScene);
+                auto path = OpenDialog();
+
+                if(path)
+                {
+                    auto newScene = Mouton::Scene::FromJson(LoadJsonFromFile(path.value()));
+                    editorLayer->SetScene(newScene);
+                }
             }
 
             if(ImGui::BeginMenu("Save ..."))
