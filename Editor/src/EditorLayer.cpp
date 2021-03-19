@@ -28,6 +28,8 @@ EditorLayer::EditorLayer()
     Mouton::RendererContext::InitContext(Mouton::GraphicAPI::OpenGL);
     Mouton::Renderer::InitRenderer();
     Mouton::Renderer2D::Init();
+
+    // Initialize PythonScriptEngine engine to enable scripted scene loading
     Mouton::PythonScriptEngine::Init();
 
     // This will load texures and some other stuff in the future
@@ -38,38 +40,38 @@ EditorLayer::EditorLayer()
 
     m_ViewportFramebuffer = Mouton::Framebuffer::CreateFramebuffer();
 
-    m_Scene->AddEntity(new Mouton::Entity("RedQuad"));
-    m_Scene->AddEntity(new Mouton::Entity("GreenQuad"));
+    // m_Scene->AddEntity(new Mouton::Entity("RedQuad"));
+    // m_Scene->AddEntity(new Mouton::Entity("GreenQuad"));
 
-    {
-        using Type = Mouton::Component::ComponentType;
+    // {
+    //     using Type = Mouton::Component::ComponentType;
 
-        auto cameraInstance =
-            new Mouton::OrthographicCameraController(std::make_shared<Mouton::OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f));
+    //     auto cameraInstance =
+    //         new Mouton::OrthographicCameraController(std::make_shared<Mouton::OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f));
 
-        Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
-        Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
-        Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>* behaviour =
-            new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSpriteScript", "RedSpriteScript", red, m_PythonErrorCb);
-        Mouton::OrthographicCameraComponent* camera =
-            new Mouton::OrthographicCameraComponent(
-                "cameraComponent",
-                cameraInstance);
+    //     Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
+    //     Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
+    //     Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>* behaviour =
+    //         new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSpriteScript", "RedSpriteScript", red, m_PythonErrorCb);
+    //     Mouton::OrthographicCameraComponent* camera =
+    //         new Mouton::OrthographicCameraComponent(
+    //             "cameraComponent",
+    //             cameraInstance);
 
-        auto orthoBehaviour = new
-            Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour", camera, m_PythonErrorCb);
+    //     auto orthoBehaviour = new
+    //         Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour", camera, m_PythonErrorCb);
 
-        m_Scene->AddComponent(Type::SpriteComponent, red);
-        m_Scene->AddComponent(Type::SpriteComponent, green);
-        m_Scene->AddComponent(Type::PythonBehaviourComponent, behaviour);
-        m_Scene->AddComponent(Type::OrthographicCamera, camera);
-        m_Scene->AddComponent(Type::PythonBehaviourComponent, orthoBehaviour);
-        m_Scene->AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
-        m_Scene->AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "RedSpriteScript");
-        m_Scene->AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
-        m_Scene->AddComponentToEntity("RedQuad", Type::OrthographicCamera, "cameraComponent");
-        m_Scene->AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "CameraBehaviour");
-    }
+    //     m_Scene->AddComponent(Type::SpriteComponent, red);
+    //     m_Scene->AddComponent(Type::SpriteComponent, green);
+    //     m_Scene->AddComponent(Type::PythonBehaviourComponent, behaviour);
+    //     m_Scene->AddComponent(Type::OrthographicCamera, camera);
+    //     m_Scene->AddComponent(Type::PythonBehaviourComponent, orthoBehaviour);
+    //     m_Scene->AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
+    //     m_Scene->AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "RedSpriteScript");
+    //     m_Scene->AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
+    //     m_Scene->AddComponentToEntity("RedQuad", Type::OrthographicCamera, "cameraComponent");
+    //     m_Scene->AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "CameraBehaviour");
+    // }
 }
 
 void EditorLayer::OnBind()
@@ -236,7 +238,7 @@ void EditorLayer::SetScene(std::shared_ptr<Mouton::Scene>& scene)
 
 void EditorLayer::OnSceneStart()
 {
-    Mouton::PythonScriptEngine::Init();
+    Mouton::PythonScriptEngine::Init(); // Ignored if an interpreter is already running
     MTN_TRACE("Scene Started");
 
     m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
@@ -275,14 +277,14 @@ void EditorLayer::OnSceneStop()
 {
     MTN_TRACE("Scene stopped");
 
-    m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
-        [](Mouton::Component& comp) {
+    m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent, [](Mouton::Component& comp) {
             auto& behaviour = Mouton::PythonBehaviourComponent<Mouton::PythonBinder>::ToPythonBehaviourComponent(comp);
 
             if(behaviour.pythonBehaviour->GetBoundComponent() &&
                 behaviour.pythonBehaviour->IsLoaded())
                 behaviour.pythonBehaviour->OnSceneEnd();
-        });
+    });
+
     Mouton::PythonScriptEngine::Stop();
 }
 

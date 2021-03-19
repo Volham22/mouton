@@ -17,7 +17,7 @@ namespace Mouton
             OrthographicCameraController* controller);
         OrthographicCameraComponent() = delete;
 
-        ~OrthographicCameraComponent();
+        ~OrthographicCameraComponent() = default;
 
         glm::vec3& GetPosition() { return m_CameraController->GetPosition(); }
         float& GetRotation() { return m_CameraController->GetRotation(); }

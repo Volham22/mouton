@@ -11,7 +11,7 @@
 #include <pybind11/embed.h>
 #include <pybind11/operators.h>
 
-// namespace py = pybind11;
+namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(Mouton, m)
 {
@@ -189,8 +189,16 @@ namespace Mouton
         static py::scoped_interpreter interpreter{};
     }
 
-    void PythonScriptEngine::Stop()
+    void PythonScriptEngine::Restart()
     {
     }
+
+    void PythonScriptEngine::Stop()
+    {
+        // if(interpreter)
+        //     delete interpreter;
+    }
+
+
 
 } // namespace Mouton

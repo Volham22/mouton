@@ -5,11 +5,12 @@ namespace py = pybind11;
 namespace Mouton
 {
 
-    SpriteComponentScriptable::SpriteComponentScriptable(const char* moduleName, SpriteComponent* comp,
+    SpriteComponentScriptable::SpriteComponentScriptable(const std::string& moduleName, SpriteComponent* comp,
         const ErrorCallback& cb)
         : m_ModuleName(moduleName), m_ScriptedComponent(comp), m_Instance(),
           m_ErrorCallback(cb), m_IsLoaded(false)
     {
+        MTN_TRACE("Module name {}", m_ModuleName);
         // try
         // {
         //     m_Instance = py::module::import(m_ModuleName).attr(m_ModuleName)();
@@ -77,8 +78,7 @@ namespace Mouton
     {
         try
         {
-            m_Instance.dec_ref();
-            m_Instance = py::module::import(m_ModuleName).attr(m_ModuleName)();
+            m_Instance = py::module::import(m_ModuleName.c_str()).attr(m_ModuleName.c_str())();
             m_IsLoaded = true;
         }
         catch(const std::exception& e)
@@ -99,11 +99,12 @@ namespace Mouton
         m_ScriptedComponent->rotation = py::cast<float>(m_Instance.attr("rotation"));
     }
 
-    OrthographicCameraComponentScriptable::OrthographicCameraComponentScriptable(const char* moduleName,
+    OrthographicCameraComponentScriptable::OrthographicCameraComponentScriptable(const std::string& moduleName,
            OrthographicCameraComponent* comp, const ErrorCallback& cb)
         : m_ScriptedComponent(comp), m_ModuleName(moduleName), m_Instance(),
           m_ErrorCallback(cb), m_IsLoaded(false)
     {
+        MTN_TRACE("Module name {}", m_ModuleName);
         // try
         // {
         //     // When loading from JSON (serialized scene) comp will be null because it might
@@ -127,9 +128,8 @@ namespace Mouton
         // Load the python Instance again because the bound component has changed
         try
         {
-            m_Instance.dec_ref();
-            m_Instance = py::module::import(m_ModuleName)
-                .attr(m_ModuleName)(m_ScriptedComponent->GetCameraControllerInstance());
+            m_Instance = py::module::import(m_ModuleName.c_str())
+                .attr(m_ModuleName.c_str())(m_ScriptedComponent->GetCameraControllerInstance());
         }
         catch(const std::exception& e)
         {
@@ -186,8 +186,8 @@ namespace Mouton
     {
         try
         {
-            m_Instance = py::module::import(m_ModuleName)
-                .attr(m_ModuleName)(m_ScriptedComponent->GetCameraControllerInstance());
+            m_Instance = py::module::import(m_ModuleName.c_str())
+                .attr(m_ModuleName.c_str())(m_ScriptedComponent->GetCameraControllerInstance());
             m_IsLoaded = true;
         }
         catch(const std::exception& e)

@@ -43,7 +43,7 @@ namespace Mouton
             writer.String("Type");
             writer.String(pythonBehaviour->GetScriptableName());
             writer.String("ModuleName");
-            writer.String(pythonBehaviour->GetModuleName());
+            writer.String(pythonBehaviour->GetModuleName().c_str());
 
             writer.String("BoundComponent");
             if(pythonBehaviour->GetBoundComponent())
@@ -56,7 +56,7 @@ namespace Mouton
         static Component* LoadJson(const Value& value)
         {
             constexpr size_t SPRITE_BEHAVIOUR_HASH  = Utils::StringHash::HashString("SpriteComponent");
-            constexpr size_t ORTHO_BEHAVIOUR_HASH  = Utils::StringHash::HashString("OrthographicCameraComponent");
+            constexpr size_t ORTHO_BEHAVIOUR_HASH   = Utils::StringHash::HashString("OrthographicCameraComponent");
 
             const size_t valueTypeHash = Utils::StringHash::HashString(std::string(value["Type"].GetString()));
 
@@ -65,7 +65,7 @@ namespace Mouton
             case SPRITE_BEHAVIOUR_HASH:
             {
                 auto* ptr =  new PythonBehaviourComponent<SpriteComponentScriptable>(
-                    value["Name"].GetString(), value["ModuleName"].GetString(), nullptr, nullptr);
+                    value["Name"].GetString(), std::string(value["ModuleName"].GetString()), nullptr, nullptr);
 
                 return ptr;
             }
@@ -73,7 +73,7 @@ namespace Mouton
             case ORTHO_BEHAVIOUR_HASH:
             {
                 auto* ptr = new PythonBehaviourComponent<OrthographicCameraComponentScriptable>(
-                    value["Name"].GetString(), value["ModuleName"].GetString(), nullptr, nullptr);
+                    value["Name"].GetString(), std::string(value["ModuleName"].GetString()), nullptr, nullptr);
 
                 return ptr;
             }

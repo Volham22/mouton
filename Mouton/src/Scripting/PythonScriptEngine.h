@@ -10,6 +10,7 @@ namespace Mouton
     {
     public:
         static void Init();
+        static void Restart();
         static void Stop();
     };
 

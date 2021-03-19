@@ -30,9 +30,4 @@ namespace Mouton
         m_CameraController->SetCoords(left, right, top, bottom, near, far);
     }
 
-    OrthographicCameraComponent::~OrthographicCameraComponent()
-    {
-        delete m_CameraController;
-    }
-
 } // namespace Mouton

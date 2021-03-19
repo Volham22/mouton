@@ -20,7 +20,7 @@ namespace Mouton
         virtual void OnPythonException(const std::exception& e) const = 0;
 
         virtual const char* GetScriptableName() const = 0;
-        virtual const char* GetModuleName() const = 0;
+        virtual const std::string& GetModuleName() const = 0;
         virtual Component* GetBoundComponent() const = 0;
         virtual bool IsLoaded() const = 0;
 
@@ -34,7 +34,7 @@ namespace Mouton
     class SpriteComponentScriptable : public PythonBinder
     {
     public:
-        SpriteComponentScriptable(const char* moduleName, SpriteComponent* comp, const ErrorCallback& cb);
+        SpriteComponentScriptable(const std::string& moduleName, SpriteComponent* comp, const ErrorCallback& cb);
 
         virtual void OnSceneBegin() override;
         virtual void OnSceneUpdate(Timestep delta) override;
@@ -42,7 +42,7 @@ namespace Mouton
         virtual void OnPythonException(const std::exception& e) const override;
 
         virtual const char* GetScriptableName() const override { return "SpriteComponent"; }
-        virtual const char* GetModuleName() const override { return m_ModuleName; }
+        virtual const std::string& GetModuleName() const override { return m_ModuleName; }
         virtual Component* GetBoundComponent() const override { return m_ScriptedComponent; }
         virtual bool IsLoaded() const override { return m_IsLoaded; }
 
@@ -52,7 +52,7 @@ namespace Mouton
         virtual bool LoadScript() override;
 
     private:
-        const char* m_ModuleName;
+        std::string m_ModuleName;
         SpriteComponent* m_ScriptedComponent;
         pybind11::object m_Instance;
         ErrorCallback m_ErrorCallback;
@@ -65,7 +65,7 @@ namespace Mouton
     class OrthographicCameraComponentScriptable : public PythonBinder
     {
     public:
-        OrthographicCameraComponentScriptable(const char* moduleName,
+        OrthographicCameraComponentScriptable(const std::string& moduleName,
            OrthographicCameraComponent* comp, const ErrorCallback& cb);
 
         virtual void OnSceneBegin() override;
@@ -74,7 +74,7 @@ namespace Mouton
         virtual void OnPythonException(const std::exception& e) const override;
 
         virtual const char* GetScriptableName() const override { return "OrthographicCameraComponent"; }
-        virtual const char* GetModuleName() const override { return m_ModuleName; }
+        virtual const std::string& GetModuleName() const override { return m_ModuleName; }
         virtual Component* GetBoundComponent() const override { return m_ScriptedComponent; }
         virtual bool IsLoaded() const override { return m_IsLoaded; }
 
@@ -85,7 +85,7 @@ namespace Mouton
 
     private:
         OrthographicCameraComponent* m_ScriptedComponent;
-        const char* m_ModuleName;
+        std::string m_ModuleName;
         pybind11::object m_Instance;
         ErrorCallback m_ErrorCallback;
         bool m_IsLoaded;

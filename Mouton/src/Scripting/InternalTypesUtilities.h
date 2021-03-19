@@ -9,14 +9,12 @@
 
 #include <pybind11/embed.h>
 
-namespace py = pybind11;
-
 namespace Mouton
 {
 
+    namespace py = pybind11;
     class InternalTypeUtils
     {
-
     public:
         template<typename T, typename... Args>
         static std::string ToString(const T& obj)
