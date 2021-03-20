@@ -238,7 +238,7 @@ void EditorLayer::SetScene(std::shared_ptr<Mouton::Scene>& scene)
 
 void EditorLayer::OnSceneStart()
 {
-    Mouton::PythonScriptEngine::Init(); // Ignored if an interpreter is already running
+    Mouton::PythonScriptEngine::Init();
     MTN_TRACE("Scene Started");
 
     m_Scene->ForEachComponents(Mouton::Component::ComponentType::PythonBehaviourComponent,
@@ -284,8 +284,6 @@ void EditorLayer::OnSceneStop()
                 behaviour.pythonBehaviour->IsLoaded())
                 behaviour.pythonBehaviour->OnSceneEnd();
     });
-
-    Mouton::PythonScriptEngine::Stop();
 }
 
 EditorLayer::~EditorLayer()

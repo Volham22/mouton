@@ -14,21 +14,35 @@ namespace Mouton
     class PythonBinder
     {
     public:
+        using ErrorCallback = std::function<void(const std::exception&)>;
+
+        PythonBinder(const std::string& m_ModuleName, const ErrorCallback& cb);
+
         virtual void OnSceneBegin() = 0;
         virtual void OnSceneUpdate(Timestep delta) = 0;
         virtual void OnSceneEnd() = 0;
         virtual void OnPythonException(const std::exception& e) const = 0;
 
         virtual const char* GetScriptableName() const = 0;
-        virtual const std::string& GetModuleName() const = 0;
         virtual Component* GetBoundComponent() const = 0;
-        virtual bool IsLoaded() const = 0;
 
         virtual void SetBoundComponent(Component* component) = 0;
 
-        using ErrorCallback = std::function<void(const std::exception&)>;
-        virtual void SetPythonErrorCallback(const ErrorCallback& cb) = 0;
         virtual bool LoadScript() = 0;
+
+        bool IsLoaded() const { return p_IsLoaded; }
+        virtual const std::string& GetModuleName() const { return p_ModuleName; }
+        void SetPythonErrorCallback(const ErrorCallback& cb) { p_ErrorCallback = cb; }
+
+        protected:
+            std::string p_ModuleName;
+            pybind11::object p_Instance;
+            pybind11::module p_Module;
+            ErrorCallback p_ErrorCallback;
+            bool p_IsLoaded;
+
+        protected:
+            void LoadPythonModule(bool reload = false);
     };
 
     class SpriteComponentScriptable : public PythonBinder
@@ -42,21 +56,14 @@ namespace Mouton
         virtual void OnPythonException(const std::exception& e) const override;
 
         virtual const char* GetScriptableName() const override { return "SpriteComponent"; }
-        virtual const std::string& GetModuleName() const override { return m_ModuleName; }
         virtual Component* GetBoundComponent() const override { return m_ScriptedComponent; }
-        virtual bool IsLoaded() const override { return m_IsLoaded; }
 
         virtual void SetBoundComponent(Component* component) override;
-        virtual void SetPythonErrorCallback(const ErrorCallback& cb) override { m_ErrorCallback = cb; }
 
         virtual bool LoadScript() override;
 
     private:
-        std::string m_ModuleName;
         SpriteComponent* m_ScriptedComponent;
-        pybind11::object m_Instance;
-        ErrorCallback m_ErrorCallback;
-        bool m_IsLoaded;
 
     private:
         void UpdateAttributes();
@@ -74,21 +81,14 @@ namespace Mouton
         virtual void OnPythonException(const std::exception& e) const override;
 
         virtual const char* GetScriptableName() const override { return "OrthographicCameraComponent"; }
-        virtual const std::string& GetModuleName() const override { return m_ModuleName; }
         virtual Component* GetBoundComponent() const override { return m_ScriptedComponent; }
-        virtual bool IsLoaded() const override { return m_IsLoaded; }
 
         virtual void SetBoundComponent(Component* component) override;
-        virtual void SetPythonErrorCallback(const ErrorCallback& cb) override { m_ErrorCallback = cb; }
 
         virtual bool LoadScript() override;
 
     private:
         OrthographicCameraComponent* m_ScriptedComponent;
-        std::string m_ModuleName;
-        pybind11::object m_Instance;
-        ErrorCallback m_ErrorCallback;
-        bool m_IsLoaded;
     };
 
 } // namespace Mouton

@@ -52,6 +52,9 @@ namespace Mouton
 
         case ComponentType::SpriteComponent:
             return "SpriteComponent";
+
+        default:
+            return "";
         }
     }
 

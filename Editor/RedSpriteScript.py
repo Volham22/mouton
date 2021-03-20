@@ -29,8 +29,9 @@ class RedSpriteScript(Mouton.SpriteComponent):
 
         # self.position.x += incX
         # self.position.y += incY
-        self.scale.x += incX
-        self.scale.y += incY
+        # self.scale.x += incX
+        # self.scale.y += incY
+        self.rotation += incX
 
         self.frame += delta.GetSeconds()
 

@@ -5,21 +5,24 @@ namespace py = pybind11;
 namespace Mouton
 {
 
+    PythonBinder::PythonBinder(const std::string& moduleName, const ErrorCallback& cb)
+        : p_ModuleName(moduleName), p_Instance(), p_Module(),
+          p_ErrorCallback(cb), p_IsLoaded(false)
+    {
+    }
+
+    void PythonBinder::LoadPythonModule(bool reload)
+    {
+        if(reload)
+            p_Module.reload();
+        else
+            p_Module = py::module::import(p_ModuleName.c_str());
+    }
+
     SpriteComponentScriptable::SpriteComponentScriptable(const std::string& moduleName, SpriteComponent* comp,
         const ErrorCallback& cb)
-        : m_ModuleName(moduleName), m_ScriptedComponent(comp), m_Instance(),
-          m_ErrorCallback(cb), m_IsLoaded(false)
+        : PythonBinder(moduleName, cb), m_ScriptedComponent(comp)
     {
-        MTN_TRACE("Module name {}", m_ModuleName);
-        // try
-        // {
-        //     m_Instance = py::module::import(m_ModuleName).attr(m_ModuleName)();
-        // }
-        // catch(const std::exception& e)
-        // {
-        //     OnPythonException(e);
-        //     MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
-        // }
     }
 
     void SpriteComponentScriptable::SetBoundComponent(Component* component)
@@ -31,13 +34,13 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnBegin")();
+            p_Instance.attr("OnBegin")();
             UpdateAttributes();
         }
         catch(const std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
         }
     }
 
@@ -45,13 +48,13 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnUpdate")(delta);
+            p_Instance.attr("OnUpdate")(delta);
             UpdateAttributes();
         }
         catch(const std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
         }
     }
 
@@ -59,66 +62,53 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnEnd")();
+            p_Instance.attr("OnEnd")();
             UpdateAttributes();
         }
         catch(const std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
         }
     }
 
     void SpriteComponentScriptable::OnPythonException(const std::exception& e) const
     {
-        m_ErrorCallback(e);
+        p_ErrorCallback(e);
     }
 
     bool SpriteComponentScriptable::LoadScript()
     {
         try
         {
-            m_Instance = py::module::import(m_ModuleName.c_str()).attr(m_ModuleName.c_str())();
-            m_IsLoaded = true;
+            LoadPythonModule(p_IsLoaded);
+            p_IsLoaded = true;
+
+            p_Instance = p_Module.attr(p_ModuleName.c_str())();
         }
         catch(const std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
-            m_IsLoaded = false;
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
+            p_IsLoaded = false;
         }
 
-        return m_IsLoaded;
+        return p_IsLoaded;
     }
 
     void SpriteComponentScriptable::UpdateAttributes()
     {
-        m_ScriptedComponent->color = py::cast<glm::vec4>(m_Instance.attr("color"));
-        m_ScriptedComponent->position = py::cast<glm::vec3>(m_Instance.attr("position"));
-        m_ScriptedComponent->scale = py::cast<glm::vec2>(m_Instance.attr("scale"));
-        m_ScriptedComponent->rotation = py::cast<float>(m_Instance.attr("rotation"));
+        m_ScriptedComponent->color = py::cast<glm::vec4>(p_Instance.attr("color"));
+        m_ScriptedComponent->position = py::cast<glm::vec3>(p_Instance.attr("position"));
+        m_ScriptedComponent->scale = py::cast<glm::vec2>(p_Instance.attr("scale"));
+        m_ScriptedComponent->rotation = py::cast<float>(p_Instance.attr("rotation"));
     }
 
     OrthographicCameraComponentScriptable::OrthographicCameraComponentScriptable(const std::string& moduleName,
            OrthographicCameraComponent* comp, const ErrorCallback& cb)
-        : m_ScriptedComponent(comp), m_ModuleName(moduleName), m_Instance(),
-          m_ErrorCallback(cb), m_IsLoaded(false)
+        : PythonBinder(moduleName, cb), m_ScriptedComponent(comp)
     {
-        MTN_TRACE("Module name {}", m_ModuleName);
-        // try
-        // {
-        //     // When loading from JSON (serialized scene) comp will be null because it might
-        //     // not be loaded yet.
-        //     // The method SetBoundComponent will initialize m_Instance once the bound component
-        //     // has been loaded.
-        //     if(comp)
-        //         m_Instance = py::module::import(m_ModuleName).attr(m_ModuleName)(comp->GetCameraControllerInstance());
-        // }
-        // catch(const std::exception& e)
-        // {
-        //     OnPythonException(e);
-        //     MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
-        // }
+        MTN_TRACE("Module name {}", p_ModuleName);
     }
 
     void OrthographicCameraComponentScriptable::SetBoundComponent(Component* component)
@@ -128,13 +118,13 @@ namespace Mouton
         // Load the python Instance again because the bound component has changed
         try
         {
-            m_Instance = py::module::import(m_ModuleName.c_str())
-                .attr(m_ModuleName.c_str())(m_ScriptedComponent->GetCameraControllerInstance());
+            p_Instance = py::module::import(p_ModuleName.c_str())
+                .attr(p_ModuleName.c_str())(m_ScriptedComponent->GetCameraControllerInstance());
         }
         catch(const std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
         }
     }
 
@@ -142,12 +132,12 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnBegin")();
+            p_Instance.attr("OnBegin")();
         }
         catch(std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
         }
     }
 
@@ -155,12 +145,12 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnUpdate")(delta);
+            p_Instance.attr("OnUpdate")(delta);
         }
         catch(std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
         }
     }
 
@@ -168,36 +158,37 @@ namespace Mouton
     {
         try
         {
-            m_Instance.attr("OnEnd")();
+            p_Instance.attr("OnEnd")();
         }
         catch(std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
         }
     }
 
     void OrthographicCameraComponentScriptable::OnPythonException(const std::exception& e) const
     {
-        m_ErrorCallback(e);
+        p_ErrorCallback(e);
     }
 
     bool OrthographicCameraComponentScriptable::LoadScript()
     {
         try
         {
-            m_Instance = py::module::import(m_ModuleName.c_str())
-                .attr(m_ModuleName.c_str())(m_ScriptedComponent->GetCameraControllerInstance());
-            m_IsLoaded = true;
+            LoadPythonModule(p_IsLoaded);
+            p_IsLoaded = true;
+
+            p_Instance = p_Module.attr(p_ModuleName.c_str())(m_ScriptedComponent->GetCameraControllerInstance());
         }
         catch(const std::exception& e)
         {
             OnPythonException(e);
-            MTN_ERROR("Python script '{0}' threw an exception : {1}", m_ModuleName, e.what());
-            m_IsLoaded = false;
+            MTN_ERROR("Python script '{0}' threw an exception : {1}", p_ModuleName, e.what());
+            p_IsLoaded = false;
         }
 
-        return m_IsLoaded;
+        return p_IsLoaded;
     }
 
 } // namespace Mouton
