@@ -58,17 +58,17 @@ namespace Mouton
     {
         int iQuad = s_Renderer2D.m_BatchData.quadCount;
 
-        const glm::vec4 verticesPositions[] = {
-            {-0.5f, -0.5f, 0.0f, 1.0f },
-            {-0.5f,  -0.5f + size.y, 0.0f, 1.0f },
-            { -0.5f + size.x,  -0.5f + size.y, 0.0f, 1.0f },
+        constexpr glm::vec4 verticesPositions[] = {
+            { -0.5f, -0.5f, 0.0f, 1.0f },
+            {  0.5f,  -0.5f, 0.0f, 1.0f },
+            {  0.5f,  0.5f, 0.0f, 1.0f },
 
-            {-0.5f, -0.5f, 0.0f, 1.0f },
-            { -0.5f + size.x, -0.5f, 0.0f, 1.0f },
-            { -0.5f + size.x,  -0.5f + size.y, 0.0f, 1.0f },
+            { -0.5f, -0.5f, 0.0f, 1.0f },
+            { -0.5f, 0.5f, 0.0f, 1.0f },
+            {  0.5f,  0.5f, 0.0f, 1.0f }
         };
 
-        const glm::vec2 texCoords[] = {
+        constexpr glm::vec2 texCoords[] = {
             { 0.0f, 0.0f, },
             { 0.0f, 1.0f, },
             { 1.0f, 1.0f, },
@@ -78,11 +78,14 @@ namespace Mouton
             { 1.0f, 1.0f, },
         };
 
+        const auto modelMatrix = glm::translate(glm::mat4(1.0f), quad) *
+                                 glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 0, 1)) *
+                                 glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
         for(int i = 0; i < 6; i++)
         {
             s_Renderer2D.m_BatchData.data[iQuad + i] = {
-                s_Renderer2D.m_VP * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0, 0, 1)) *
-                    glm::translate(glm::mat4(1.0f), quad) * verticesPositions[i],
+                s_Renderer2D.m_VP * modelMatrix * verticesPositions[i],
                 texCoords[i],
                 color,
                 0
@@ -100,23 +103,23 @@ namespace Mouton
     {
         int iQuad = s_Renderer2D.m_BatchData.quadCount;
 
-        glm::vec4 verticesPositions[] = {
-            {-0.5f, -0.5f, 0.0f, 1.0f },
-            {-0.5f,  -0.5f + size.y, 0.0f, 1.0f },
-            { -0.5f + size.x,  -0.5f + size.y, 0.0f, 1.0f },
+        constexpr glm::vec4 verticesPositions[] = {
+            { -0.5f, -0.5f, 0.0f, 1.0f },
+            {  0.5f,  -0.5f, 0.0f, 1.0f },
+            {  0.5f,  0.5f, 0.0f, 1.0f },
 
-            {-0.5f, -0.5f, 0.0f, 1.0f },
-            { -0.5f + size.x, -0.5f, 0.0f, 1.0f },
-            { -0.5f + size.x,  -0.5f + size.y, 0.0f, 1.0f },
+            { -0.5f, -0.5f, 0.0f, 1.0f },
+            { -0.5f, 0.5f, 0.0f, 1.0f },
+            {  0.5f,  0.5f, 0.0f, 1.0f }
         };
 
-        const glm::vec2 texCoords[] = {
+        constexpr glm::vec2 texCoords[] = {
             { 0.0f, 0.0f, },
-            { 0.0f, 1.0f, },
+            { 1.0f, 0.0f, },
             { 1.0f, 1.0f, },
 
             { 0.0f, 0.0f, },
-            { 1.0f, 0.0f, },
+            { 0.0f, 1.0f, },
             { 1.0f, 1.0f, },
         };
 
@@ -139,11 +142,14 @@ namespace Mouton
             textureIndice = s_Renderer2D.m_BatchData.texturesCount;
         }
 
+        const auto modelMatrix = glm::translate(glm::mat4(1.0f), quad) *
+                                 glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 0, 1)) *
+                                 glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
         for(int i = 0; i < 6; i++)
         {
             s_Renderer2D.m_BatchData.data[iQuad + i] = {
-                s_Renderer2D.m_VP * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0, 0, 1)) *
-                    glm::translate(glm::mat4(1.0f), quad) * verticesPositions[i],
+                s_Renderer2D.m_VP * modelMatrix * verticesPositions[i],
                 texCoords[i],
                 glm::vec4(1.0f),
                 static_cast<float>(textureIndice)

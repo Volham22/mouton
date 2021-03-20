@@ -15,6 +15,4 @@ int main()
     Mouton::Application::PushLayer(sandboxLayer);
     Mouton::Application::Run();
     Mouton::Application::EndApplication();
-
-    delete sandboxLayer;
 }

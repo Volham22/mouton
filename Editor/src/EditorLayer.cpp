@@ -22,7 +22,7 @@
 
 
 EditorLayer::EditorLayer()
-    : Layer("Editor Layer"), m_Camera(0.0f, 100.0f, 0.0f, 100.0f), m_Scene(new Mouton::Scene()),
+    : Layer("Editor Layer"), m_Camera(-100.0f, 100.0f, -100.0f, 100.0f), m_Scene(new Mouton::Scene()),
       m_ComponentShown(nullptr), m_ScenePlaying(SceneStates::Stopped), m_Logger()
 {
     Mouton::RendererContext::InitContext(Mouton::GraphicAPI::OpenGL);
@@ -39,39 +39,6 @@ EditorLayer::EditorLayer()
     m_SceneExplorer.InitProperties();
 
     m_ViewportFramebuffer = Mouton::Framebuffer::CreateFramebuffer();
-
-    // m_Scene->AddEntity(new Mouton::Entity("RedQuad"));
-    // m_Scene->AddEntity(new Mouton::Entity("GreenQuad"));
-
-    // {
-    //     using Type = Mouton::Component::ComponentType;
-
-    //     auto cameraInstance =
-    //         new Mouton::OrthographicCameraController(std::make_shared<Mouton::OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f));
-
-    //     Mouton::SpriteComponent* red = new Mouton::SpriteComponent("RedSprite");
-    //     Mouton::SpriteComponent* green = new Mouton::SpriteComponent("GreenSprite");
-    //     Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>* behaviour =
-    //         new Mouton::PythonBehaviourComponent<Mouton::SpriteComponentScriptable>("RedSpriteScript", "RedSpriteScript", red, m_PythonErrorCb);
-    //     Mouton::OrthographicCameraComponent* camera =
-    //         new Mouton::OrthographicCameraComponent(
-    //             "cameraComponent",
-    //             cameraInstance);
-
-    //     auto orthoBehaviour = new
-    //         Mouton::PythonBehaviourComponent<Mouton::OrthographicCameraComponentScriptable>("CameraBehaviour", "CameraBehaviour", camera, m_PythonErrorCb);
-
-    //     m_Scene->AddComponent(Type::SpriteComponent, red);
-    //     m_Scene->AddComponent(Type::SpriteComponent, green);
-    //     m_Scene->AddComponent(Type::PythonBehaviourComponent, behaviour);
-    //     m_Scene->AddComponent(Type::OrthographicCamera, camera);
-    //     m_Scene->AddComponent(Type::PythonBehaviourComponent, orthoBehaviour);
-    //     m_Scene->AddComponentToEntity("RedQuad", Type::SpriteComponent, "RedSprite");
-    //     m_Scene->AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "RedSpriteScript");
-    //     m_Scene->AddComponentToEntity("GreenQuad", Type::SpriteComponent, "GreenSprite");
-    //     m_Scene->AddComponentToEntity("RedQuad", Type::OrthographicCamera, "cameraComponent");
-    //     m_Scene->AddComponentToEntity("RedQuad", Type::PythonBehaviourComponent, "CameraBehaviour");
-    // }
 }
 
 void EditorLayer::OnBind()
