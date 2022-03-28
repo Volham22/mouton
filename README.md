@@ -14,8 +14,8 @@ It's a toy project to learn OpenGL and some game engine basics.
 
 ## Screenshots
 
-[](screenshots/scene1.png)
-[](screenshots/scene2.png)
+![Scene](screenshots/scene1.png?raw=true)
+![Scene](screenshots/scene2.png?raw=true)
 
 How to install ?
 ------
@@ -28,7 +28,7 @@ First, Clone this repository
 git clone https://github.com/Volham22/mouton.git --recursive
 ```
 
-Make sure cmake and make are installed, and be patient it may take some time to compile on some potato computer.
+Make sure cmake and make are installed, and be patient it may take some time to compile.
 Run the build script
 
 ```
