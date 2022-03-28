@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <fstream>
 #include <sstream>
+#include <optional>
 
 
 // Show a file dialog to save the serialized scene
