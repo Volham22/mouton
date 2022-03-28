@@ -1,28 +1,29 @@
 #ifndef SPRITE_COMPONENT_H
 #define SPRITE_COMPONENT_H
 
-#include "MoutonPch.h"
 #include "Core/Utils/SerializationUtils.h"
+#include "MoutonPch.h"
 
 #include "Ecs/Components.h"
 #include "Renderer/Texture.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     struct SpriteComponent : public Component {
-        glm::vec4 color{1.0f, 0.0f, 0.0f, 1.0f};
-        glm::vec3 position{0.0f};
+        glm::vec4 color { 1.0f, 0.0f, 0.0f, 1.0f };
+        glm::vec3 position { 0.0f };
         float rotation = 0.0f;
-        glm::vec2 scale{1.0f};
+        glm::vec2 scale { 1.0f };
         bool isTextured = false;
         std::shared_ptr<Texture2D> texture = nullptr;
 
         SpriteComponent(const std::string& name = "SpriteComponent",
-            Component::ComponentType type = ComponentType::SpriteComponent);
+                        Component::ComponentType type
+                        = ComponentType::SpriteComponent);
         SpriteComponent(std::shared_ptr<Texture2D>& texture,
-            const std::string& name = "SpriteComponent",
-            Component::ComponentType type = ComponentType::SpriteComponent);
+                        const std::string& name = "SpriteComponent",
+                        Component::ComponentType type
+                        = ComponentType::SpriteComponent);
 
         template<typename Writer>
         void Serialize(Writer& writer)
@@ -55,7 +56,7 @@ namespace Mouton
             writer.Bool(isTextured);
 
             writer.String("Texture");
-            if(isTextured)
+            if (isTextured)
                 writer.String(texture->GetFilename().c_str());
             else
                 writer.Null();
@@ -64,26 +65,30 @@ namespace Mouton
         template<typename Value>
         static SpriteComponent* LoadJson(const Value& value)
         {
-            auto color = Utils::SerializationUtils::Vec4FromJson(value["Color"]);
-            auto position = Utils::SerializationUtils::Vec3FromJson(value["Position"]);
-            auto scale = Utils::SerializationUtils::Vec2FromJson(value["Scale"]);
+            auto color
+                = Utils::SerializationUtils::Vec4FromJson(value["Color"]);
+            auto position
+                = Utils::SerializationUtils::Vec3FromJson(value["Position"]);
+            auto scale
+                = Utils::SerializationUtils::Vec2FromJson(value["Scale"]);
             float rotation = static_cast<float>(value["Rotation"].GetDouble());
 
-            SpriteComponent* comp = new SpriteComponent(value["Name"].GetString());
+            SpriteComponent* comp
+                = new SpriteComponent(value["Name"].GetString());
             comp->color = color;
             comp->position = position;
             comp->scale = scale;
             comp->rotation = rotation;
             comp->isTextured = value["IsTextured"].GetBool();
 
-            if(comp->isTextured)
-                comp->texture = Texture2D::CreateTexture(value["Texture"].GetString());
+            if (comp->isTextured)
+                comp->texture
+                    = Texture2D::CreateTexture(value["Texture"].GetString());
 
             return comp;
         }
     };
 
 } // namespace Mouton
-
 
 #endif

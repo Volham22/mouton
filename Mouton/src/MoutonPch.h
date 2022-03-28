@@ -2,17 +2,17 @@
 #define MOUTON_PCH
 
 #include <array>
+#include <list>
 #include <map>
-#include <unordered_map>
 #include <set>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <list>
 
-#include <memory>
+#include <algorithm>
 #include <cctype>
 #include <functional>
-#include <algorithm>
+#include <memory>
 #include <string>
 
 #include <Core/Log.h>
@@ -23,10 +23,10 @@
 #include <glm/gtc/type_ptr.hpp>
 
 // Events
-#include <Core/Events/Events.h>
 #include <Core/Events/ApplicationEvents.h>
-#include <Core/Events/MouseEvents.h>
+#include <Core/Events/Events.h>
 #include <Core/Events/KeyEvents.h>
+#include <Core/Events/MouseEvents.h>
 #include <Core/Events/WindowEvents.h>
 
 #endif

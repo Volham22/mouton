@@ -3,18 +3,16 @@
 
 #include "Renderer/GraphicContext.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class OpenGLGraphicContext : public GraphicContext
     {
-    public:
+      public:
         virtual const char* GetGraphicContext() override;
         virtual const char* GetGraphicApiVersion() override;
         virtual const char* GetRendererName() override;
     };
 
 } // namespace Mouton
-
 
 #endif

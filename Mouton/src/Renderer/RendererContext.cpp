@@ -2,8 +2,7 @@
 
 #include "Platform/OpenGL/OpenGLContext.h"
 
-namespace Mouton
-{
+namespace Mouton {
     RendererContext RendererContext::s_Instance;
 
     void RendererContext::InitContext(GraphicAPI api)
@@ -29,7 +28,8 @@ namespace Mouton
 
     std::unique_ptr<GraphicContext> RendererContext::GetCurrentGraphicContext()
     {
-        return std::unique_ptr<OpenGLGraphicContext>(new OpenGLGraphicContext());
+        return std::unique_ptr<OpenGLGraphicContext>(
+            new OpenGLGraphicContext());
     }
 
     void RendererContext::DestroyContext()
@@ -38,15 +38,8 @@ namespace Mouton
         // Some stuff here
     }
 
-    RendererContext::RendererContext()
-        : m_API(GraphicAPI::None)
-    {
-    }
+    RendererContext::RendererContext() : m_API(GraphicAPI::None) {}
 
-    RendererContext::RendererContext(GraphicAPI api)
-        : m_API(api)
-    {
-    }
-
+    RendererContext::RendererContext(GraphicAPI api) : m_API(api) {}
 
 } // namespace Mouton

@@ -1,15 +1,14 @@
 #ifndef VERTEX_ARRAY_H
 #define VERTEX_ARRAY_H
 
-#include "MoutonPch.h"
 #include "Buffers.h"
+#include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class VertexArray
     {
-    public:
+      public:
         virtual void Bind() = 0;
         virtual void Unbind() = 0;
 
@@ -19,6 +18,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

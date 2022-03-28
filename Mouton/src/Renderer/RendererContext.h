@@ -1,23 +1,26 @@
 #ifndef RENDERER_CONTEXT_H
 
-#include "MoutonPch.h"
-#include "GraphicContext.h"
+    #include "GraphicContext.h"
+    #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
     enum class GraphicAPI : uint8_t {
-        None = 0, OpenGL = 1 // Vulkan, DirectX 11, DirectX12 ...
+        None = 0,
+        OpenGL = 1 // Vulkan, DirectX 11, DirectX12 ...
     };
 
     class RendererContext
     {
-    public:
+      public:
         static void InitContext(GraphicAPI api);
         static void DestroyContext();
-        static GraphicAPI GetCurrentAPI() { return s_Instance.GetCurrentAPIImp(); };
+        static GraphicAPI GetCurrentAPI()
+        {
+            return s_Instance.GetCurrentAPIImp();
+        };
         static std::unique_ptr<GraphicContext> GetCurrentGraphicContext();
 
-    private:
+      private:
         RendererContext();
         RendererContext(GraphicAPI api);
         GraphicAPI GetCurrentAPIImp() const { return m_API; };
@@ -27,6 +30,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

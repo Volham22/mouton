@@ -3,12 +3,19 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
-    enum class ShaderType{
-        Int, Int2, Int3, Int4,
-        Float, Float2, Float3, Float4,
-        Mat2, Mat3, Mat4,
+namespace Mouton {
+    enum class ShaderType {
+        Int,
+        Int2,
+        Int3,
+        Int4,
+        Float,
+        Float2,
+        Float3,
+        Float4,
+        Mat2,
+        Mat3,
+        Mat4,
         Bool
     };
 
@@ -20,26 +27,26 @@ namespace Mouton
         int size;
         int count;
 
-    private:
+      private:
         int GetSize(ShaderType type) const;
         int GetCount(ShaderType type) const;
     };
 
     class BufferLayout
     {
-    public:
+      public:
         BufferLayout();
         BufferLayout(std::initializer_list<BufferElement> elem);
         int GetStride();
         std::vector<BufferElement>& GetElements() { return m_BufferElements; };
-    
-    private:
+
+      private:
         std::vector<BufferElement> m_BufferElements;
     };
 
     class Buffer
     {
-    public:
+      public:
         virtual void Bind() = 0;
         virtual void Unbind() = 0;
         virtual void SetData(void* data, size_t size) = 0;
@@ -47,7 +54,7 @@ namespace Mouton
 
     class VertexBuffer : public Buffer
     {
-    public:
+      public:
         virtual void SetSubData(void* data, size_t begin, size_t end) = 0;
         virtual void SetLayout(const BufferLayout& layout) = 0;
         virtual BufferLayout& GetLayout() = 0;
@@ -57,13 +64,12 @@ namespace Mouton
 
     class ElementBuffer : public Buffer
     {
-    public:
+      public:
         virtual int GetCount() const = 0;
 
         static std::shared_ptr<ElementBuffer> CreateElementBuffer();
     };
 
 } // namespace Mouton
-
 
 #endif

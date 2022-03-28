@@ -3,20 +3,20 @@
 
 #include "Core/MoutonCore.h"
 
-#include "Renderer/Window.h"
-#include "Renderer/LayerManager.h"
 #include "ImGuiLayer.h"
+#include "Renderer/LayerManager.h"
+#include "Renderer/Window.h"
 
-#define MOUTON_CORE_INCLUDED Mouton::Application* Mouton::Application::s_Application;
+#define MOUTON_CORE_INCLUDED \
+    Mouton::Application* Mouton::Application::s_Application;
 
-namespace Mouton
-{
-    
+namespace Mouton {
+
     class Application
     {
-    public:
+      public:
         Application(const WindowProperties& properties);
-        Application(Application &app) = delete;
+        Application(Application& app) = delete;
         static void InitApplication();
         static void PushLayer(Layer* layer);
         static void Run();
@@ -24,16 +24,19 @@ namespace Mouton
         static void SetApplicationShouldStop(bool state = false);
         static void EndApplication();
 
-    private:
+      private:
         Application();
         void OnInit();
         void RunImpl();
         void PushLayerImpl(Layer* layer);
         bool OnEvent(Event& event);
         bool GetWindowShouldCloseImpl() const { return m_WindowShouldClose; };
-        void SetWindowShouldCloseImpl(bool state = false) { m_WindowShouldClose = state; };
+        void SetWindowShouldCloseImpl(bool state = false)
+        {
+            m_WindowShouldClose = state;
+        };
 
-    private:
+      private:
         static Application* s_Application;
         std::unique_ptr<Window> m_WindowInstance;
         LayerManager m_LayerManager;
@@ -41,6 +44,6 @@ namespace Mouton
         bool m_WindowShouldClose;
     };
 
-}
+} // namespace Mouton
 
 #endif

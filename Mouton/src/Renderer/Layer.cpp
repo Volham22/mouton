@@ -1,11 +1,7 @@
 #include "Layer.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
-    Layer::Layer(const char* name)
-        : m_Name(name)
-    {
-    }
+    Layer::Layer(const char* name) : m_Name(name) {}
 
 } // namespace Mouton

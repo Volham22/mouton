@@ -3,12 +3,11 @@
 
 #include "Renderer/RenderCommand.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class OpenGLRenderCommand : public RenderCommand
     {
-    protected:
+      protected:
         virtual void ClearImp() override;
         virtual void SetClearColorImp(const glm::vec4& color);
         virtual void SetDepthTestImp(bool enable) override;
@@ -19,6 +18,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

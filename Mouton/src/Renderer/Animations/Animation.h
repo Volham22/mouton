@@ -5,14 +5,14 @@
 
 #include <chrono>
 
-namespace Mouton
-{
+namespace Mouton {
 
     class Animation
     {
-    public:
+      public:
         Animation();
-        Animation(const std::string& name, double duration, double tickPerSecond);
+        Animation(const std::string& name, double duration,
+                  double tickPerSecond);
         void Play();
         double Update();
         void Stop();
@@ -20,7 +20,8 @@ namespace Mouton
         const std::string& GetName() const { return m_Name; };
         double GetDuration() const { return m_Duration; };
         double GetTickPerSecond() const { return m_TickPerSecond; };
-    private:
+
+      private:
         std::string m_Name;
         double m_Duration, m_TickPerSecond;
         double m_Tick;
@@ -29,6 +30,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

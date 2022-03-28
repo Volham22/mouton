@@ -3,23 +3,21 @@
 
 #include "Renderer/VertexArray.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class OpenGLVertexArray : public VertexArray
     {
-    public:
+      public:
         OpenGLVertexArray();
         ~OpenGLVertexArray();
         virtual void Bind() override;
         virtual void Unbind() override;
         virtual void AddVertexBuffer(VertexBuffer& vb) override;
-    
-    private:
+
+      private:
         uint32_t m_VAOHandle;
     };
 
 } // namespace Mouton
-
 
 #endif

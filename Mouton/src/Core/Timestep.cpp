@@ -1,16 +1,10 @@
 #include "Timestep.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
-    Chrono::Chrono()
-        : m_Begin(std::chrono::high_resolution_clock::now())
-    {
-    }
+    Chrono::Chrono() : m_Begin(std::chrono::high_resolution_clock::now()) {}
 
-    Timestep::Timestep(float time) : m_Delta(time)
-    {
-    }
+    Timestep::Timestep(float time) : m_Delta(time) {}
 
     Timestep Chrono::GetDeltaTime()
     {
@@ -25,19 +19,10 @@ namespace Mouton
         m_Begin = std::chrono::high_resolution_clock::now();
     }
 
-    float Timestep::operator+(float x) const
-    {
-        return m_Delta + x;
-    }
+    float Timestep::operator+(float x) const { return m_Delta + x; }
 
-    float Timestep::operator-(float x) const
-    {
-        return m_Delta - x;
-    }
+    float Timestep::operator-(float x) const { return m_Delta - x; }
 
-    float Timestep::operator*(float x) const
-    {
-        return m_Delta * x;
-    }
+    float Timestep::operator*(float x) const { return m_Delta * x; }
 
 } // namespace Mouton

@@ -5,11 +5,10 @@
 #include "Platform/MoutonOpenGLImGui.h"
 #include "imgui.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     ImGUILayer::ImGUILayer(void* win, const char* name)
-            : Layer(name), m_WindowInstance(static_cast<GLFWwindow*>(win))
+        : Layer(name), m_WindowInstance(static_cast<GLFWwindow*>(win))
     {
         InitMoutonImgui(m_WindowInstance);
 
@@ -28,13 +27,9 @@ namespace Mouton
         NewImguiMoutonFrame();
     }
 
-    void ImGUILayer::OnUpdate(Timestep delta)
-    {
-    }
+    void ImGUILayer::OnUpdate(Timestep delta) {}
 
-    void ImGUILayer::OnRender()
-    {
-    }
+    void ImGUILayer::OnRender() {}
 
     void ImGUILayer::OnUnbind()
     {
@@ -51,15 +46,8 @@ namespace Mouton
         }
     }
 
-    bool ImGUILayer::OnEvent(Event& event)
-    {
-        return false;
-    }
+    bool ImGUILayer::OnEvent(Event& event) { return false; }
 
-    ImGUILayer::~ImGUILayer()
-    {
-        DestroyMoutonImgui();
-    }
+    ImGUILayer::~ImGUILayer() { DestroyMoutonImgui(); }
 
 } // namespace Mouton
-

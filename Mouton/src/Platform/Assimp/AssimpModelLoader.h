@@ -5,27 +5,32 @@
 
 #include "Renderer/Model.h"
 
-#include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/scene.h>
 
-namespace Mouton
-{
+namespace Mouton {
 
     class AssimpModelLoader : public ModelLoader
     {
-    public:
+      public:
         AssimpModelLoader(const std::string& path);
         virtual bool Load() override;
         virtual std::shared_ptr<Model>& GetLoadedModel() override;
-        virtual std::shared_ptr<std::vector<Animation>>& GetModelAnimations() override;
+        virtual std::shared_ptr<std::vector<Animation>>&
+        GetModelAnimations() override;
 
-    private:
-        void LoadNodes(aiNode* node, const aiScene* scene, std::shared_ptr<Node>& currentNode);
-        Mesh LoadMesh(aiMesh* mesh, const aiScene* scene, aiNode* meshNode, std::shared_ptr<Node>& node);
+      private:
+        void LoadNodes(aiNode* node, const aiScene* scene,
+                       std::shared_ptr<Node>& currentNode);
+        Mesh LoadMesh(aiMesh* mesh, const aiScene* scene, aiNode* meshNode,
+                      std::shared_ptr<Node>& node);
         glm::mat4 ToGlmMat4(const aiMatrix4x4& matrix);
-        void LoadMeshBones(aiMesh* mesh, aiNode* meshNode, const aiScene* scene, std::vector<MeshVertex>& vertices, std::shared_ptr<Node>& node);
+        void LoadMeshBones(aiMesh* mesh, aiNode* meshNode, const aiScene* scene,
+                           std::vector<MeshVertex>& vertices,
+                           std::shared_ptr<Node>& node);
         void LoadBoneKeyFrame(const aiScene* scene);
-        std::vector<MeshTexture> LoadTextures(aiMaterial* mat, aiTextureType aiType, TextureType type);
+        std::vector<MeshTexture>
+        LoadTextures(aiMaterial* mat, aiTextureType aiType, TextureType type);
 
         std::shared_ptr<Model> m_LoadedModel;
         std::shared_ptr<std::vector<Animation>> m_Animations;
@@ -37,6 +42,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

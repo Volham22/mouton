@@ -1,7 +1,6 @@
 #include "PythonCoreAPI.h"
 
-namespace Mouton::PythonAPI
-{
+namespace Mouton::PythonAPI {
 
     void Core::Print(const std::string& message)
     {

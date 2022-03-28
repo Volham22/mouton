@@ -5,26 +5,24 @@
 #include "MoutonPch.h"
 
 #if defined(MTN_PLATFORM_LINUX) || defined(MTN_PLATFORM_WIN)
-#include "Platform/Keycodes.h"
+    #include "Platform/Keycodes.h"
 #endif
 
-namespace Mouton
-{
+namespace Mouton {
 
     class Inputs
     {
-    public:
+      public:
         static void InitInputs(void* internalWindowInstance);
         static bool IsKeyPressed(int keycode);
 
-    protected:
+      protected:
         virtual bool IsKeyPressedInt(int keycode) = 0;
-    
-    private:
+
+      private:
         static std::unique_ptr<Inputs> s_InputInstance;
     };
 
 } // namespace Mouton
-
 
 #endif

@@ -33,3 +33,6 @@ imgui.ini
 # Clion files
 cmake-build-debug/
 .idea/
+
+# CompileDB
+compile_commands.json

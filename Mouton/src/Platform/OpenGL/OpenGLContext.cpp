@@ -2,8 +2,7 @@
 
 #include <glad/glad.h>
 
-namespace Mouton
-{
+namespace Mouton {
 
     const char* OpenGLGraphicContext::GetGraphicContext()
     {

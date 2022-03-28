@@ -1,18 +1,18 @@
 #include "Engine.h"
 
-#include "Core/Timestep.h"
 #include "Core/Inputs.h"
+#include "Core/Timestep.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     Application::Application(const WindowProperties& properties)
-        : m_WindowInstance(Window::CreateWindowInstance(properties)), m_LayerManager(),
-          m_ImGuiLayer(m_WindowInstance->GetWindowInternalInstance()), m_WindowShouldClose(false)
+        : m_WindowInstance(Window::CreateWindowInstance(properties)),
+          m_LayerManager(),
+          m_ImGuiLayer(m_WindowInstance->GetWindowInternalInstance()),
+          m_WindowShouldClose(false)
     {
         Inputs::InitInputs(m_WindowInstance->GetWindowInternalInstance());
     }
-
 
     void Application::InitApplication()
     {
@@ -26,10 +26,7 @@ namespace Mouton
         s_Application->PushLayerImpl(layer);
     }
 
-    void Application::Run()
-    {
-        s_Application->RunImpl();
-    }
+    void Application::Run() { s_Application->RunImpl(); }
 
     bool Application::ApplicationShouldStop()
     {
@@ -41,21 +38,19 @@ namespace Mouton
         s_Application->SetWindowShouldCloseImpl(state);
     }
 
-    void Application::EndApplication()
-    {
-        delete s_Application;
-    }
+    void Application::EndApplication() { delete s_Application; }
 
     void Application::OnInit()
     {
         using namespace std::placeholders;
 
         MTN_INFO("Begin of Mouton");
-        m_WindowInstance->SetEventFunction(std::bind<bool>(&Application::OnEvent, this, _1));
+        m_WindowInstance->SetEventFunction(
+            std::bind<bool>(&Application::OnEvent, this, _1));
     }
 
     bool Application::OnEvent(Event& event)
-    { 
+    {
         m_LayerManager.OnLayersEvent(event);
         return true;
     }
@@ -64,7 +59,7 @@ namespace Mouton
     {
         // Main Mouton Application Loop
         // ImGUi layer is always on the top
-        while(!m_WindowShouldClose)
+        while (!m_WindowShouldClose)
         {
             m_ImGuiLayer.OnBind();
             m_ImGuiLayer.OnUpdate(Timestep());
@@ -78,4 +73,4 @@ namespace Mouton
     {
         m_LayerManager.AddLayer(layer);
     }
-}
+} // namespace Mouton

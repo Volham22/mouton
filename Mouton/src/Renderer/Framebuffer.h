@@ -3,12 +3,11 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class Framebuffer
     {
-    public:
+      public:
         static std::shared_ptr<Framebuffer> CreateFramebuffer();
 
         virtual void Bind() = 0;
@@ -18,6 +17,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

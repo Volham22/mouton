@@ -1,33 +1,25 @@
 #include "LayerManager.h"
 
-namespace Mouton
-{
-    LayerManager::LayerManager()
-    :   m_Layers(), m_Chrono()
-    {
-    }
+namespace Mouton {
+    LayerManager::LayerManager() : m_Layers(), m_Chrono() {}
 
-    void LayerManager::AddLayer(Layer* layer)
-    {
-        m_Layers.push_back(layer);
-    }
+    void LayerManager::AddLayer(Layer* layer) { m_Layers.push_back(layer); }
 
     bool LayerManager::RemoveLayer(Layer* layer)
     {
         auto target = std::find(m_Layers.begin(), m_Layers.end(), layer);
 
-        if(target != m_Layers.end())
+        if (target != m_Layers.end())
         {
             m_Layers.erase(target);
             return true;
-        }
-        else
+        } else
             return false;
     }
 
     void LayerManager::UpdateLayers()
     {
-        for(Layer* l : m_Layers)
+        for (Layer* l : m_Layers)
         {
             l->OnBind();
             l->OnUpdate(m_Chrono.GetDeltaTime());
@@ -42,7 +34,7 @@ namespace Mouton
     {
         auto it = m_Layers.begin();
 
-        while(it != m_Layers.end() && !event.Handled())
+        while (it != m_Layers.end() && !event.Handled())
         {
             (*it)->OnEvent(event);
             it++;
@@ -53,7 +45,7 @@ namespace Mouton
 
     LayerManager::~LayerManager()
     {
-        for(Layer* l : m_Layers)
+        for (Layer* l : m_Layers)
             delete l;
     }
 

@@ -4,12 +4,11 @@
 // Include Pch
 #include "Renderer/Buffers.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class OpenGLVertexBuffer : public VertexBuffer
     {
-    public:
+      public:
         OpenGLVertexBuffer();
         ~OpenGLVertexBuffer();
         OpenGLVertexBuffer(void* data);
@@ -18,17 +17,20 @@ namespace Mouton
         virtual void Unbind() override;
         virtual void SetData(void* data, size_t size) override;
         virtual void SetSubData(void* data, size_t begin, size_t end) override;
-        virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout;};
+        virtual void SetLayout(const BufferLayout& layout) override
+        {
+            m_Layout = layout;
+        };
         virtual BufferLayout& GetLayout() override { return m_Layout; };
 
-    private:
+      private:
         BufferLayout m_Layout;
         uint32_t m_OglVboHandle;
     };
 
     class OpenGLElementBuffer : public ElementBuffer
     {
-    public:
+      public:
         OpenGLElementBuffer();
         ~OpenGLElementBuffer();
 
@@ -36,13 +38,12 @@ namespace Mouton
         virtual void Unbind() override;
         virtual void SetData(void* data, size_t size) override;
         virtual int GetCount() const override;
-    
-    private:
+
+      private:
         uint32_t m_OglEboHandle;
         size_t m_Size;
     };
 
 } // namespace Mouton
-
 
 #endif

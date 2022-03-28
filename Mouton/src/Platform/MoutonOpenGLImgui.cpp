@@ -2,14 +2,12 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
     void InitMoutonImgui(GLFWwindow* win)
     {
         ImGui::CreateContext();
 
-        if(!IMGUI_CHECKVERSION())
-            MTN_WARN("Imgui version check failed !");
+        if (!IMGUI_CHECKVERSION()) MTN_WARN("Imgui version check failed !");
 
         auto& io = ImGui::GetIO();
         ImGui::StyleColorsClassic();
@@ -50,6 +48,5 @@ namespace Mouton
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
-
 
 } // namespace Mouton

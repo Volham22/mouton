@@ -3,16 +3,16 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class ScriptSkeletonFactory
     {
-    public:
-        static void CreateSpriteComponentSkeleton(const std::string& moduleName, const std::string& templateFile);
+      public:
+        static void
+        CreateSpriteComponentSkeleton(const std::string& moduleName,
+                                      const std::string& templateFile);
     };
 
 } // namespace Mouton
-
 
 #endif

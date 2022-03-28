@@ -5,17 +5,17 @@
 
 struct GLFWwindow;
 
-namespace Mouton
-{
+namespace Mouton {
 
     class GLFWWindowInstance : public Window
     {
-    public:
+      public:
         GLFWWindowInstance(const WindowProperties& properties);
         ~GLFWWindowInstance();
 
         virtual void OnUpdate() override;
-        virtual void SetEventFunction(std::function<bool(Event& event)> func) override;
+        virtual void
+        SetEventFunction(std::function<bool(Event& event)> func) override;
 
         virtual void EnableVSync(bool enable = true) override;
         virtual bool IsVSync() override;
@@ -26,7 +26,7 @@ namespace Mouton
 
         virtual void* GetWindowInternalInstance() const override;
 
-    private:
+      private:
         void OnInit(const WindowProperties& properties);
 
         GLFWwindow* m_GLFWWindow;
@@ -35,6 +35,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

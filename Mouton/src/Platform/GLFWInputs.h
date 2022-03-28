@@ -5,20 +5,18 @@
 
 struct GLFWwindow;
 
-namespace Mouton
-{
+namespace Mouton {
 
     class GLFWInputs : public Inputs
     {
-    public:
+      public:
         GLFWInputs(GLFWwindow* window);
         virtual bool IsKeyPressedInt(int keycode) override;
-    
-    private:
+
+      private:
         GLFWwindow* m_Window;
     };
 
 } // namespace Mouton
-
 
 #endif

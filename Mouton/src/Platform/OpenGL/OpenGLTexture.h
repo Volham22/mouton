@@ -3,12 +3,11 @@
 
 #include "Renderer/Texture.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class OpenGLTexture2D : public Texture2D
     {
-    public:
+      public:
         OpenGLTexture2D(const char* fileapath);
         ~OpenGLTexture2D();
         virtual void Bind(uint32_t slot = 0) override;
@@ -18,8 +17,8 @@ namespace Mouton
         virtual std::string GetFilename() const override { return m_Path; }
 
         virtual bool operator==(Texture2D& other) const override;
-    
-    private:
+
+      private:
         void LoadTexture(const char* filepath);
 
         uint32_t m_TextureHandle;
@@ -27,7 +26,6 @@ namespace Mouton
         int m_Slot;
         std::string m_Path;
     };
-
 
 } // namespace Mouton
 

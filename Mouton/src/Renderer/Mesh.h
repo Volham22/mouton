@@ -3,12 +3,11 @@
 
 #include "MoutonPch.h"
 
-#include "Texture.h"
 #include "Buffers.h"
+#include "Texture.h"
 #include "VertexArray.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     struct MeshVertex {
         glm::vec3 positions;
@@ -18,9 +17,7 @@ namespace Mouton
         glm::vec4 weight;
     };
 
-    enum TextureType {
-        Diffuse, Specular, Normal, Height
-    };
+    enum TextureType { Diffuse, Specular, Normal, Height };
 
     using MeshTexture = std::pair<TextureType, std::shared_ptr<Texture2D>>;
 
@@ -28,15 +25,15 @@ namespace Mouton
     {
         friend class Node;
 
-    public:
+      public:
         Mesh(std::vector<MeshVertex>& vertices,
-            std::vector<unsigned int>& indices,
-            std::vector<MeshTexture> textures, bool animated=false);
+             std::vector<unsigned int>& indices,
+             std::vector<MeshTexture> textures, bool animated = false);
         void Bind() const;
         void Unbind() const;
         void Draw() const;
 
-    private:
+      private:
         std::vector<unsigned int> m_Indices;
         std::vector<MeshVertex> m_Vertices;
         std::vector<MeshTexture> m_Textures;

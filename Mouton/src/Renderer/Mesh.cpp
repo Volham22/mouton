@@ -2,33 +2,33 @@
 
 #include "Renderer.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     Mesh::Mesh(std::vector<MeshVertex>& vertices,
-            std::vector<unsigned int>& indices,
-            std::vector<MeshTexture> textures, bool animated)
-    : m_Indices(indices), m_Vertices(vertices), m_Textures(textures),
-      m_VBO(VertexBuffer::CreateVertexBuffer()), m_EBO(ElementBuffer::CreateElementBuffer()), m_VAO(VertexArray::CreateVertexArray())
+               std::vector<unsigned int>& indices,
+               std::vector<MeshTexture> textures, bool animated)
+        : m_Indices(indices), m_Vertices(vertices), m_Textures(textures),
+          m_VBO(VertexBuffer::CreateVertexBuffer()),
+          m_EBO(ElementBuffer::CreateElementBuffer()),
+          m_VAO(VertexArray::CreateVertexArray())
     {
         m_VBO->SetData(&vertices[0], sizeof(MeshVertex) * vertices.size());
 
-        if(animated)
+        if (animated)
         {
             m_VBO->SetLayout({
-                { ShaderType::Float3, false },
-                { ShaderType::Float2, false },
-                { ShaderType::Float3, false },
-                { ShaderType::Int4,   false },
-                { ShaderType::Float4,   false },
+                {ShaderType::Float3, false},
+                {ShaderType::Float2, false},
+                {ShaderType::Float3, false},
+                {  ShaderType::Int4, false},
+                {ShaderType::Float4, false},
             });
-        }
-        else
+        } else
         {
             m_VBO->SetLayout({
-                { ShaderType::Float3, false },
-                { ShaderType::Float2, false },
-                { ShaderType::Float3, false }
+                {ShaderType::Float3, false},
+                {ShaderType::Float2, false},
+                {ShaderType::Float3, false}
             });
         }
 
@@ -38,9 +38,9 @@ namespace Mouton
 
     void Mesh::Bind() const
     {
-        for(const MeshTexture& tex : m_Textures)
+        for (const MeshTexture& tex : m_Textures)
         {
-            switch(tex.first)
+            switch (tex.first)
             {
             case TextureType::Diffuse:
                 tex.second->Bind(0);
@@ -66,7 +66,7 @@ namespace Mouton
 
     void Mesh::Unbind() const
     {
-        for(const MeshTexture& tex : m_Textures)
+        for (const MeshTexture& tex : m_Textures)
             tex.second->Unbind();
 
         m_VAO->Unbind();

@@ -3,16 +3,14 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton::PythonAPI
-{
+namespace Mouton::PythonAPI {
 
     class Core
     {
-    public:
+      public:
         static void Print(const std::string& message);
     };
 
-} // namespace Mouton
-
+} // namespace Mouton::PythonAPI
 
 #endif

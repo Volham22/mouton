@@ -3,12 +3,11 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class Texture
     {
-    public:
+      public:
         virtual void Bind(uint32_t slot = 0) = 0;
         virtual void Unbind() = 0;
         virtual int GetWidth() = 0;
@@ -18,13 +17,12 @@ namespace Mouton
 
     class Texture2D : public Texture
     {
-    public:
+      public:
         virtual bool operator==(Texture2D& other) const = 0;
 
         static std::shared_ptr<Texture2D> CreateTexture(const char* filepath);
     };
 
 } // namespace Mouton
-
 
 #endif

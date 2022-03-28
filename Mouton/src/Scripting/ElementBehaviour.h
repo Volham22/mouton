@@ -4,51 +4,60 @@
 #include "MoutonPch.h"
 
 #include "Core/Timestep.h"
-#include "Renderer/Layer.h"
 #include "Ecs/Components.h"
+#include "Renderer/Layer.h"
 
 #include <type_traits>
 
-#define MTN_COMPONENT_TO_BEHAVIOUR(x) static_cast<Mouton::Behaviour<Mouton::Component>&>(x)
+#define MTN_COMPONENT_TO_BEHAVIOUR(x) \
+    static_cast<Mouton::Behaviour<Mouton::Component>&>(x)
 
-namespace Mouton
-{
+namespace Mouton {
 
     template<typename T>
     class Behaviour : public Component
     {
-        static_assert(std::is_base_of_v<Component, T>, "T must be derived from Mouton::Component !");
+        static_assert(std::is_base_of_v<Component, T>,
+                      "T must be derived from Mouton::Component !");
 
-    public:
+      public:
         Behaviour(const std::string& name = "BehaviourComponent")
             : Component(Component::ComponentType::BehaviourComponent, name)
-        {
-        }
+        {}
 
         Behaviour(T* element, const std::string& name = "BehaviourComponent")
-            : Component(Component::ComponentType::BehaviourComponent, name), m_Element(element)
-        {
-        }
+            : Component(Component::ComponentType::BehaviourComponent, name),
+              m_Element(element)
+        {}
 
-        void SetOnSceneBegin(std::function<void(T&)> callback) { m_OnSceneBeginCallback = callback; };
-        void SetOnSceneUpdate(std::function<void(T&, Timestep)> callback) { m_OnSceneUpdateCallback = callback; };
-        void SetOnSceneEnd(std::function<void(T&)> callback) { m_OnSceneEndCallback = callback; };
+        void SetOnSceneBegin(std::function<void(T&)> callback)
+        {
+            m_OnSceneBeginCallback = callback;
+        };
+        void SetOnSceneUpdate(std::function<void(T&, Timestep)> callback)
+        {
+            m_OnSceneUpdateCallback = callback;
+        };
+        void SetOnSceneEnd(std::function<void(T&)> callback)
+        {
+            m_OnSceneEndCallback = callback;
+        };
 
         bool DoBegin() { return CallIfExists(m_OnSceneBeginCallback); };
         bool DoUpdate() { return CallIfExists(m_OnSceneUpdateCallback); };
         bool DoEnd() { return CallIfExists(m_OnSceneEndCallback); };
 
-    private:
+      private:
         T* m_Element = nullptr;
 
         std::function<void(T&)> m_OnSceneBeginCallback;
         std::function<void(T&)> m_OnSceneUpdateCallback;
         std::function<void(T&)> m_OnSceneEndCallback;
 
-    private:
+      private:
         bool CallIfExists(std::function<void(T&)>& callback)
         {
-            if(!callback) return false;
+            if (!callback) return false;
 
             callback(*m_Element);
             return true;
@@ -56,6 +65,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

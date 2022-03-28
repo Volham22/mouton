@@ -3,13 +3,13 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
     class Renderer
     {
-    public:
+      public:
         static void InitRenderer();
-        static void BeginScene(const glm::vec4& clearColor = { 0.2f, 0.2f, 0.2f, 1.0f });
+        static void BeginScene(const glm::vec4& clearColor
+                               = { 0.2f, 0.2f, 0.2f, 1.0f });
         static void SetDepthTest(bool enable);
         static void SetBlending(bool enable);
         static void Draw(int count); // Everything must be bound correctly
@@ -18,6 +18,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

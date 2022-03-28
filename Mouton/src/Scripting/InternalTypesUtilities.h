@@ -3,23 +3,22 @@
 
 #include "MoutonPch.h"
 
+#include <sstream>
 #include <type_traits>
 #include <typeinfo>
-#include <sstream>
 
 #include <pybind11/embed.h>
 
-namespace Mouton
-{
+namespace Mouton {
 
     namespace py = pybind11;
     class InternalTypeUtils
     {
-    public:
+      public:
         template<typename T, typename... Args>
         static std::string ToString(const T& obj)
         {
-            if constexpr(std::is_arithmetic_v<T>)
+            if constexpr (std::is_arithmetic_v<T>)
             {
                 std::stringstream ss;
                 ss << obj;
@@ -32,14 +31,15 @@ namespace Mouton
         template<int32_t T, int32_t U, typename V>
         static std::string ToMatString(const glm::mat<T, U, V>& m)
         {
-            static_assert(std::is_arithmetic_v<V>, "Matrix type must be arithmetic !");
+            static_assert(std::is_arithmetic_v<V>,
+                          "Matrix type must be arithmetic !");
 
             std::stringstream ss;
 
             ss << "Matrix of " << T << " x " << U << '\n';
-            for(int32_t i = 0; i < T; i++)
+            for (int32_t i = 0; i < T; i++)
             {
-                for(int32_t j = 0; j < U; j++)
+                for (int32_t j = 0; j < U; j++)
                     ss << m[i][j] << ' ';
 
                 ss << '\n';
@@ -49,19 +49,20 @@ namespace Mouton
         }
 
         template<typename T, typename U>
-        static void AssignMatrixIndex(T& matrix, const py::tuple& args, const U& value)
+        static void AssignMatrixIndex(T& matrix, const py::tuple& args,
+                                      const U& value)
         {
-            if(args.size() > 2)
-                throw std::out_of_range("Incorrect number of arguments passed to __setitem__");
+            if (args.size() > 2)
+                throw std::out_of_range(
+                    "Incorrect number of arguments passed to __setitem__");
 
-            if constexpr(std::is_arithmetic_v<U>)
+            if constexpr (std::is_arithmetic_v<U>)
             {
                 int32_t row = py::cast<float>(args[0]);
                 int32_t column = py::cast<float>(args[1]);
 
                 matrix[row][column] = value;
-            }
-            else
+            } else
             {
                 int32_t index = py::cast<int32_t>(args[0]);
                 matrix[index] = value;
@@ -71,8 +72,9 @@ namespace Mouton
         template<typename T>
         static float GetMatrix2DIndex(const T& matrix, const py::tuple& args)
         {
-            if(args.size() > 2)
-                throw std::out_of_range("Incorrect number of arguments passed to __setitem__");
+            if (args.size() > 2)
+                throw std::out_of_range(
+                    "Incorrect number of arguments passed to __setitem__");
 
             int32_t row = py::cast<int32_t>(args[0]);
             int32_t column = py::cast<int32_t>(args[1]);
@@ -92,7 +94,8 @@ namespace Mouton
     {
         std::stringstream ss;
 
-        ss << "<Vector2 " << "(x|r): " << vector.x;
+        ss << "<Vector2 "
+           << "(x|r): " << vector.x;
         ss << " (y|g): " << vector.y;
         ss << '>';
 
@@ -104,7 +107,8 @@ namespace Mouton
     {
         std::stringstream ss;
 
-        ss << "<Vector3 " << "(x|r): " << vector.x;
+        ss << "<Vector3 "
+           << "(x|r): " << vector.x;
         ss << " (y|g): " << vector.y;
         ss << " (z|b) " << vector.z;
         ss << '>';
@@ -117,7 +121,8 @@ namespace Mouton
     {
         std::stringstream ss;
 
-        ss << "<Vector4 " << "(x|r): " << vector.x;
+        ss << "<Vector4 "
+           << "(x|r): " << vector.x;
         ss << " (y|g): " << vector.y;
         ss << " (z|b) " << vector.z;
         ss << " (w|a) " << vector.w;
@@ -127,6 +132,5 @@ namespace Mouton
     }
 
 } // namespace Mouton
-
 
 #endif

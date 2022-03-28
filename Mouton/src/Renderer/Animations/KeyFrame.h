@@ -3,15 +3,15 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class KeyFrame
     {
-    public:
+      public:
         KeyFrame();
         KeyFrame(const std::string& name, const glm::vec3& pos,
-            const glm::vec3 &scale, const glm::quat& rotation, double time);
+                 const glm::vec3& scale, const glm::quat& rotation,
+                 double time);
         const std::string& GetName() const { return m_Name; };
         const glm::vec3& GetPosition() const { return m_Position; };
         const glm::vec3& GetScale() const { return m_Scale; };
@@ -20,7 +20,7 @@ namespace Mouton
 
         bool operator<(const KeyFrame& other) const;
 
-    private:
+      private:
         std::string m_Name;
         glm::vec3 m_Position, m_Scale;
         glm::quat m_Rotation;
@@ -28,6 +28,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

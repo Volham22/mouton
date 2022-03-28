@@ -2,8 +2,7 @@
 
 #include "RenderCommand.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     void Renderer::InitRenderer()
     {
@@ -28,10 +27,7 @@ namespace Mouton
         RenderCommand::SetBlending(enable);
     }
 
-    void Renderer::Draw(int count)
-    {
-        RenderCommand::Draw(count);
-    }
+    void Renderer::Draw(int count) { RenderCommand::Draw(count); }
 
     void Renderer::DrawIndexed(int indicesCount)
     {

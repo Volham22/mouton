@@ -3,18 +3,16 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class GraphicContext
     {
-    public:
+      public:
         virtual const char* GetGraphicContext() = 0;
         virtual const char* GetGraphicApiVersion() = 0;
         virtual const char* GetRendererName() = 0;
     };
 
 } // namespace Mouton
-
 
 #endif

@@ -1,28 +1,30 @@
 #ifndef RENDERER2D_H
 #define RENDERER2D_H
 
+#include "Buffers.h"
 #include "MoutonPch.h"
 #include "Renderer.h"
+#include "Shader.h"
 #include "Texture.h"
 #include "VertexArray.h"
-#include "Buffers.h"
-#include "Shader.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class Renderer2D
     {
-    public:
+      public:
         static void Init();
         static void BeginScene(const glm::mat4& camera);
-        static void DrawQuad(const glm::vec3& quad, const glm::vec2 size, const glm::vec4& color, float rotation = 0.0f);
-        static void DrawQuad(const glm::vec3& quads, const glm::vec2& size, std::shared_ptr<Texture2D>& texture, float rotation = 0.0f);
+        static void DrawQuad(const glm::vec3& quad, const glm::vec2 size,
+                             const glm::vec4& color, float rotation = 0.0f);
+        static void DrawQuad(const glm::vec3& quads, const glm::vec2& size,
+                             std::shared_ptr<Texture2D>& texture,
+                             float rotation = 0.0f);
         static int GetDrawCallPerFrame();
         static int GetVerticesAmount();
         static void EndScene();
-    
-    private:
+
+      private:
         static const int MAXQUAD = 10000;
         static const int MAXTEXTURE = 8;
 
@@ -57,6 +59,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

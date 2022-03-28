@@ -1,50 +1,60 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "MoutonPch.h"
-#include "Entity.h"
 #include "Components.h"
+#include "Entity.h"
+#include "MoutonPch.h"
 
 #include "MoutonComponents/OrthographicCameraComponent.h"
 #include "MoutonComponents/PythonBehaviourComponent.h"
 #include "MoutonComponents/SpriteComponent.h"
 #include "Scripting/ElementBehaviour.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class Scene
     {
-    public:
-        using SceneComponentData = std::unordered_map<Component::ComponentType, std::unordered_map<std::string, Component*>>;
+      public:
+        using SceneComponentData
+            = std::unordered_map<Component::ComponentType,
+                                 std::unordered_map<std::string, Component*>>;
         Scene() = default;
         ~Scene();
 
         bool AddEntity(Entity* entity);
         bool RemoveEntity(const std::string& entityName);
-        bool AddComponentToEntity(const std::string& entityName, Component::ComponentType type, const std::string& componentName);
-        bool AddComponentToEntity(const uint16_t entityId, Component::ComponentType type, const std::string& componentName);
-        bool RemoveComponentToEntity(const std::string& entityName, Component::ComponentType type, const std::string& componentName);
-        // A new component must be heap allocated. It will be destroyed when needed
-        bool AddComponent(Component::ComponentType type, Component* newComponent);
-        bool RemoveComponent(Component::ComponentType type, const std::string& componentName);
+        bool AddComponentToEntity(const std::string& entityName,
+                                  Component::ComponentType type,
+                                  const std::string& componentName);
+        bool AddComponentToEntity(const uint16_t entityId,
+                                  Component::ComponentType type,
+                                  const std::string& componentName);
+        bool RemoveComponentToEntity(const std::string& entityName,
+                                     Component::ComponentType type,
+                                     const std::string& componentName);
+        // A new component must be heap allocated. It will be destroyed when
+        // needed
+        bool AddComponent(Component::ComponentType type,
+                          Component* newComponent);
+        bool RemoveComponent(Component::ComponentType type,
+                             const std::string& componentName);
         std::vector<Entity*> GetEntities();
-        std::vector<Component*> GetEntityComponent(const std::string& entityName);
+        std::vector<Component*>
+        GetEntityComponent(const std::string& entityName);
         Component* GetComponentByName(const std::string& name);
 
         template<typename T>
         void ForEachComponents(T callback)
-        {
-        }
+        {}
 
         template<typename T, typename U, typename... Args>
         void ForEachComponents(T comp, Args... args, U callback)
         {
-            if(comp == Component::ComponentType::Any)
+            if (comp == Component::ComponentType::Any)
             {
-                for(auto&[type, components] : m_SceneData)
+                for (auto& [type, components] : m_SceneData)
                 {
-                    for(auto&[name, comp] : components)
+                    for (auto& [name, comp] : components)
                         callback(*comp);
                 }
 
@@ -53,9 +63,9 @@ namespace Mouton
 
             auto& components = m_SceneData[comp];
 
-            for(auto&[name, compo] : components)
+            for (auto& [name, compo] : components)
                 callback((*compo));
-            
+
             ForEachComponents(args..., callback);
         }
 
@@ -70,13 +80,13 @@ namespace Mouton
         template<typename T, typename... U>
         std::vector<Component*> GetComponents(T t, U... args)
         {
-            if(t == Component::ComponentType::Any)
+            if (t == Component::ComponentType::Any)
             {
                 std::vector<Component*> res;
 
-                for(auto&[_, components] : m_SceneData)
+                for (auto& [_, components] : m_SceneData)
                 {
-                    for(auto& values : components)
+                    for (auto& values : components)
                         res.push_back(values.second);
                 }
 
@@ -84,9 +94,9 @@ namespace Mouton
             }
 
             std::vector<Component*> append;
-            for(auto&[name, component] : m_SceneData[t])
+            for (auto& [name, component] : m_SceneData[t])
                 append.push_back(component);
-            
+
             auto&& recVec = GetComponents(args...);
             recVec.insert(recVec.end(), append.begin(), append.end());
             return recVec;
@@ -99,32 +109,36 @@ namespace Mouton
 
             writer.StartObject();
 
-            for(auto&[type, components] : m_SceneData)
+            for (auto& [type, components] : m_SceneData)
             {
                 writer.String(Component::TypeToString(type));
                 writer.StartArray();
 
-                for(auto&[name, component] : components)
+                for (auto& [name, component] : components)
                 {
                     writer.StartObject();
                     component->Serialize(writer);
 
-                    switch(type)
+                    switch (type)
                     {
-                    // case ComponentType::BehaviourComponent:
-                    //     static_cast<ElementBehaviour*>(component)->Serialize(writer);
-                    //     break;
+                        // case ComponentType::BehaviourComponent:
+                        //     static_cast<ElementBehaviour*>(component)->Serialize(writer);
+                        //     break;
 
                     case ComponentType::OrthographicCamera:
-                        static_cast<OrthographicCameraComponent*>(component)->Serialize(writer);
+                        static_cast<OrthographicCameraComponent*>(component)
+                            ->Serialize(writer);
                         break;
 
                     case ComponentType::PythonBehaviourComponent:
-                        static_cast<PythonBehaviourComponent<PythonBinder>*>(component)->Serialize(writer);
+                        static_cast<PythonBehaviourComponent<PythonBinder>*>(
+                            component)
+                            ->Serialize(writer);
                         break;
 
                     case ComponentType::SpriteComponent:
-                        static_cast<SpriteComponent*>(component)->Serialize(writer);
+                        static_cast<SpriteComponent*>(component)->Serialize(
+                            writer);
                         break;
                     }
 
@@ -137,7 +151,7 @@ namespace Mouton
             writer.String("Entities");
 
             writer.StartArray();
-            for(auto&[name, entity] : m_Entities)
+            for (auto& [name, entity] : m_Entities)
             {
                 writer.StartObject();
 
@@ -153,25 +167,26 @@ namespace Mouton
 
         static std::shared_ptr<Scene> FromJson(const std::string& json);
 
-    private:
+      private:
         SceneComponentData m_SceneData;
         std::unordered_map<std::string, uint16_t> m_ComponentsReferenceCount;
         std::unordered_map<std::string, Entity*> m_Entities;
         int m_EntityNumber = 0;
 
-        void decComponent(Component::ComponentType type, std::string componentName);
+        void decComponent(Component::ComponentType type,
+                          std::string componentName);
 
         template<typename Value>
         void BindEntities(const Value& value, Component* component)
         {
             const auto& ids = value["Ids"].GetArray();
 
-            for(auto& id : ids)
-                AddComponentToEntity(id.GetInt(), component->GetComponentType(), component->GetComponentName());
+            for (auto& id : ids)
+                AddComponentToEntity(id.GetInt(), component->GetComponentType(),
+                                     component->GetComponentName());
         }
     };
 
 } // namespace Mouton
-
 
 #endif

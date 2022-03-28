@@ -4,43 +4,48 @@
 
 static GLenum GetGLType(Mouton::ShaderType type)
 {
-        switch(type)
-        {
-        case Mouton::ShaderType::Float:     return GL_FLOAT;
-        case Mouton::ShaderType::Float2:    return GL_FLOAT;
-        case Mouton::ShaderType::Float3:    return GL_FLOAT;
-        case Mouton::ShaderType::Float4:    return GL_FLOAT;
-        case Mouton::ShaderType::Int:       return GL_INT;
-        case Mouton::ShaderType::Int2:      return GL_INT;
-        case Mouton::ShaderType::Int3:      return GL_INT;
-        case Mouton::ShaderType::Int4:      return GL_INT;
-        case Mouton::ShaderType::Mat2:      return GL_FLOAT;
-        case Mouton::ShaderType::Mat3:      return GL_FLOAT;
-        case Mouton::ShaderType::Mat4:      return GL_FLOAT;
-        case Mouton::ShaderType::Bool:      return GL_BOOL;
+    switch (type)
+    {
+    case Mouton::ShaderType::Float:
+        return GL_FLOAT;
+    case Mouton::ShaderType::Float2:
+        return GL_FLOAT;
+    case Mouton::ShaderType::Float3:
+        return GL_FLOAT;
+    case Mouton::ShaderType::Float4:
+        return GL_FLOAT;
+    case Mouton::ShaderType::Int:
+        return GL_INT;
+    case Mouton::ShaderType::Int2:
+        return GL_INT;
+    case Mouton::ShaderType::Int3:
+        return GL_INT;
+    case Mouton::ShaderType::Int4:
+        return GL_INT;
+    case Mouton::ShaderType::Mat2:
+        return GL_FLOAT;
+    case Mouton::ShaderType::Mat3:
+        return GL_FLOAT;
+    case Mouton::ShaderType::Mat4:
+        return GL_FLOAT;
+    case Mouton::ShaderType::Bool:
+        return GL_BOOL;
 
-        default:                            return 0;
-        }
+    default:
+        return 0;
+    }
 }
 
-namespace Mouton
-{
+namespace Mouton {
 
-    OpenGLVertexArray::OpenGLVertexArray()
-        : m_VAOHandle(0)
+    OpenGLVertexArray::OpenGLVertexArray() : m_VAOHandle(0)
     {
         glGenVertexArrays(1, &m_VAOHandle);
     }
 
-    void OpenGLVertexArray::Bind()
-    {
-        glBindVertexArray(m_VAOHandle);
-    }
+    void OpenGLVertexArray::Bind() { glBindVertexArray(m_VAOHandle); }
 
-    void OpenGLVertexArray::Unbind()
-    {
-        glBindVertexArray(0);
-    }
+    void OpenGLVertexArray::Unbind() { glBindVertexArray(0); }
 
     void OpenGLVertexArray::AddVertexBuffer(VertexBuffer& vb)
     {
@@ -50,34 +55,24 @@ namespace Mouton
         vb.Bind();
         glBindVertexArray(m_VAOHandle);
 
-        for(auto& elem : vb.GetLayout().GetElements())
+        for (auto& elem : vb.GetLayout().GetElements())
         {
 
             glEnableVertexAttribArray(slot);
 
-            if(elem.type != ShaderType::Int
-                && elem.type != ShaderType::Int2
+            if (elem.type != ShaderType::Int && elem.type != ShaderType::Int2
                 && elem.type != ShaderType::Int3
                 && elem.type != ShaderType::Int4)
             {
-                glVertexAttribPointer(
-                    slot,
-                    elem.count,
-                    GetGLType(elem.type),
-                    elem.normalized,
-                    vb.GetLayout().GetStride(),
-                    reinterpret_cast<void*>(offset)
-                );
-            }
-            else
+                glVertexAttribPointer(slot, elem.count, GetGLType(elem.type),
+                                      elem.normalized,
+                                      vb.GetLayout().GetStride(),
+                                      reinterpret_cast<void*>(offset));
+            } else
             {
-                glVertexAttribIPointer(
-                    slot,
-                    elem.count,
-                    GetGLType(elem.type),
-                    vb.GetLayout().GetStride(),
-                    reinterpret_cast<void*>(offset)
-                );
+                glVertexAttribIPointer(slot, elem.count, GetGLType(elem.type),
+                                       vb.GetLayout().GetStride(),
+                                       reinterpret_cast<void*>(offset));
             }
 
             offset += elem.size;

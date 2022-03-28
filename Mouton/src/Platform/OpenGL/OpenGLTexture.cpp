@@ -5,8 +5,7 @@
 #include <glad/glad.h>
 #include <stb_image.h>
 
-namespace Mouton
-{
+namespace Mouton {
 
     OpenGLTexture2D::OpenGLTexture2D(const char* filepath)
         : m_TextureHandle(0), m_TextureWidth(0), m_TextureHeight(0),
@@ -37,41 +36,32 @@ namespace Mouton
 
     void OpenGLTexture2D::LoadTexture(const char* filepath)
     {
-        uint8_t* data = stbi_load(
-            filepath,
-            &m_TextureWidth,
-            &m_TextureHeight,
-            &m_TextureChannels,
-            0 // No prefered texture channels number
+        uint8_t* data = stbi_load(filepath, &m_TextureWidth, &m_TextureHeight,
+                                  &m_TextureChannels,
+                                  0 // No prefered texture channels number
         );
 
         glBindTexture(GL_TEXTURE_2D, m_TextureHandle);
 
-        if(data)
+        if (data)
         {
-            glTexImage2D(
-                GL_TEXTURE_2D,
-                0,
-                m_TextureChannels > 3 ? GL_RGBA : GL_RGB,
-                m_TextureWidth,
-                m_TextureHeight,
-                0,
-                m_TextureChannels > 3 ? GL_RGBA : GL_RGB,
-                GL_UNSIGNED_BYTE,
-                data
-            );
+            glTexImage2D(GL_TEXTURE_2D, 0,
+                         m_TextureChannels > 3 ? GL_RGBA : GL_RGB,
+                         m_TextureWidth, m_TextureHeight, 0,
+                         m_TextureChannels > 3 ? GL_RGBA : GL_RGB,
+                         GL_UNSIGNED_BYTE, data);
 
             glGenerateMipmap(GL_TEXTURE_2D);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                            GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             stbi_image_free(data);
 
-        }
-        else
+        } else
             MTN_WARN("Texture '{0}' coundn't be loaded !", filepath);
 
         glBindTexture(GL_TEXTURE_2D, 0);

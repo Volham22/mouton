@@ -5,12 +5,11 @@
 
 struct GLFWwindow;
 
-namespace Mouton
-{
+namespace Mouton {
 
     class ImGUILayer : public Layer
     {
-    public:
+      public:
         ImGUILayer(void* win, const char* name = "ImguiLayer");
         ~ImGUILayer();
         virtual void OnBind() override;
@@ -19,7 +18,7 @@ namespace Mouton
         virtual void OnUnbind() override;
         virtual bool OnEvent(Event& event) override;
 
-    private:
+      private:
         GLFWwindow* m_WindowInstance;
     };
 

@@ -25,7 +25,7 @@ You will need a C++17 compiler.
 First, Clone this repository
 
 ```
-git clone https://gitlab.com/Volham/mouton.git --recursive
+git clone https://github.com/Volham22/mouton.git --recursive
 ```
 
 Make sure cmake and make are installed, and be patient it may take some time to compile on some potato computer.

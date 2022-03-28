@@ -2,13 +2,13 @@
 
 #include "Core/Events/Events.h"
 
-#include "Renderer/Model.h"
-#include "Renderer/Camera.h"
 #include "Ecs/Scene.h"
+#include "Renderer/Camera.h"
+#include "Renderer/Model.h"
 
 class SandboxLayer : public Mouton::Layer
 {
-public:
+  public:
     SandboxLayer();
     ~SandboxLayer();
 
@@ -18,8 +18,8 @@ public:
     virtual void OnUnbind() override;
     virtual bool OnEvent(Mouton::Event& event) override;
 
-private:
-        std::shared_ptr<Mouton::Model> m_Model;
-        Mouton::OrthographicCamera m_Camera;
-        Mouton::Scene m_Scene;
+  private:
+    std::shared_ptr<Mouton::Model> m_Model;
+    Mouton::OrthographicCamera m_Camera;
+    Mouton::Scene m_Scene;
 };

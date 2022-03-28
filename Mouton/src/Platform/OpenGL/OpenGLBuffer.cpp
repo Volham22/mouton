@@ -2,17 +2,14 @@
 
 #include <glad/glad.h>
 
-namespace Mouton
-{
+namespace Mouton {
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer()
-        : m_OglVboHandle(0)
+    OpenGLVertexBuffer::OpenGLVertexBuffer() : m_OglVboHandle(0)
     {
         glGenBuffers(1, &m_OglVboHandle);
     }
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(void* data)
-        : m_OglVboHandle(0)
+    OpenGLVertexBuffer::OpenGLVertexBuffer(void* data) : m_OglVboHandle(0)
     {
         glGenBuffers(1, &m_OglVboHandle); // TODO: Error handling here
         glBindBuffer(GL_ARRAY_BUFFER, m_OglVboHandle);
@@ -24,15 +21,13 @@ namespace Mouton
         glBindBuffer(GL_ARRAY_BUFFER, m_OglVboHandle);
     }
 
-    void OpenGLVertexBuffer::Unbind()
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
+    void OpenGLVertexBuffer::Unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
     void OpenGLVertexBuffer::SetData(void* data, size_t size)
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_OglVboHandle);
-        glBufferData(GL_ARRAY_BUFFER, size, data, !data ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size, data,
+                     !data ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
@@ -48,8 +43,7 @@ namespace Mouton
         glDeleteBuffers(GL_ARRAY_BUFFER, &m_OglVboHandle);
     }
 
-    OpenGLElementBuffer::OpenGLElementBuffer()
-        : m_OglEboHandle(0), m_Size(0)
+    OpenGLElementBuffer::OpenGLElementBuffer() : m_OglEboHandle(0), m_Size(0)
     {
         glGenBuffers(1, &m_OglEboHandle);
     }
@@ -61,7 +55,7 @@ namespace Mouton
 
     void OpenGLElementBuffer::Unbind()
     {
-         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     void OpenGLElementBuffer::SetData(void* data, size_t size)

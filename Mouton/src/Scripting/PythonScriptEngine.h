@@ -3,18 +3,16 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class PythonScriptEngine
     {
-    public:
+      public:
         static void Init();
         static void Restart();
         static void Stop();
     };
 
 } // namespace Mouton
-
 
 #endif

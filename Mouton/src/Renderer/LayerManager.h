@@ -1,17 +1,16 @@
 #ifndef LAYER_MANAGER_H
 #define LAYER_MANAGER_H
 
-#include "MoutonPch.h"
 #include "Core/Timestep.h"
+#include "MoutonPch.h"
 
 #include "Layer.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class LayerManager
     {
-    public:
+      public:
         LayerManager();
         ~LayerManager();
 
@@ -20,12 +19,11 @@ namespace Mouton
         void UpdateLayers();
         bool OnLayersEvent(Event& event);
 
-    private:
+      private:
         std::vector<Layer*> m_Layers;
         Chrono m_Chrono;
     };
 
 } // namespace Mouton
-
 
 #endif

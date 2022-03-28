@@ -5,26 +5,25 @@
 
 #include <filesystem>
 
-namespace Mouton::Utils
-{
+namespace Mouton::Utils {
 
     class DirectoryItem
     {
-    public:
+      public:
         DirectoryItem() = delete;
         DirectoryItem(const std::string& path, bool isDir = false);
 
         bool IsDirectory() const { return m_IsDir; };
         const std::string& GetPath() const { return m_Path; };
 
-    private:
+      private:
         std::string m_Path;
         bool m_IsDir;
     };
 
     class Directory
     {
-    public:
+      public:
         Directory() = delete;
         Directory(const std::string& dirPath);
 
@@ -36,15 +35,17 @@ namespace Mouton::Utils
             namespace fs = std::filesystem;
             std::vector<DirectoryItem> items;
 
-            if constexpr(Recursive)
+            if constexpr (Recursive)
             {
-                for(const auto& item : fs::recursive_directory_iterator(m_DirPath))
-                        items.push_back(DirectoryItem(item.path(), item.is_directory()));
-            }
-            else
+                for (const auto& item :
+                     fs::recursive_directory_iterator(m_DirPath))
+                    items.push_back(
+                        DirectoryItem(item.path(), item.is_directory()));
+            } else
             {
-                for(const auto& item : fs::directory_iterator(m_DirPath))
-                    items.push_back(DirectoryItem(item.path(), item.is_directory()));
+                for (const auto& item : fs::directory_iterator(m_DirPath))
+                    items.push_back(
+                        DirectoryItem(item.path(), item.is_directory()));
             }
 
             return items;
@@ -52,11 +53,10 @@ namespace Mouton::Utils
 
         // TODO: Add file and directory creation
 
-    private:
+      private:
         std::string m_DirPath;
     };
 
-} // namespace Mouton
-
+} // namespace Mouton::Utils
 
 #endif

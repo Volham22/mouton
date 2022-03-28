@@ -5,14 +5,14 @@
 
 #include "Camera.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class OrthographicCameraController
     {
-    public:
+      public:
         OrthographicCameraController() = delete;
-        OrthographicCameraController(std::shared_ptr<OrthographicCamera> camera);
+        OrthographicCameraController(
+            std::shared_ptr<OrthographicCamera> camera);
 
         glm::vec3& GetPosition() { return m_Position; }
         float& GetRotation() { return m_Rotation; }
@@ -21,15 +21,15 @@ namespace Mouton
         void Move(const glm::vec3& movePosition);
         void Translate(const glm::vec3& position);
         void Rotate(float angle);
-        void SetCoords(float left, float right, float top, float bottom, float near=-1.0f, float far=1.0f);
+        void SetCoords(float left, float right, float top, float bottom,
+                       float near = -1.0f, float far = 1.0f);
 
-    private:
+      private:
         std::shared_ptr<OrthographicCamera> m_Camera;
         glm::vec3 m_Position;
         float m_Rotation;
     };
 
 } // namespace Mouton
-
 
 #endif

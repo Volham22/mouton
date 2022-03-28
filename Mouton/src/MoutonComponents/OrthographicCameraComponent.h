@@ -1,20 +1,19 @@
 #ifndef ORTHOGRAPHIC_CAMERA_COMPONENT_H
 #define ORTHOGRAPHIC_CAMERA_COMPONENT_H
 
-#include "MoutonPch.h"
 #include "Core/Utils/SerializationUtils.h"
+#include "MoutonPch.h"
 
 #include "Ecs/Components.h"
 #include "Renderer/OrthographicCameraController.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     class OrthographicCameraComponent : public Component
     {
-    public:
+      public:
         OrthographicCameraComponent(const std::string& name,
-            OrthographicCameraController* controller);
+                                    OrthographicCameraController* controller);
         OrthographicCameraComponent() = delete;
 
         ~OrthographicCameraComponent() = default;
@@ -27,20 +26,24 @@ namespace Mouton
         void Translate(const glm::vec3& position);
         void Rotate(float angle);
         void SetCoords(float left, float right, float top, float bottom,
-                float near=-1.0f, float far=1.0f);
+                       float near = -1.0f, float far = 1.0f);
 
         template<typename Writer>
         void Serialize(Writer& writer) const
         {
             writer.String("Position");
             writer.StartArray();
-            writer.Double(static_cast<double>(m_CameraController->GetPosition().x));
-            writer.Double(static_cast<double>(m_CameraController->GetPosition().y));
-            writer.Double(static_cast<double>(m_CameraController->GetPosition().z));
+            writer.Double(
+                static_cast<double>(m_CameraController->GetPosition().x));
+            writer.Double(
+                static_cast<double>(m_CameraController->GetPosition().y));
+            writer.Double(
+                static_cast<double>(m_CameraController->GetPosition().z));
             writer.EndArray();
 
             writer.String("Rotation");
-            writer.Double(static_cast<double>(m_CameraController->GetRotation()));
+            writer.Double(
+                static_cast<double>(m_CameraController->GetRotation()));
         }
 
         template<typename Value>
@@ -48,21 +51,22 @@ namespace Mouton
         {
             std::string name = value["Name"].GetString();
             auto* controller = new OrthographicCameraController(
-                std::make_shared<OrthographicCamera>(0.0f, 100.0f, 0.0f, 100.0f)
-            );
+                std::make_shared<OrthographicCamera>(0.0f, 100.0f, 0.0f,
+                                                     100.0f));
 
-            OrthographicCameraComponent* comp = new OrthographicCameraComponent(name, controller);
-            comp->Move(Utils::SerializationUtils::Vec3FromJson(value["Position"]));
+            OrthographicCameraComponent* comp
+                = new OrthographicCameraComponent(name, controller);
+            comp->Move(
+                Utils::SerializationUtils::Vec3FromJson(value["Position"]));
             comp->Rotate((float)value["Rotation"].GetDouble());
 
             return comp;
         }
 
-    private:
+      private:
         OrthographicCameraController* m_CameraController;
     };
 
 } // namespace Mouton
-
 
 #endif

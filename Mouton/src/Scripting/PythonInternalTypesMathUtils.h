@@ -3,25 +3,21 @@
 
 #include "MoutonPch.h"
 
-namespace Mouton
-{
+namespace Mouton {
     template<typename T>
     struct Ret;
 
     // Retrieve type of function pointer
     template<typename T, typename... Args>
-    struct Ret<T(*)(Args...)> {
+    struct Ret<T (*)(Args...)> {
         using type = T;
     };
 
     class PythonInternalMath
     {
-    public:
-        template<
-            typename Func,
-            typename Return = typename Ret<Func>::type,
-            typename... Args
-        >
+      public:
+        template<typename Func, typename Return = typename Ret<Func>::type,
+                 typename... Args>
         static Return CallFunction(const Func& call, Args... args)
         {
             return call(args...);
@@ -29,6 +25,5 @@ namespace Mouton
     };
 
 } // namespace Mouton
-
 
 #endif

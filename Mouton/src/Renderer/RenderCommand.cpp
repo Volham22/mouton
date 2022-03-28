@@ -3,33 +3,29 @@
 #include "Platform/OpenGL/OpenGLRenderCommand.h"
 #include "RendererContext.h"
 
-namespace Mouton
-{
+namespace Mouton {
 
     std::unique_ptr<RenderCommand> RenderCommand::s_RenderCommand;
 
     void RenderCommand::Init()
     {
-        switch(RendererContext::GetCurrentAPI())
+        switch (RendererContext::GetCurrentAPI())
         {
         case GraphicAPI::OpenGL:
             s_RenderCommand = std::make_unique<OpenGLRenderCommand>();
             break;
-        
+
         case GraphicAPI::None:
             MTN_WARN("None grahpic API render command are not allowed !");
             break;
-        
+
         default:
             MTN_WARN("Unknown graphic API for RenderCommand !");
             break;
         }
     }
 
-    void RenderCommand::Clear()
-    {
-        s_RenderCommand->ClearImp();
-    }
+    void RenderCommand::Clear() { s_RenderCommand->ClearImp(); }
 
     void RenderCommand::SetDepthTest(bool enable)
     {
@@ -51,10 +47,7 @@ namespace Mouton
         s_RenderCommand->SetDebugMessageImpl();
     }
 
-    void RenderCommand::Draw(int count)
-    {
-        s_RenderCommand->DrawImp(count);
-    }
+    void RenderCommand::Draw(int count) { s_RenderCommand->DrawImp(count); }
 
     void RenderCommand::DrawIndexed(int indicesCount)
     {
